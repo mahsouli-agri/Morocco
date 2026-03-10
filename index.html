@@ -4,2485 +4,805 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محصولي المباشر - سوق الفلاح الذكي 🌾</title>
-
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
-        :root {
-            --primary: #2d7a3a;
-            --primary-light: #4caf50;
-            --primary-dark: #1b5e20;
-            --primary-glow: rgba(76, 175, 80, 0.3);
-            --secondary: #ff8f00;
-            --secondary-light: #ffb300;
-            --accent: #e65100;
-            --bg-main: #f0f7f1;
-            --bg-card: #ffffff;
-            --bg-dark: #1a3a1f;
-            --bg-sidebar: #0d2613;
-            --text-primary: #1a2e1a;
-            --text-secondary: #4a6b4a;
-            --text-light: #7a9a7a;
-            --text-white: #f5f5f5;
-            --border: #c8e6c9;
-            --border-light: #e8f5e9;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
-            --shadow-glow: 0 0 20px var(--primary-glow);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --radius-full: 50px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --sidebar-width: 280px;
-            --header-height: 70px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-primary);
-            line-height: 1.7;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            position: fixed;
-            top: 0; right: 0; left: 0;
-            height: var(--header-height);
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 1000;
-            box-shadow: var(--shadow-md);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .menu-toggle {
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            width: 42px; height: 42px;
-            border-radius: var(--radius-sm);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .menu-toggle:hover { background: rgba(255,255,255,0.25); }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 40px; height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-
-        .logo-text h1 { font-size: 1.2rem; font-weight: 800; line-height: 1.2; }
-        .logo-text span { font-size: 0.7rem; opacity: 0.8; font-weight: 300; }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-btn {
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .header-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -2px; left: -2px;
-            width: 18px; height: 18px;
-            background: var(--accent);
-            color: white;
-            font-size: 0.6rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .user-avatar {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: var(--transition);
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-
-        .user-avatar:hover { border-color: white; transform: scale(1.1); }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1001;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .sidebar-overlay.active { opacity: 1; visibility: visible; }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: var(--bg-sidebar);
-            z-index: 1002;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .sidebar.active { right: 0; }
-
-        .sidebar-header {
-            padding: 20px;
-            background: linear-gradient(180deg, var(--primary-dark), var(--bg-sidebar));
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-logo { font-size: 2.5rem; margin-bottom: 8px; }
-        .sidebar-header h2 { color: white; font-size: 1.3rem; font-weight: 700; }
-        .sidebar-header p { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
-
-        .sidebar-nav { flex: 1; padding: 15px 10px; }
-
-        .nav-section-title {
-            color: var(--primary-light);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 10px 15px 5px;
-            letter-spacing: 1px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: rgba(255,255,255,0.75);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            margin: 2px 0;
-            transition: var(--transition);
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: rgba(76,175,80,0.15);
-            color: var(--primary-light);
-        }
-
-        .nav-item.active {
-            background: rgba(76,175,80,0.2);
-            border-right: 3px solid var(--primary-light);
-        }
-
-        .nav-item i { width: 22px; text-align: center; font-size: 1.1rem; }
-
-        .nav-item .badge {
-            margin-right: auto;
-            background: var(--accent);
-            color: white;
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-
-        .sidebar-footer {
-            padding: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: var(--radius-md);
-        }
-
-        .sidebar-user-avatar {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-        }
-
-        .sidebar-user-info h4 { color: white; font-size: 0.9rem; }
-        .sidebar-user-info span { color: rgba(255,255,255,0.5); font-size: 0.75rem; }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            margin-top: var(--header-height);
-            padding: 20px;
-            min-height: calc(100vh - var(--header-height));
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ===== AUTH ===== */
-        .auth-container {
-            min-height: calc(100vh - var(--header-height));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            margin-top: var(--header-height);
-        }
-
-        .auth-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 440px;
-            overflow: hidden;
-        }
-
-        .auth-header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            padding: 30px;
-            text-align: center;
-            color: white;
-        }
-
-        .auth-header-icon {
-            width: 70px; height: 70px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 15px;
-        }
-
-        .auth-header h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
-        .auth-header p { opacity: 0.85; font-size: 0.9rem; }
-
-        .auth-body { padding: 30px; }
-
-        .auth-tabs {
-            display: flex;
-            background: var(--bg-main);
-            border-radius: var(--radius-full);
-            padding: 4px;
-            margin-bottom: 25px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            border-radius: var(--radius-full);
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-secondary);
-        }
-
-        .auth-tab.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .form-group { margin-bottom: 18px; }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-
-        .input-wrapper { position: relative; }
-
-        .input-wrapper i {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            font-size: 1rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 42px 12px 42px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: var(--bg-main);
-            color: var(--text-primary);
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .form-input::placeholder { color: var(--text-light); }
-
-        .password-toggle {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-light);
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
-            border-radius: var(--radius-md);
-            box-shadow: 0 4px 15px rgba(45, 122, 58, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 122, 58, 0.4);
-        }
-
-        .btn-primary:active { transform: translateY(0); }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--border-light);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            gap: 15px;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .divider span { color: var(--text-light); font-size: 0.85rem; font-weight: 500; }
-
-        .social-login { display: flex; gap: 10px; }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            background: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            color: var(--text-primary);
-        }
-
-        .social-btn:hover {
-            border-color: var(--primary);
-            background: var(--border-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .social-btn.google i { color: #ea4335; }
-        .social-btn.facebook i { color: #1877f2; }
-
-        .auth-footer {
-            text-align: center;
-            padding: 5px 0;
-            color: var(--text-light);
-            font-size: 0.85rem;
-        }
-
-        .auth-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
-
-        /* ===== PAGES ===== */
-        .page-section { display: none; }
-
-        .page-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Welcome Banner */
-        .welcome-banner {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: var(--radius-xl);
-            padding: 25px;
-            color: white;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-banner::before {
-            content: '🌾';
-            position: absolute;
-            top: -10px; left: -10px;
-            font-size: 6rem;
-            opacity: 0.1;
-        }
-
-        .welcome-banner h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
-        .welcome-banner p { opacity: 0.9; font-size: 0.95rem; }
-
-        .welcome-stats {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .welcome-stat {
-            background: rgba(255,255,255,0.15);
-            padding: 10px 15px;
-            border-radius: var(--radius-md);
-            flex: 1;
-            min-width: 100px;
-            text-align: center;
-        }
-
-        .welcome-stat .num { font-size: 1.5rem; font-weight: 800; display: block; }
-        .welcome-stat .label { font-size: 0.75rem; opacity: 0.8; }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .quick-action-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 20px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .quick-action-card:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .quick-action-card .icon {
-            width: 50px; height: 50px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin: 0 auto 10px;
-        }
-
-        .quick-action-card .icon.green { background: #e8f5e9; color: var(--primary); }
-        .quick-action-card .icon.orange { background: #fff3e0; color: var(--secondary); }
-        .quick-action-card .icon.blue { background: #e3f2fd; color: #1976d2; }
-        .quick-action-card .icon.red { background: #fce4ec; color: #c62828; }
-
-        .quick-action-card h4 { font-size: 0.9rem; color: var(--text-primary); margin-bottom: 3px; }
-        .quick-action-card p { font-size: 0.75rem; color: var(--text-light); }
-
-        /* Section Headers */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .section-header h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-header .view-all {
-            color: var(--primary);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* ===== PRODUCT CARDS ===== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .product-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            border: 1px solid var(--border-light);
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-light);
-        }
-
-        .product-card-image {
-            height: 160px;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            position: relative;
-        }
-
-        .product-card-image img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 10px; right: 10px;
-            background: var(--primary);
-            color: white;
-            padding: 4px 10px;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .product-card-body { padding: 15px; }
-        .product-card-body h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; }
-
-        .product-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-light);
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .product-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .product-price-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .product-price { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
-        .product-price small { font-size: 0.75rem; font-weight: 400; color: var(--text-light); }
-
-        .btn-contact {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-contact:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        /* ===== PRICE TABLE ===== */
-        .price-table-container {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
-        }
-
-        .price-table-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 15px 20px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .price-table-header h3 {
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .price-table th {
-            background: var(--bg-main);
-            padding: 12px 15px;
-            text-align: right;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            border-bottom: 2px solid var(--border);
-        }
-
-        .price-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-light);
-            font-size: 0.9rem;
-        }
-
-        .price-table tr:hover { background: var(--border-light); }
-
-        .price-change {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 3px 8px;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .price-change.up { background: #e8f5e9; color: var(--primary); }
-        .price-change.down { background: #fce4ec; color: #c62828; }
-        .price-change.stable { background: #fff3e0; color: var(--secondary); }
-
-        /* ===== ADD PRODUCT FORM ===== */
-        .form-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .form-card-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 25px;
-            color: white;
-            text-align: center;
-        }
-
-        .form-card-header h3 { font-size: 1.3rem; font-weight: 800; }
-        .form-card-body { padding: 25px; }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            background: var(--bg-main);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .form-textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            background: var(--bg-main);
-            color: var(--text-primary);
-            resize: vertical;
-            min-height: 100px;
-            transition: var(--transition);
-        }
-
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .image-upload-area {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-md);
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            background: var(--bg-main);
-        }
-
-        .image-upload-area:hover {
-            border-color: var(--primary);
-            background: var(--border-light);
-        }
-
-        .image-upload-area i { font-size: 2.5rem; color: var(--primary-light); margin-bottom: 10px; }
-        .image-upload-area p { color: var(--text-light); font-size: 0.9rem; }
-
-        /* ===== INVENTORY ===== */
-        .inventory-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 15px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transition);
-            border-right: 4px solid var(--primary);
-        }
-
-        .inventory-card:hover { box-shadow: var(--shadow-md); }
-
-        .inventory-icon {
-            width: 50px; height: 50px;
-            border-radius: var(--radius-md);
-            background: #e8f5e9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .inventory-info { flex: 1; }
-        .inventory-info h4 { font-size: 1rem; font-weight: 700; }
-        .inventory-info p { font-size: 0.8rem; color: var(--text-light); }
-
-        .inventory-status { text-align: center; }
-        .inventory-qty { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
-        .inventory-unit { font-size: 0.7rem; color: var(--text-light); }
-
-        .progress-bar {
-            width: 100%; height: 6px;
-            background: var(--border-light);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .progress-bar-fill.high { background: var(--primary); }
-        .progress-bar-fill.medium { background: var(--secondary); }
-        .progress-bar-fill.low { background: var(--accent); }
-
-        /* ===== WEATHER ===== */
-        .weather-widget {
-            background: linear-gradient(135deg, #1976d2, #0d47a1);
-            border-radius: var(--radius-xl);
-            padding: 25px;
-            color: white;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .weather-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .weather-location {
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .weather-main {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 15px;
-        }
-
-        .weather-temp { font-size: 3rem; font-weight: 800; }
-        .weather-icon { font-size: 3rem; }
-        .weather-desc { font-size: 1rem; opacity: 0.9; }
-
-        .weather-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .weather-detail {
-            background: rgba(255,255,255,0.15);
-            padding: 10px;
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .weather-detail i { font-size: 1.2rem; margin-bottom: 5px; display: block; }
-        .weather-detail .value { font-weight: 700; font-size: 1rem; }
-        .weather-detail .label { font-size: 0.7rem; opacity: 0.8; }
-
-        .weather-advice {
-            background: rgba(255,255,255,0.1);
-            padding: 12px;
-            border-radius: var(--radius-md);
-            margin-top: 15px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ===== SEARCH ===== */
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .search-input-wrapper { flex: 1; position: relative; }
-
-        .search-input-wrapper i {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 42px 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            background: var(--bg-card);
-            transition: var(--transition);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .filter-chips {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .filter-chip {
-            padding: 6px 16px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-full);
-            background: var(--bg-card);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-secondary);
-        }
-
-        .filter-chip:hover, .filter-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* ===== TOAST ===== */
-        .toast-container {
-            position: fixed;
-            top: calc(var(--header-height) + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .toast {
-            padding: 14px 18px;
-            border-radius: var(--radius-md);
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-lg);
-            animation: toastIn 0.4s ease;
-            cursor: pointer;
-        }
-
-        .toast.success { background: linear-gradient(135deg, #2d7a3a, #1b5e20); }
-        .toast.error { background: linear-gradient(135deg, #c62828, #b71c1c); }
-        .toast.warning { background: linear-gradient(135deg, #e65100, #bf360c); }
-        .toast.info { background: linear-gradient(135deg, #1565c0, #0d47a1); }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== LOADING ===== */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-overlay.hidden { opacity: 0; pointer-events: none; }
-
-        .loader {
-            width: 60px; height: 60px;
-            border: 4px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .loading-text { margin-top: 15px; color: var(--text-secondary); font-weight: 600; }
-
-        /* ===== USER DROPDOWN ===== */
-        .user-dropdown {
-            position: absolute;
-            top: calc(var(--header-height) - 5px);
-            left: 20px;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            min-width: 220px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            z-index: 999;
-            overflow: hidden;
-        }
-
-        .user-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-header {
-            padding: 15px;
-            background: var(--bg-main);
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .dropdown-header h4 { font-size: 0.95rem; color: var(--text-primary); }
-        .dropdown-header p { font-size: 0.75rem; color: var(--text-light); }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            color: var(--text-primary);
-            transition: var(--transition);
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .dropdown-item:hover { background: var(--border-light); }
-        .dropdown-item i { width: 20px; color: var(--text-light); }
-
-        .dropdown-item.danger {
-            color: #c62828;
-            border-top: 1px solid var(--border-light);
-        }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .empty-state .icon { font-size: 4rem; margin-bottom: 15px; opacity: 0.5; }
-        .empty-state h3 { color: var(--text-secondary); margin-bottom: 8px; }
-        .empty-state p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; }
-
-        /* ===== NOTIFICATION PANEL ===== */
-        .notification-panel {
-            position: fixed;
-            top: var(--header-height);
-            left: 0; right: 0;
-            background: var(--bg-card);
-            box-shadow: var(--shadow-lg);
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 998;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .notification-panel.active { transform: translateY(0); }
-
-        .notification-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border-light);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            transition: var(--transition);
-        }
-
-        .notification-item:hover { background: var(--border-light); }
-
-        .notification-item .n-icon {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .notification-item .n-content h5 { font-size: 0.9rem; margin-bottom: 2px; }
-        .notification-item .n-content p { font-size: 0.8rem; color: var(--text-light); }
-        .notification-item .n-time { font-size: 0.7rem; color: var(--text-light); white-space: nowrap; }
-
-        /* ===== FAB ===== */
-        .fab {
-            position: fixed;
-            bottom: 25px; left: 25px;
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            transition: var(--transition);
-            z-index: 100;
-            display: none;
-        }
-
-        .fab:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 30px rgba(45, 122, 58, 0.4);
-        }
-
-        .fab.visible {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ===== UTILITIES ===== */
-        .hidden { display: none !important; }
-        .mt-1 { margin-top: 8px; }
-        .mt-2 { margin-top: 16px; }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .main-content { padding: 15px; }
-            .products-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            .welcome-stats { flex-direction: column; }
-            .quick-actions { grid-template-columns: repeat(2, 1fr); }
-            .social-login { flex-direction: column; }
-            .weather-details { grid-template-columns: repeat(2, 1fr); }
-            .price-table th, .price-table td { padding: 10px 8px; font-size: 0.8rem; }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text h1 { font-size: 1rem; }
-            .header { padding: 0 12px; }
-        }
+        :root{--primary:#2d7a3a;--primary-light:#4caf50;--primary-dark:#1b5e20;--primary-glow:rgba(76,175,80,0.3);--secondary:#ff8f00;--accent:#e65100;--bg-main:#f0f7f1;--bg-card:#fff;--bg-sidebar:#0d2613;--text-primary:#1a2e1a;--text-secondary:#4a6b4a;--text-light:#7a9a7a;--border:#c8e6c9;--border-light:#e8f5e9;--shadow-sm:0 2px 8px rgba(0,0,0,.08);--shadow-md:0 4px 16px rgba(0,0,0,.12);--shadow-lg:0 8px 32px rgba(0,0,0,.16);--shadow-glow:0 0 20px var(--primary-glow);--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;--radius-full:50px;--transition:all .3s cubic-bezier(.4,0,.2,1);--sidebar-width:280px;--header-height:70px}
+        *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+        body{font-family:'Tajawal',sans-serif;background:var(--bg-main);color:var(--text-primary);line-height:1.7;overflow-x:hidden;min-height:100vh}
+
+        /* HEADER */
+        .header{position:fixed;top:0;right:0;left:0;height:var(--header-height);background:linear-gradient(135deg,var(--primary-dark),var(--primary));display:flex;align-items:center;justify-content:space-between;padding:0 15px;z-index:1000;box-shadow:var(--shadow-md)}
+        .header-right{display:flex;align-items:center;gap:10px}
+        .menu-toggle{background:rgba(255,255,255,.15);border:none;color:#fff;width:40px;height:40px;border-radius:var(--radius-sm);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+        .menu-toggle:hover{background:rgba(255,255,255,.25)}
+        .logo{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none}
+        .logo-icon{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+        .logo-text h1{font-size:1.1rem;font-weight:800;line-height:1.2}
+        .logo-text span{font-size:.65rem;opacity:.8}
+        .header-left{display:flex;align-items:center;gap:8px}
+        .header-btn{background:rgba(255,255,255,.15);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:.95rem;cursor:pointer;transition:var(--transition);position:relative}
+        .header-btn:hover{background:rgba(255,255,255,.3)}
+        .notif-badge{position:absolute;top:-2px;left:-2px;width:16px;height:16px;background:var(--accent);color:#fff;font-size:.55rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+        .user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.5);cursor:pointer;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.85rem;transition:var(--transition)}
+        .user-avatar:hover{border-color:#fff}
+        .header-login-btn{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);color:#fff;padding:7px 15px;border-radius:var(--radius-full);font-family:'Tajawal';font-weight:600;font-size:.85rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:5px}
+        .header-login-btn:hover{background:rgba(255,255,255,.3);border-color:#fff}
+
+        /* SIDEBAR */
+        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1001;opacity:0;visibility:hidden;transition:var(--transition)}
+        .sidebar-overlay.active{opacity:1;visibility:visible}
+        .sidebar{position:fixed;top:0;right:-300px;width:var(--sidebar-width);height:100vh;background:var(--bg-sidebar);z-index:1002;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto}
+        .sidebar.active{right:0}
+        .sidebar-header{padding:18px;background:linear-gradient(180deg,var(--primary-dark),var(--bg-sidebar));text-align:center;border-bottom:1px solid rgba(255,255,255,.1)}
+        .sidebar-logo{font-size:2.2rem;margin-bottom:6px}
+        .sidebar-header h2{color:#fff;font-size:1.2rem;font-weight:700}
+        .sidebar-header p{color:rgba(255,255,255,.6);font-size:.75rem}
+        .sidebar-nav{flex:1;padding:12px 8px}
+        .nav-section{color:var(--primary-light);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:8px 12px 4px;letter-spacing:1px}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;color:rgba(255,255,255,.75);text-decoration:none;border-radius:var(--radius-sm);margin:2px 0;transition:var(--transition);cursor:pointer;font-size:.9rem}
+        .nav-item:hover,.nav-item.active{background:rgba(76,175,80,.15);color:var(--primary-light)}
+        .nav-item.active{border-right:3px solid var(--primary-light)}
+        .nav-item i{width:20px;text-align:center;font-size:1rem}
+        .nav-item .badge{margin-right:auto;background:var(--accent);color:#fff;padding:2px 7px;border-radius:var(--radius-full);font-size:.65rem;font-weight:700}
+        .nav-item.admin-nav{color:#ffb300}
+        .sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.1)}
+        .sidebar-user{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:var(--radius-md)}
+        .sidebar-user-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.85rem}
+        .sidebar-user-info h4{color:#fff;font-size:.85rem}
+        .sidebar-user-info span{color:rgba(255,255,255,.5);font-size:.7rem}
+
+        /* MAIN */
+        .main-content{margin-top:var(--header-height);padding:15px;min-height:calc(100vh - var(--header-height));max-width:1200px;margin-left:auto;margin-right:auto}
+
+        /* MODAL */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
+        .modal-overlay.active{display:flex}
+        .modal-close{position:absolute;top:12px;left:12px;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;z-index:2}
+        .auth-card{background:var(--bg-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);width:100%;max-width:420px;overflow:hidden;position:relative;max-height:90vh;overflow-y:auto}
+        .auth-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));padding:25px;text-align:center;color:#fff}
+        .auth-header-icon{width:60px;height:60px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 12px}
+        .auth-header h2{font-size:1.3rem;font-weight:800;margin-bottom:4px}
+        .auth-header p{opacity:.85;font-size:.85rem}
+        .auth-body{padding:25px}
+        .auth-tabs{display:flex;background:var(--bg-main);border-radius:var(--radius-full);padding:3px;margin-bottom:20px}
+        .auth-tab{flex:1;padding:9px;text-align:center;border:none;background:transparent;border-radius:var(--radius-full);font-family:'Tajawal';font-weight:600;font-size:.9rem;cursor:pointer;transition:var(--transition);color:var(--text-secondary)}
+        .auth-tab.active{background:var(--primary);color:#fff}
+
+        /* FORMS */
+        .form-group{margin-bottom:15px}
+        .form-group label{display:block;margin-bottom:5px;font-weight:600;font-size:.85rem}
+        .input-wrapper{position:relative}
+        .input-wrapper i{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:.9rem}
+        .form-input{width:100%;padding:11px 38px;border:2px solid var(--border);border-radius:var(--radius-md);font-family:'Tajawal';font-size:.95rem;transition:var(--transition);background:var(--bg-main);color:var(--text-primary)}
+        .form-input:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:var(--shadow-glow)}
+        .form-input::placeholder{color:var(--text-light)}
+        .form-input-simple{width:100%;padding:11px 12px;border:2px solid var(--border);border-radius:var(--radius-md);font-family:'Tajawal';font-size:.95rem;transition:var(--transition);background:var(--bg-main);color:var(--text-primary)}
+        .form-input-simple:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:var(--shadow-glow)}
+        .password-toggle{position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-light);cursor:pointer}
+        .form-select{width:100%;padding:11px 12px;border:2px solid var(--border);border-radius:var(--radius-md);font-family:'Tajawal';font-size:.95rem;background:var(--bg-main);color:var(--text-primary);cursor:pointer;transition:var(--transition)}
+        .form-select:focus{outline:none;border-color:var(--primary);box-shadow:var(--shadow-glow)}
+        .form-textarea{width:100%;padding:11px 12px;border:2px solid var(--border);border-radius:var(--radius-md);font-family:'Tajawal';font-size:.95rem;background:var(--bg-main);color:var(--text-primary);resize:vertical;min-height:80px;transition:var(--transition)}
+        .form-textarea:focus{outline:none;border-color:var(--primary);box-shadow:var(--shadow-glow)}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border:none;border-radius:var(--radius-md);font-family:'Tajawal';font-weight:700;font-size:.95rem;cursor:pointer;transition:var(--transition)}
+        .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;width:100%;padding:13px;font-size:1.05rem;box-shadow:0 4px 15px rgba(45,122,58,.3)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,122,58,.4)}
+        .btn-sm{padding:6px 12px;font-size:.8rem;border-radius:var(--radius-sm);width:auto}
+        .btn-danger{background:#c62828;color:#fff}
+        .btn-warning{background:var(--secondary);color:#fff}
+        .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text-primary);width:100%}
+        .btn-outline:hover{border-color:var(--primary);color:var(--primary);background:var(--border-light)}
+
+        .divider{display:flex;align-items:center;margin:18px 0;gap:12px}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+        .divider span{color:var(--text-light);font-size:.8rem}
+        .social-login{display:flex;gap:8px}
+        .social-btn{flex:1;padding:10px;border:2px solid var(--border);border-radius:var(--radius-md);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Tajawal';font-weight:600;font-size:.85rem;transition:var(--transition);color:var(--text-primary)}
+        .social-btn:hover{border-color:var(--primary);background:var(--border-light);transform:translateY(-2px)}
+        .social-btn.google i{color:#ea4335}
+        .social-btn.facebook i{color:#1877f2}
+
+        /* PAGES */
+        .page-section{display:none}
+        .page-section.active{display:block;animation:fadeIn .4s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+        /* WELCOME */
+        .welcome-banner{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-xl);padding:22px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+        .welcome-banner::before{content:'🌾';position:absolute;top:-10px;left:-10px;font-size:5rem;opacity:.1}
+        .welcome-banner h2{font-size:1.3rem;font-weight:800;margin-bottom:4px}
+        .welcome-banner p{opacity:.9;font-size:.9rem}
+        .welcome-stats{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+        .welcome-stat{background:rgba(255,255,255,.15);padding:8px 12px;border-radius:var(--radius-md);flex:1;min-width:90px;text-align:center}
+        .welcome-stat .num{font-size:1.4rem;font-weight:800;display:block}
+        .welcome-stat .label{font-size:.7rem;opacity:.8}
+
+        .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px}
+        .quick-action-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:18px 12px;text-align:center;cursor:pointer;transition:var(--transition);border:2px solid transparent;box-shadow:var(--shadow-sm)}
+        .quick-action-card:hover{border-color:var(--primary-light);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+        .quick-action-card .qicon{width:45px;height:45px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 8px}
+        .quick-action-card .qicon.green{background:#e8f5e9;color:var(--primary)}
+        .quick-action-card .qicon.orange{background:#fff3e0;color:var(--secondary)}
+        .quick-action-card .qicon.blue{background:#e3f2fd;color:#1976d2}
+        .quick-action-card .qicon.purple{background:#f3e5f5;color:#7b1fa2}
+        .quick-action-card h4{font-size:.85rem;margin-bottom:2px}
+        .quick-action-card p{font-size:.7rem;color:var(--text-light)}
+
+        .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+        .section-header h3{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:6px}
+        .section-header .view-all{color:var(--primary);font-size:.8rem;font-weight:600;cursor:pointer}
+
+        /* PRODUCTS */
+        .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:22px}
+        .product-card{background:var(--bg-card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:var(--transition);border:1px solid var(--border-light)}
+        .product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--primary-light)}
+        .product-card-image{height:150px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative}
+        .product-card-image img{width:100%;height:100%;object-fit:cover}
+        .product-badge{position:absolute;top:8px;right:8px;background:var(--primary);color:#fff;padding:3px 8px;border-radius:var(--radius-full);font-size:.7rem;font-weight:600}
+        .product-card-body{padding:12px}
+        .product-card-body h4{font-size:1rem;font-weight:700;margin-bottom:4px}
+        .product-meta{display:flex;align-items:center;gap:10px;color:var(--text-light);font-size:.75rem;margin-bottom:8px;flex-wrap:wrap}
+        .product-meta span{display:flex;align-items:center;gap:3px}
+        .seller-link{color:var(--primary);cursor:pointer;text-decoration:underline}
+        .seller-link:hover{color:var(--primary-dark)}
+        .product-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border-light)}
+        .product-price{font-size:1.2rem;font-weight:800;color:var(--primary)}
+        .product-price small{font-size:.7rem;font-weight:400;color:var(--text-light)}
+        .product-actions{display:flex;gap:5px}
+        .btn-contact{background:var(--primary);color:#fff;border:none;padding:7px 12px;border-radius:var(--radius-sm);font-family:'Tajawal';font-weight:600;font-size:.8rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:4px}
+        .btn-contact:hover{background:var(--primary-dark)}
+        .btn-chat{background:#1976d2;color:#fff;border:none;padding:7px 12px;border-radius:var(--radius-sm);font-family:'Tajawal';font-weight:600;font-size:.8rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:4px}
+        .btn-chat:hover{background:#0d47a1}
+
+        /* PRICES */
+        .price-table-container{background:var(--bg-card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:18px}
+        .price-table-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));padding:12px 15px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+        .price-table-header h3{font-size:1rem;display:flex;align-items:center;gap:6px}
+        .price-table{width:100%;border-collapse:collapse}
+        .price-table th{background:var(--bg-main);padding:10px 12px;text-align:right;font-weight:700;font-size:.8rem;color:var(--text-secondary);border-bottom:2px solid var(--border)}
+        .price-table td{padding:10px 12px;border-bottom:1px solid var(--border-light);font-size:.85rem}
+        .price-table tr:hover{background:var(--border-light)}
+        .price-change{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:var(--radius-full);font-size:.75rem;font-weight:600}
+        .price-change.up{background:#e8f5e9;color:var(--primary)}
+        .price-change.down{background:#fce4ec;color:#c62828}
+        .price-change.stable{background:#fff3e0;color:var(--secondary)}
+
+        /* FORM CARD */
+        .form-card{background:var(--bg-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);overflow:hidden;max-width:600px;margin:0 auto}
+        .form-card-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));padding:22px;color:#fff;text-align:center}
+        .form-card-header h3{font-size:1.2rem;font-weight:800}
+        .form-card-body{padding:22px}
+
+        .image-upload-area{border:2px dashed var(--border);border-radius:var(--radius-md);padding:25px;text-align:center;cursor:pointer;transition:var(--transition);background:var(--bg-main)}
+        .image-upload-area:hover{border-color:var(--primary);background:var(--border-light)}
+        .image-upload-area i{font-size:2rem;color:var(--primary-light);margin-bottom:8px}
+        .image-upload-area p{color:var(--text-light);font-size:.85rem}
+
+        /* INVENTORY */
+        .inventory-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:12px;box-shadow:var(--shadow-sm);margin-bottom:10px;display:flex;align-items:center;gap:12px;border-right:4px solid var(--primary)}
+        .inventory-icon{width:45px;height:45px;border-radius:var(--radius-md);background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+        .inventory-info{flex:1}
+        .inventory-info h4{font-size:.9rem;font-weight:700}
+        .inventory-info p{font-size:.75rem;color:var(--text-light)}
+        .inventory-qty{font-size:1.1rem;font-weight:800;color:var(--primary);text-align:center}
+        .inventory-unit{font-size:.65rem;color:var(--text-light);text-align:center}
+        .progress-bar{width:100%;height:5px;background:var(--border-light);border-radius:3px;overflow:hidden;margin-top:4px}
+        .progress-bar-fill{height:100%;border-radius:3px}
+        .progress-bar-fill.high{background:var(--primary)}
+        .progress-bar-fill.medium{background:var(--secondary)}
+        .progress-bar-fill.low{background:var(--accent)}
+
+        /* SEARCH */
+        .search-bar{display:flex;gap:8px;margin-bottom:15px}
+        .search-input-wrapper{flex:1;position:relative}
+        .search-input-wrapper i{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-light)}
+        .search-input{width:100%;padding:10px 38px 10px 12px;border:2px solid var(--border);border-radius:var(--radius-md);font-family:'Tajawal';font-size:.95rem;background:var(--bg-card);transition:var(--transition)}
+        .search-input:focus{outline:none;border-color:var(--primary);box-shadow:var(--shadow-glow)}
+        .filter-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+        .filter-chip{padding:5px 14px;border:2px solid var(--border);border-radius:var(--radius-full);background:var(--bg-card);font-family:'Tajawal';font-size:.8rem;font-weight:500;cursor:pointer;transition:var(--transition);color:var(--text-secondary)}
+        .filter-chip:hover,.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+        /* CHAT */
+        .chat-container{display:flex;flex-direction:column;height:calc(100vh - var(--header-height) - 40px);max-width:700px;margin:0 auto}
+        .chat-list{flex:1;overflow-y:auto}
+        .chat-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-card);border-radius:var(--radius-md);margin-bottom:8px;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-sm)}
+        .chat-item:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+        .chat-item.unread{border-right:3px solid var(--primary)}
+        .chat-avatar{width:45px;height:45px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;flex-shrink:0}
+        .chat-info{flex:1;min-width:0}
+        .chat-info h4{font-size:.9rem;font-weight:700;margin-bottom:2px}
+        .chat-info p{font-size:.8rem;color:var(--text-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .chat-info .chat-product{font-size:.7rem;color:var(--primary);font-weight:600}
+        .chat-time{font-size:.7rem;color:var(--text-light);flex-shrink:0}
+
+        .chat-view{display:none;flex-direction:column;height:100%}
+        .chat-view.active{display:flex}
+        .chat-view-header{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg-card);border-radius:var(--radius-md);margin-bottom:8px;box-shadow:var(--shadow-sm)}
+        .chat-back{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-primary);padding:5px}
+        .chat-view-header h4{flex:1;font-size:.95rem}
+        .chat-messages{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px}
+        .chat-msg{max-width:80%;padding:10px 14px;border-radius:var(--radius-lg);font-size:.9rem;line-height:1.5;position:relative}
+        .chat-msg.sent{background:var(--primary);color:#fff;align-self:flex-start;border-bottom-right-radius:4px}
+        .chat-msg.received{background:var(--bg-card);color:var(--text-primary);align-self:flex-end;border-bottom-left-radius:4px;box-shadow:var(--shadow-sm)}
+        .chat-msg .msg-time{font-size:.6rem;opacity:.7;margin-top:3px;display:block}
+        .chat-input-area{display:flex;gap:8px;padding:10px 0}
+        .chat-input{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-full);font-family:'Tajawal';font-size:.9rem;background:var(--bg-card)}
+        .chat-input:focus{outline:none;border-color:var(--primary)}
+        .chat-send{background:var(--primary);color:#fff;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:var(--transition)}
+        .chat-send:hover{background:var(--primary-dark)}
+
+        /* PUBLIC PROFILE */
+        .profile-cover{height:120px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-xl) var(--radius-xl) 0 0;position:relative}
+        .profile-avatar-lg{width:80px;height:80px;border-radius:50%;background:var(--primary-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;border:4px solid #fff;position:absolute;bottom:-40px;right:20px;box-shadow:var(--shadow-md)}
+        .profile-info-section{background:var(--bg-card);border-radius:0 0 var(--radius-xl) var(--radius-xl);padding:50px 20px 20px;box-shadow:var(--shadow-sm);margin-bottom:15px}
+        .profile-info-section h2{font-size:1.3rem;font-weight:800;margin-bottom:3px}
+        .profile-info-section .profile-role{color:var(--primary);font-weight:600;font-size:.85rem}
+        .profile-info-section .profile-region{color:var(--text-light);font-size:.8rem;display:flex;align-items:center;gap:4px;margin-top:3px}
+        .profile-stats-row{display:flex;gap:15px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light)}
+        .profile-stat{text-align:center;flex:1}
+        .profile-stat .num{font-size:1.3rem;font-weight:800;color:var(--text-primary);display:block}
+        .profile-stat .label{font-size:.7rem;color:var(--text-light)}
+
+        /* STARS */
+        .stars{display:flex;gap:3px;direction:ltr}
+        .stars i{color:#ddd;font-size:1rem;cursor:pointer;transition:var(--transition)}
+        .stars i.active,.stars i:hover{color:#ffb300}
+        .stars-display{display:flex;gap:2px;direction:ltr}
+        .stars-display i{color:#ddd;font-size:.85rem}
+        .stars-display i.active{color:#ffb300}
+
+        /* ADMIN */
+        .admin-header{background:linear-gradient(135deg,#ff8f00,#e65100);padding:22px;color:#fff;text-align:center;border-radius:var(--radius-xl);margin-bottom:18px}
+        .admin-header h2{font-size:1.4rem;font-weight:800}
+        .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+        .admin-stat-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:18px;text-align:center;box-shadow:var(--shadow-sm);border-top:3px solid var(--primary)}
+        .admin-stat-card.orange{border-top-color:var(--secondary)}
+        .admin-stat-card.red{border-top-color:var(--accent)}
+        .admin-stat-card.blue{border-top-color:#1976d2}
+        .admin-stat-card .stat-num{font-size:1.8rem;font-weight:800}
+        .admin-stat-card .stat-label{font-size:.75rem;color:var(--text-light)}
+        .admin-tabs{display:flex;gap:6px;margin-bottom:15px;flex-wrap:wrap}
+        .admin-tab{padding:8px 16px;border:2px solid var(--border);border-radius:var(--radius-full);background:var(--bg-card);font-family:'Tajawal';font-weight:600;cursor:pointer;transition:var(--transition);font-size:.85rem}
+        .admin-tab.active{background:var(--secondary);color:#fff;border-color:var(--secondary)}
+        .admin-tab-content{display:none}
+        .admin-tab-content.active{display:block}
+        .admin-row{background:var(--bg-card);border-radius:var(--radius-md);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-sm);flex-wrap:wrap}
+        .admin-row .row-icon{font-size:1.8rem}
+        .admin-row .row-info{flex:1;min-width:140px}
+        .admin-row .row-info h4{font-size:.9rem;font-weight:700}
+        .admin-row .row-info p{font-size:.75rem;color:var(--text-light)}
+        .admin-row .row-actions{display:flex;gap:5px}
+
+        /* SETTINGS */
+        .setting-item{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-main);border-radius:var(--radius-md);margin-bottom:10px}
+        .setting-item .setting-info{flex:1}
+        .setting-item .setting-info h4{font-size:.9rem;font-weight:600}
+        .setting-item .setting-info p{font-size:.75rem;color:var(--text-light)}
+        .toggle-switch{width:48px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:var(--transition)}
+        .toggle-switch.active{background:var(--primary)}
+        .toggle-switch::after{content:'';position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;top:2px;right:2px;transition:var(--transition);box-shadow:var(--shadow-sm)}
+        .toggle-switch.active::after{right:24px}
+
+        /* TOAST */
+        .toast-container{position:fixed;top:calc(var(--header-height) + 8px);left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;width:90%;max-width:380px}
+        .toast{padding:12px 15px;border-radius:var(--radius-md);color:#fff;font-weight:600;font-size:.85rem;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-lg);animation:toastIn .4s ease;cursor:pointer}
+        .toast.success{background:linear-gradient(135deg,#2d7a3a,#1b5e20)}
+        .toast.error{background:linear-gradient(135deg,#c62828,#b71c1c)}
+        .toast.warning{background:linear-gradient(135deg,#e65100,#bf360c)}
+        .toast.info{background:linear-gradient(135deg,#1565c0,#0d47a1)}
+        @keyframes toastIn{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
+
+        /* LOADING */
+        .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity .5s ease}
+        .loading-overlay.hidden{opacity:0;pointer-events:none}
+        .loader{width:50px;height:50px;border:4px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .loading-text{margin-top:12px;color:var(--text-secondary);font-weight:600;font-size:.9rem}
+
+        /* DROPDOWN */
+        .user-dropdown{position:absolute;top:calc(var(--header-height) - 5px);left:15px;background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:var(--transition);z-index:999;overflow:hidden}
+        .user-dropdown.active{opacity:1;visibility:visible;transform:translateY(0)}
+        .dropdown-header{padding:12px;background:var(--bg-main);border-bottom:1px solid var(--border);text-align:center}
+        .dropdown-header h4{font-size:.9rem}
+        .dropdown-header p{font-size:.7rem;color:var(--text-light)}
+        .dropdown-item{display:flex;align-items:center;gap:8px;padding:10px 12px;color:var(--text-primary);transition:var(--transition);cursor:pointer;font-size:.85rem}
+        .dropdown-item:hover{background:var(--border-light)}
+        .dropdown-item i{width:18px;color:var(--text-light)}
+        .dropdown-item.danger{color:#c62828;border-top:1px solid var(--border-light)}
+
+        .empty-state{text-align:center;padding:40px 15px}
+        .empty-state .icon{font-size:3.5rem;margin-bottom:12px;opacity:.5}
+        .empty-state h3{color:var(--text-secondary);margin-bottom:6px;font-size:1rem}
+        .empty-state p{color:var(--text-light);font-size:.85rem;margin-bottom:15px}
+
+        .fab{position:fixed;bottom:20px;left:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:50%;font-size:1.3rem;cursor:pointer;box-shadow:var(--shadow-lg);transition:var(--transition);z-index:100;display:none}
+        .fab:hover{transform:scale(1.1) rotate(90deg)}
+        .fab.visible{display:flex;align-items:center;justify-content:center}
+
+        .hidden{display:none !important}
+        .mt-1{margin-top:6px}.mt-2{margin-top:12px}
+
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:var(--bg-main)}
+        ::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:3px}
+
+        @media(max-width:768px){.products-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.welcome-stats{flex-direction:column}.quick-actions{grid-template-columns:repeat(2,1fr)}.social-login{flex-direction:column}.price-table th,.price-table td{padding:8px 6px;font-size:.75rem}.admin-stats{grid-template-columns:1fr 1fr}}
+        @media(max-width:480px){.logo-text h1{font-size:.95rem}.header{padding:0 10px}}
     </style>
 </head>
 <body>
-
-    <!-- LOADING -->
-    <div class="loading-overlay" id="loadingScreen">
-        <div class="loader"></div>
-        <p class="loading-text">جاري تحميل محصولي المباشر... 🌱</p>
-    </div>
-
-    <!-- TOAST -->
+    <div class="loading-overlay" id="loadingScreen"><div class="loader"></div><p class="loading-text" data-i18n="loading">جاري تحميل محصولي... 🌱</p></div>
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- HEADER -->
-    <header class="header" id="mainHeader">
+    <header class="header">
         <div class="header-right">
-            <button class="menu-toggle" onclick="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-            </button>
-            <a href="#" class="logo" onclick="navigateTo('home');return false;">
-                <div class="logo-icon">🌾</div>
-                <div class="logo-text">
-                    <h1>محصولي المباشر</h1>
-                    <span>سوق الفلاح الذكي</span>
-                </div>
-            </a>
+            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <a href="#" class="logo" onclick="navigateTo('home');return false"><div class="logo-icon">🌾</div><div class="logo-text"><h1>محصولي المباشر</h1><span data-i18n="slogan">سوق الفلاح الذكي</span></div></a>
         </div>
         <div class="header-left">
-            <button class="header-btn" onclick="toggleNotifications()" id="notifBtn">
-                <i class="fas fa-bell"></i>
-                <span class="notification-badge" id="notifBadge">3</span>
-            </button>
-            <div class="user-avatar" onclick="toggleUserDropdown()" id="headerAvatar">
-                <i class="fas fa-user"></i>
-            </div>
+            <button class="header-btn" onclick="navigateTo('chat')" title="الرسائل"><i class="fas fa-comment-dots"></i><span class="notif-badge hidden" id="chatBadge">0</span></button>
+            <button class="header-login-btn" id="headerLoginBtn" onclick="openAuthModal()"><i class="fas fa-sign-in-alt"></i> <span data-i18n="login">دخول</span></button>
+            <div class="user-avatar hidden" onclick="toggleUserDropdown()" id="headerAvatar">م</div>
         </div>
-
         <div class="user-dropdown" id="userDropdown">
-            <div class="dropdown-header">
-                <h4 id="dropdownName">ضيف</h4>
-                <p id="dropdownEmail">لم يتم تسجيل الدخول</p>
-            </div>
-            <div class="dropdown-item" onclick="navigateTo('profile')">
-                <i class="fas fa-user-circle"></i><span>حسابي</span>
-            </div>
-            <div class="dropdown-item" onclick="navigateTo('inventory')">
-                <i class="fas fa-boxes-stacked"></i><span>مخزوني</span>
-            </div>
-            <div class="dropdown-item" onclick="navigateTo('settings')">
-                <i class="fas fa-cog"></i><span>الإعدادات</span>
-            </div>
-            <div class="dropdown-item danger" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span>
-            </div>
+            <div class="dropdown-header"><h4 id="dropdownName">ضيف</h4><p id="dropdownEmail"></p></div>
+            <div class="dropdown-item" onclick="viewMyProfile()"><i class="fas fa-user-circle"></i><span data-i18n="myProfile">ملفي الشخصي</span></div>
+            <div class="dropdown-item" onclick="navigateTo('chat')"><i class="fas fa-comment-dots"></i><span data-i18n="messages">الرسائل</span></div>
+            <div class="dropdown-item" onclick="navigateTo('inventory')"><i class="fas fa-boxes-stacked"></i><span data-i18n="myStock">مخزوني</span></div>
+            <div class="dropdown-item hidden" id="dropdownAdminBtn" onclick="navigateTo('admin')"><i class="fas fa-shield-halved" style="color:#ff8f00"></i><span style="color:#ff8f00;font-weight:700">لوحة الأدمين</span></div>
+            <div class="dropdown-item" onclick="navigateTo('settings')"><i class="fas fa-cog"></i><span data-i18n="settings">الإعدادات</span></div>
+            <div class="dropdown-item danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i><span data-i18n="logout">خروج</span></div>
         </div>
     </header>
 
     <!-- SIDEBAR -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">🌾</div>
-            <h2>محصولي المباشر</h2>
-            <p>سوق الفلاح الذكي في جيبك</p>
-        </div>
+        <div class="sidebar-header"><div class="sidebar-logo">🌾</div><h2>محصولي المباشر</h2><p data-i18n="slogan">سوق الفلاح الذكي في جيبك</p></div>
         <div class="sidebar-nav">
-            <div class="nav-section-title">القائمة الرئيسية</div>
-            <a class="nav-item active" onclick="navigateTo('home')" data-page="home">
-                <i class="fas fa-home"></i><span>الرئيسية</span>
-            </a>
-            <a class="nav-item" onclick="navigateTo('market')" data-page="market">
-                <i class="fas fa-store"></i><span>السوق المباشر</span>
-                <span class="badge" id="marketBadge">0</span>
-            </a>
-            <a class="nav-item" onclick="navigateTo('addProduct')" data-page="addProduct">
-                <i class="fas fa-plus-circle"></i><span>نشر محصول</span>
-            </a>
-            <div class="nav-section-title">أدوات ذكية</div>
-            <a class="nav-item" onclick="navigateTo('prices')" data-page="prices">
-                <i class="fas fa-chart-line"></i><span>بورصة الأسعار</span>
-            </a>
-            <a class="nav-item" onclick="navigateTo('inventory')" data-page="inventory">
-                <i class="fas fa-boxes-stacked"></i><span>إدارة المخزون</span>
-            </a>
-            <a class="nav-item" onclick="navigateTo('weather')" data-page="weather">
-                <i class="fas fa-cloud-sun"></i><span>أحوال الطقس</span>
-            </a>
-            <div class="nav-section-title">الحساب</div>
-            <a class="nav-item" onclick="navigateTo('profile')" data-page="profile">
-                <i class="fas fa-user-circle"></i><span>حسابي</span>
-            </a>
-            <a class="nav-item" onclick="navigateTo('settings')" data-page="settings">
-                <i class="fas fa-cog"></i><span>الإعدادات</span>
-            </a>
-            <a class="nav-item" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span>
-            </a>
+            <div class="nav-section" data-i18n="mainMenu">القائمة الرئيسية</div>
+            <a class="nav-item active" onclick="navigateTo('home')" data-page="home"><i class="fas fa-home"></i><span data-i18n="home">الرئيسية</span></a>
+            <a class="nav-item" onclick="navigateTo('market')" data-page="market"><i class="fas fa-store"></i><span data-i18n="market">السوق</span><span class="badge" id="marketBadge">0</span></a>
+            <a class="nav-item" onclick="requireAuth('addProduct')" data-page="addProduct"><i class="fas fa-plus-circle"></i><span data-i18n="publish">نشر محصول</span></a>
+            <a class="nav-item" onclick="navigateTo('prices')" data-page="prices"><i class="fas fa-chart-line"></i><span data-i18n="prices">بورصة الأسعار</span></a>
+            <a class="nav-item" onclick="requireAuth('chat')" data-page="chat"><i class="fas fa-comment-dots"></i><span data-i18n="messages">الرسائل</span></a>
+            <a class="nav-item" onclick="requireAuth('inventory')" data-page="inventory"><i class="fas fa-boxes-stacked"></i><span data-i18n="myStock">المخزون</span></a>
+            <div class="nav-section hidden" id="adminSidebarSection">إدارة</div>
+            <a class="nav-item admin-nav hidden" id="adminSidebarLink" onclick="navigateTo('admin')" data-page="admin"><i class="fas fa-shield-halved"></i><span>لوحة الأدمين</span></a>
+            <div class="nav-section" data-i18n="account">الحساب</div>
+            <a class="nav-item hidden" id="sidebarProfileLink" onclick="viewMyProfile()" data-page="publicProfile"><i class="fas fa-user-circle"></i><span data-i18n="myProfile">ملفي</span></a>
+            <a class="nav-item hidden" id="sidebarSettingsLink" onclick="navigateTo('settings')" data-page="settings"><i class="fas fa-cog"></i><span data-i18n="settings">الإعدادات</span></a>
+            <a class="nav-item hidden" id="sidebarLogoutLink" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i><span data-i18n="logout">خروج</span></a>
+            <a class="nav-item" id="sidebarLoginLink" onclick="openAuthModal()"><i class="fas fa-sign-in-alt"></i><span data-i18n="login">تسجيل الدخول</span></a>
         </div>
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="sidebar-user-avatar" id="sidebarAvatar">ض</div>
-                <div class="sidebar-user-info">
-                    <h4 id="sidebarName">ضيف</h4>
-                    <span id="sidebarRole">مستخدم</span>
-                </div>
-            </div>
-        </div>
+        <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" id="sidebarAvatar">ض</div><div class="sidebar-user-info"><h4 id="sidebarName">ضيف</h4><span id="sidebarRole">زائر</span></div></div></div>
     </nav>
 
-    <!-- NOTIFICATIONS -->
-    <div class="notification-panel" id="notifPanel">
-        <div class="notification-item">
-            <div class="n-icon" style="background:#e8f5e9;color:#2d7a3a;"><i class="fas fa-seedling"></i></div>
-            <div class="n-content">
-                <h5>محصول جديد في منطقتك!</h5>
-                <p>تم نشر طماطم طازجة من منطقة بركان</p>
-            </div>
-            <span class="n-time">منذ 5 دقائق</span>
-        </div>
-        <div class="notification-item">
-            <div class="n-icon" style="background:#fff3e0;color:#e65100;"><i class="fas fa-chart-line"></i></div>
-            <div class="n-content">
-                <h5>تغير في أسعار البطاطس</h5>
-                <p>ارتفع سعر البطاطس بنسبة 15%</p>
-            </div>
-            <span class="n-time">منذ ساعة</span>
-        </div>
-        <div class="notification-item">
-            <div class="n-icon" style="background:#e3f2fd;color:#1565c0;"><i class="fas fa-cloud-rain"></i></div>
-            <div class="n-content">
-                <h5>تنبيه طقس</h5>
-                <p>أمطار متوقعة غداً - خطط للحصاد اليوم</p>
-            </div>
-            <span class="n-time">منذ 3 ساعات</span>
-        </div>
-    </div>
-
-    <!-- ===== AUTH PAGE ===== -->
-    <div id="authPage" class="auth-container">
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="authModal">
         <div class="auth-card">
-            <div class="auth-header">
-                <div class="auth-header-icon">🌾</div>
-                <h2>مرحباً بك في محصولي</h2>
-                <p>سوق الفلاح الذكي في جيبك</p>
-            </div>
+            <button class="modal-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
+            <div class="auth-header"><div class="auth-header-icon">🌾</div><h2 data-i18n="welcomeAuth">مرحباً بك في محصولي</h2><p data-i18n="authDesc">سجل لنشر وإدارة محاصيلك</p></div>
             <div class="auth-body">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</button>
-                    <button class="auth-tab" onclick="switchAuthTab('register')">حساب جديد</button>
-                </div>
-
-                <!-- Login -->
+                <div class="auth-tabs"><button class="auth-tab active" onclick="switchAuthTab('login')" data-i18n="login">دخول</button><button class="auth-tab" onclick="switchAuthTab('register')" data-i18n="register">حساب جديد</button></div>
                 <form id="loginForm" onsubmit="handleEmailLogin(event)">
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" class="form-input" id="loginEmail" placeholder="example@mail.com" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required minlength="6">
-                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div style="text-align:left;margin-bottom:15px;">
-                        <a href="#" onclick="handleForgotPassword();return false;" style="color:var(--primary);font-size:0.85rem;text-decoration:none;">نسيت كلمة المرور؟</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="loginBtn">
-                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-                    </button>
+                    <div class="form-group"><label data-i18n="email">البريد</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" class="form-input" id="loginEmail" placeholder="example@mail.com" required></div></div>
+                    <div class="form-group"><label data-i18n="password">كلمة المرور</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required minlength="6"><button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)"><i class="fas fa-eye"></i></button></div></div>
+                    <div style="text-align:left;margin-bottom:12px"><a href="#" onclick="handleForgotPassword();return false" style="color:var(--primary);font-size:.8rem;text-decoration:none" data-i18n="forgotPass">نسيت كلمة المرور؟</a></div>
+                    <button type="submit" class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span data-i18n="login">دخول</span></button>
                 </form>
-
-                <!-- Register -->
                 <form id="registerForm" class="hidden" onsubmit="handleEmailRegister(event)">
-                    <div class="form-group">
-                        <label>الاسم الكامل</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" class="form-input" id="registerName" placeholder="اسمك الكامل" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>البريد الإلكتروني</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" class="form-input" id="registerEmail" placeholder="example@mail.com" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>رقم الهاتف</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" class="form-input" id="registerPhone" placeholder="06XXXXXXXX" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>المنطقة / المدينة</label>
-                        <select class="form-select" id="registerRegion" required>
-                            <option value="">اختر المنطقة</option>
-                            <option value="الدار البيضاء">الدار البيضاء</option>
-                            <option value="الرباط">الرباط</option>
-                            <option value="مراكش">مراكش</option>
-                            <option value="فاس">فاس</option>
-                            <option value="طنجة">طنجة</option>
-                            <option value="أكادير">أكادير</option>
-                            <option value="مكناس">مكناس</option>
-                            <option value="وجدة">وجدة</option>
-                            <option value="بركان">بركان</option>
-                            <option value="الناظور">الناظور</option>
-                            <option value="تطوان">تطوان</option>
-                            <option value="القنيطرة">القنيطرة</option>
-                            <option value="آسفي">آسفي</option>
-                            <option value="الجديدة">الجديدة</option>
-                            <option value="بني ملال">بني ملال</option>
-                            <option value="خنيفرة">خنيفرة</option>
-                            <option value="سطات">سطات</option>
-                            <option value="تازة">تازة</option>
-                            <option value="أخرى">أخرى</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>نوع الحساب</label>
-                        <select class="form-select" id="registerRole" required>
-                            <option value="">اختر نوع الحساب</option>
-                            <option value="farmer">🌱 فلاح / منتج</option>
-                            <option value="distributor">🚛 موزع / تاجر</option>
-                            <option value="buyer">🛒 مشتري</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>كلمة المرور</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" class="form-input" id="registerPassword" placeholder="6 أحرف على الأقل" required minlength="6">
-                            <button type="button" class="password-toggle" onclick="togglePassword('registerPassword',this)">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="registerBtn">
-                        <i class="fas fa-user-plus"></i> إنشاء الحساب
-                    </button>
+                    <div class="form-group"><label data-i18n="fullName">الاسم</label><div class="input-wrapper"><i class="fas fa-user"></i><input type="text" class="form-input" id="registerName" required></div></div>
+                    <div class="form-group"><label data-i18n="email">البريد</label><div class="input-wrapper"><i class="fas fa-envelope"></i><input type="email" class="form-input" id="registerEmail" required></div></div>
+                    <div class="form-group"><label data-i18n="phone">الهاتف</label><div class="input-wrapper"><i class="fas fa-phone"></i><input type="tel" class="form-input" id="registerPhone" placeholder="06XXXXXXXX" required></div></div>
+                    <div class="form-group"><label data-i18n="region">المنطقة</label><select class="form-select" id="registerRegion" required><option value="">اختر</option><option>الدار البيضاء</option><option>الرباط</option><option>مراكش</option><option>فاس</option><option>طنجة</option><option>أكادير</option><option>مكناس</option><option>وجدة</option><option>بركان</option><option>الناظور</option><option>القنيطرة</option><option>سطات</option><option>بني ملال</option><option>أخرى</option></select></div>
+                    <div class="form-group"><label data-i18n="accountType">نوع الحساب</label><select class="form-select" id="registerRole" required><option value="">اختر</option><option value="farmer">🌱 فلاح</option><option value="distributor">🚛 موزع</option><option value="buyer">🛒 مشتري</option></select></div>
+                    <div class="form-group"><label data-i18n="password">كلمة المرور</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" class="form-input" id="registerPassword" required minlength="6"><button type="button" class="password-toggle" onclick="togglePassword('registerPassword',this)"><i class="fas fa-eye"></i></button></div></div>
+                    <button type="submit" class="btn btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> <span data-i18n="createAccount">إنشاء</span></button>
                 </form>
-
-                <div class="divider"><span>أو ادخل بواسطة</span></div>
-
-                <div class="social-login">
-                    <button class="social-btn google" onclick="handleGoogleLogin()" type="button">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <button class="social-btn facebook" onclick="handleFacebookLogin()" type="button">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </button>
-                </div>
-
-                <div class="auth-footer mt-2">
-                    <p>بتسجيلك فأنت توافق على <a href="#">شروط الاستخدام</a></p>
-                </div>
+                <div class="divider"><span data-i18n="orLoginWith">أو ادخل بواسطة</span></div>
+                <div class="social-login"><button class="social-btn google" onclick="handleGoogleLogin()" type="button"><i class="fab fa-google"></i> Google</button><button class="social-btn facebook" onclick="handleFacebookLogin()" type="button"><i class="fab fa-facebook-f"></i> Facebook</button></div>
             </div>
         </div>
     </div>
 
-    <!-- ===== MAIN APP ===== -->
-    <div id="appContainer" class="hidden">
-        <div class="main-content">
+    <!-- MAIN APP -->
+    <div class="main-content">
+        <!-- HOME -->
+        <section class="page-section active" id="page-home">
+            <div class="welcome-banner"><h2 id="welcomeMsg" data-i18n="welcomeHome">مرحباً بك في محصولي! 👋</h2><p data-i18n="welcomeDesc">تصفح المحاصيل واشترِ مباشرة من الفلاح</p><div class="welcome-stats"><div class="welcome-stat"><span class="num" id="statProducts">0</span><span class="label" data-i18n="availableProducts">محصول</span></div><div class="welcome-stat"><span class="num" id="statFarmers">0</span><span class="label" data-i18n="registeredFarmers">مستخدم</span></div><div class="welcome-stat"><span class="num" id="statRegions">0</span><span class="label" data-i18n="regions">منطقة</span></div></div></div>
+            <div class="section-header"><h3><i class="fas fa-bolt" style="color:var(--secondary)"></i> <span data-i18n="quickActions">إجراءات سريعة</span></h3></div>
+            <div class="quick-actions">
+                <div class="quick-action-card" onclick="requireAuth('addProduct')"><div class="qicon green"><i class="fas fa-plus"></i></div><h4 data-i18n="publish">نشر محصول</h4><p data-i18n="addYourProduct">أضف منتجك</p></div>
+                <div class="quick-action-card" onclick="navigateTo('market')"><div class="qicon orange"><i class="fas fa-store"></i></div><h4 data-i18n="market">السوق</h4><p data-i18n="browseOffers">تصفح العروض</p></div>
+                <div class="quick-action-card" onclick="navigateTo('prices')"><div class="qicon blue"><i class="fas fa-chart-line"></i></div><h4 data-i18n="prices">الأسعار</h4><p data-i18n="trackPrices">تابع التقلبات</p></div>
+                <div class="quick-action-card" onclick="requireAuth('chat')"><div class="qicon purple"><i class="fas fa-comments"></i></div><h4 data-i18n="messages">الرسائل</h4><p data-i18n="chatWithSellers">تواصل مع البائعين</p></div>
+            </div>
+            <div class="section-header"><h3><i class="fas fa-fire" style="color:var(--accent)"></i> <span data-i18n="latestProducts">أحدث المحاصيل</span></h3><a class="view-all" onclick="navigateTo('market')" data-i18n="viewAll">عرض الكل ←</a></div>
+            <div class="products-grid" id="homeProducts"></div>
+        </section>
 
-            <!-- HOME -->
-            <section class="page-section active" id="page-home">
-                <div class="welcome-banner">
-                    <h2 id="welcomeMsg">مرحباً! 👋</h2>
-                    <p>مرحباً بك في سوقك الذكي - ابدأ ببيع أو شراء محاصيلك مباشرة</p>
-                    <div class="welcome-stats">
-                        <div class="welcome-stat">
-                            <span class="num" id="statProducts">0</span>
-                            <span class="label">محصول متاح</span>
-                        </div>
-                        <div class="welcome-stat">
-                            <span class="num" id="statFarmers">0</span>
-                            <span class="label">فلاح مسجل</span>
-                        </div>
-                        <div class="welcome-stat">
-                            <span class="num" id="statRegions">0</span>
-                            <span class="label">منطقة</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- MARKET -->
+        <section class="page-section" id="page-market">
+            <div class="section-header"><h3><i class="fas fa-store" style="color:var(--primary)"></i> <span data-i18n="market">السوق المباشر</span></h3></div>
+            <div class="search-bar"><div class="search-input-wrapper"><i class="fas fa-search"></i><input type="text" class="search-input" id="searchInput" oninput="filterProducts()" data-i18n-placeholder="searchProduct"></div></div>
+            <div class="filter-chips"><button class="filter-chip active" onclick="filterByCategory('all',this)" data-i18n="all">الكل</button><button class="filter-chip" onclick="filterByCategory('خضروات',this)">🥬 <span data-i18n="vegetables">خضروات</span></button><button class="filter-chip" onclick="filterByCategory('فواكه',this)">🍎 <span data-i18n="fruits">فواكه</span></button><button class="filter-chip" onclick="filterByCategory('حبوب',this)">🌾 <span data-i18n="grains">حبوب</span></button><button class="filter-chip" onclick="filterByCategory('بقوليات',this)">🫘 <span data-i18n="legumes">بقوليات</span></button><button class="filter-chip" onclick="filterByCategory('أعشاب',this)">🌿 <span data-i18n="herbs">أعشاب</span></button></div>
+            <div class="products-grid" id="marketProducts"></div>
+            <div class="empty-state hidden" id="emptyMarket"><div class="icon">🔍</div><h3 data-i18n="noResults">لا توجد نتائج</h3></div>
+        </section>
 
-                <div class="section-header">
-                    <h3><i class="fas fa-bolt" style="color:var(--secondary)"></i> إجراءات سريعة</h3>
-                </div>
-                <div class="quick-actions">
-                    <div class="quick-action-card" onclick="navigateTo('addProduct')">
-                        <div class="icon green"><i class="fas fa-plus"></i></div>
-                        <h4>نشر محصول</h4>
-                        <p>أضف منتجك للبيع</p>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('market')">
-                        <div class="icon orange"><i class="fas fa-store"></i></div>
-                        <h4>تصفح السوق</h4>
-                        <p>شاهد العروض المتاحة</p>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('prices')">
-                        <div class="icon blue"><i class="fas fa-chart-line"></i></div>
-                        <h4>بورصة الأسعار</h4>
-                        <p>تابع تقلبات السوق</p>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('weather')">
-                        <div class="icon red"><i class="fas fa-cloud-sun"></i></div>
-                        <h4>الطقس</h4>
-                        <p>تحقق قبل الحصاد</p>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h3><i class="fas fa-fire" style="color:var(--accent)"></i> أحدث المحاصيل</h3>
-                    <a class="view-all" onclick="navigateTo('market')">عرض الكل ←</a>
-                </div>
-                <div class="products-grid" id="homeProducts"></div>
-            </section>
-
-            <!-- MARKET -->
-            <section class="page-section" id="page-market">
-                <div class="section-header">
-                    <h3><i class="fas fa-store" style="color:var(--primary)"></i> السوق المباشر</h3>
-                </div>
-                <div class="search-bar">
-                    <div class="search-input-wrapper">
-                        <i class="fas fa-search"></i>
-                        <input type="text" class="search-input" placeholder="ابحث عن محصول..." id="searchInput" oninput="filterProducts()">
-                    </div>
-                </div>
-                <div class="filter-chips">
-                    <button class="filter-chip active" onclick="filterByCategory('all',this)">الكل</button>
-                    <button class="filter-chip" onclick="filterByCategory('خضروات',this)">🥬 خضروات</button>
-                    <button class="filter-chip" onclick="filterByCategory('فواكه',this)">🍎 فواكه</button>
-                    <button class="filter-chip" onclick="filterByCategory('حبوب',this)">🌾 حبوب</button>
-                    <button class="filter-chip" onclick="filterByCategory('بقوليات',this)">🫘 بقوليات</button>
-                    <button class="filter-chip" onclick="filterByCategory('أعشاب',this)">🌿 أعشاب</button>
-                </div>
-                <div class="products-grid" id="marketProducts"></div>
-                <div class="empty-state hidden" id="emptyMarket">
-                    <div class="icon">🔍</div>
-                    <h3>لا توجد نتائج</h3>
-                    <p>جرب البحث بكلمة أخرى أو غير الفلتر</p>
-                </div>
-            </section>
-
-            <!-- ADD PRODUCT -->
-            <section class="page-section" id="page-addProduct">
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <h3>🌱 نشر محصول جديد</h3>
-                        <p style="opacity:0.85;font-size:0.9rem;margin-top:5px;">أضف منتجك ليظهر مباشرة لجميع المشترين</p>
-                    </div>
-                    <div class="form-card-body">
-                        <form id="addProductForm" onsubmit="handleAddProduct(event)">
-                            <div class="form-group">
-                                <label>📦 نوع المحصول</label>
-                                <select class="form-select" id="prodCategory" required>
-                                    <option value="">اختر التصنيف</option>
-                                    <option value="خضروات">🥬 خضروات</option>
-                                    <option value="فواكه">🍎 فواكه</option>
-                                    <option value="حبوب">🌾 حبوب</option>
-                                    <option value="بقوليات">🫘 بقوليات</option>
-                                    <option value="أعشاب">🌿 أعشاب ونباتات</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>🏷️ اسم المنتج</label>
-                                <div class="input-wrapper">
-                                    <i class="fas fa-tag"></i>
-                                    <input type="text" class="form-input" id="prodName" placeholder="مثال: طماطم، بطاطس، برتقال..." required>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>💰 السعر (درهم)</label>
-                                    <div class="input-wrapper">
-                                        <i class="fas fa-coins"></i>
-                                        <input type="number" class="form-input" id="prodPrice" placeholder="0.00" step="0.01" min="0" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>📏 الوحدة</label>
-                                    <select class="form-select" id="prodUnit" required>
-                                        <option value="كجم">كيلوغرام</option>
-                                        <option value="طن">طن</option>
-                                        <option value="صندوق">صندوق</option>
-                                        <option value="قنطار">قنطار</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>📊 الكمية المتاحة</label>
-                                    <div class="input-wrapper">
-                                        <i class="fas fa-weight-hanging"></i>
-                                        <input type="number" class="form-input" id="prodQuantity" placeholder="الكمية" min="1" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>📍 المنطقة</label>
-                                    <select class="form-select" id="prodRegion" required>
-                                        <option value="">اختر المنطقة</option>
-                                        <option value="الدار البيضاء">الدار البيضاء</option>
-                                        <option value="الرباط">الرباط</option>
-                                        <option value="مراكش">مراكش</option>
-                                        <option value="فاس">فاس</option>
-                                        <option value="أكادير">أكادير</option>
-                                        <option value="مكناس">مكناس</option>
-                                        <option value="بركان">بركان</option>
-                                        <option value="الناظور">الناظور</option>
-                                        <option value="وجدة">وجدة</option>
-                                        <option value="القنيطرة">القنيطرة</option>
-                                        <option value="سطات">سطات</option>
-                                        <option value="بني ملال">بني ملال</option>
-                                        <option value="أخرى">أخرى</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>📝 وصف إضافي</label>
-                                <textarea class="form-textarea" id="prodDescription" placeholder="أضف تفاصيل عن جودة المنتج، طريقة التوصيل..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>📸 صورة المنتج (اختياري)</label>
-                                <div class="image-upload-area" onclick="document.getElementById('prodImage').click()">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>اضغط لإضافة صورة للمحصول</p>
-                                    <p style="font-size:0.75rem;color:var(--text-light);">PNG, JPG - حد أقصى 5 ميغا</p>
-                                </div>
-                                <input type="file" id="prodImage" accept="image/*" class="hidden" onchange="handleImagePreview(this)">
-                                <div id="imagePreview" class="hidden mt-1" style="text-align:center;">
-                                    <img id="previewImg" style="max-width:200px;border-radius:var(--radius-md);margin-top:10px;">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary" id="publishBtn">
-                                <i class="fas fa-paper-plane"></i> نشر المحصول الآن
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PRICES -->
-            <section class="page-section" id="page-prices">
-                <div class="section-header">
-                    <h3><i class="fas fa-chart-line" style="color:var(--primary)"></i> بورصة الأسعار</h3>
-                    <span style="font-size:0.8rem;color:var(--text-light);">آخر تحديث: <span id="priceUpdateTime">اليوم</span></span>
-                </div>
-                <div class="price-table-container">
-                    <div class="price-table-header">
-                        <h3><i class="fas fa-chart-bar"></i> أسعار الخضروات</h3>
-                        <span style="font-size:0.8rem;">درهم / كجم</span>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="price-table">
-                            <thead><tr><th>المنتج</th><th>السعر الحالي</th><th>التغير</th><th>أقل سعر</th><th>أعلى سعر</th></tr></thead>
-                            <tbody id="priceTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="price-table-container">
-                    <div class="price-table-header" style="background:linear-gradient(135deg,#e65100,#bf360c);">
-                        <h3><i class="fas fa-chart-bar"></i> أسعار الفواكه</h3>
-                        <span style="font-size:0.8rem;">درهم / كجم</span>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="price-table">
-                            <thead><tr><th>المنتج</th><th>السعر الحالي</th><th>التغير</th><th>أقل سعر</th><th>أعلى سعر</th></tr></thead>
-                            <tbody id="fruitPriceTable"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- INVENTORY -->
-            <section class="page-section" id="page-inventory">
-                <div class="section-header">
-                    <h3><i class="fas fa-boxes-stacked" style="color:var(--primary)"></i> إدارة المخزون</h3>
-                    <button class="btn btn-primary" style="padding:8px 16px;font-size:0.85rem;width:auto;" onclick="navigateTo('addProduct')">
-                        <i class="fas fa-plus"></i> إضافة
-                    </button>
-                </div>
-                <div id="inventoryList"></div>
-                <div class="empty-state" id="emptyInventory">
-                    <div class="icon">📦</div>
-                    <h3>لا توجد محاصيل في المخزون</h3>
-                    <p>ابدأ بنشر محاصيلك لتظهر هنا</p>
-                    <button class="btn btn-primary" style="width:auto;margin:0 auto;" onclick="navigateTo('addProduct')">
-                        <i class="fas fa-plus"></i> نشر محصول
-                    </button>
-                </div>
-            </section>
-
-            <!-- WEATHER -->
-            <section class="page-section" id="page-weather">
-                <div class="section-header">
-                    <h3><i class="fas fa-cloud-sun" style="color:#1976d2"></i> أحوال الطقس</h3>
-                </div>
-                <div class="weather-widget">
-                    <div class="weather-header">
-                        <span class="weather-location"><i class="fas fa-map-marker-alt"></i> <span id="weatherCity">جاري التحديد...</span></span>
-                        <span id="weatherDate" style="font-size:0.85rem;opacity:0.8;"></span>
-                    </div>
-                    <div class="weather-main">
-                        <span class="weather-icon" id="weatherIcon">☀️</span>
-                        <div>
-                            <div class="weather-temp"><span id="weatherTemp">--</span>°</div>
-                            <div class="weather-desc" id="weatherDesc">جاري التحميل...</div>
+        <!-- ADD PRODUCT -->
+        <section class="page-section" id="page-addProduct">
+            <div class="form-card">
+                <div class="form-card-header"><h3>🌱 <span data-i18n="publishProduct">نشر محصول جديد</span></h3></div>
+                <div class="form-card-body">
+                    <form id="addProductForm" onsubmit="handleAddProduct(event)">
+                        <div class="form-group"><label>📦 <span data-i18n="productType">نوع المحصول</span></label><select class="form-select" id="prodCategory" required><option value="">اختر</option><option value="خضروات">🥬 خضروات</option><option value="فواكه">🍎 فواكه</option><option value="حبوب">🌾 حبوب</option><option value="بقوليات">🫘 بقوليات</option><option value="أعشاب">🌿 أعشاب</option></select></div>
+                        <div class="form-group"><label>🏷️ <span data-i18n="productName">اسم المنتج</span></label><div class="input-wrapper"><i class="fas fa-tag"></i><input type="text" class="form-input" id="prodName" required></div></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>💰 <span data-i18n="priceDH">السعر (درهم)</span></label><div class="input-wrapper"><i class="fas fa-coins"></i><input type="number" class="form-input" id="prodPrice" step="0.01" min="0" required></div></div>
+                            <div class="form-group"><label>📏 <span data-i18n="unit">الوحدة</span></label><select class="form-select" id="prodUnit" required><option value="كجم">كيلوغرام</option><option value="طن">طن</option><option value="صندوق">صندوق</option><option value="قنطار">قنطار</option></select></div>
                         </div>
-                    </div>
-                    <div class="weather-details">
-                        <div class="weather-detail"><i class="fas fa-tint"></i><div class="value" id="weatherHumidity">--%</div><div class="label">الرطوبة</div></div>
-                        <div class="weather-detail"><i class="fas fa-wind"></i><div class="value" id="weatherWind">-- كم/س</div><div class="label">الرياح</div></div>
-                        <div class="weather-detail"><i class="fas fa-cloud-rain"></i><div class="value" id="weatherRain">--%</div><div class="label">احتمال المطر</div></div>
-                    </div>
-                    <div class="weather-advice" id="weatherAdvice"><i class="fas fa-lightbulb"></i><span>جاري تحليل الطقس...</span></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>📊 <span data-i18n="quantity">الكمية</span></label><div class="input-wrapper"><i class="fas fa-weight-hanging"></i><input type="number" class="form-input" id="prodQuantity" min="1" required></div></div>
+                            <div class="form-group"><label>📍 <span data-i18n="region">المنطقة</span></label><select class="form-select" id="prodRegion" required><option value="">اختر</option><option>الدار البيضاء</option><option>الرباط</option><option>مراكش</option><option>فاس</option><option>أكادير</option><option>مكناس</option><option>بركان</option><option>الناظور</option><option>وجدة</option><option>القنيطرة</option><option>سطات</option><option>أخرى</option></select></div>
+                        </div>
+                        <div class="form-group"><label>📞 <span data-i18n="contactPhone">رقم التواصل</span></label><div class="input-wrapper"><i class="fas fa-phone"></i><input type="tel" class="form-input" id="prodPhone" placeholder="06XXXXXXXX"></div></div>
+                        <div class="form-group"><label>📝 <span data-i18n="description">وصف</span></label><textarea class="form-textarea" id="prodDescription"></textarea></div>
+                        <div class="form-group"><label>📸 <span data-i18n="photo">صورة</span></label><div class="image-upload-area" onclick="document.getElementById('prodImage').click()"><i class="fas fa-cloud-upload-alt"></i><p data-i18n="clickToUpload">اضغط لإضافة صورة</p></div><input type="file" id="prodImage" accept="image/*" class="hidden" onchange="handleImagePreview(this)"><div id="imagePreview" class="hidden mt-1" style="text-align:center"><img id="previewImg" style="max-width:180px;border-radius:var(--radius-md);margin-top:8px"></div></div>
+                        <button type="submit" class="btn btn-primary" id="publishBtn"><i class="fas fa-paper-plane"></i> <span data-i18n="publishNow">نشر الآن</span></button>
+                    </form>
                 </div>
-                <div class="section-header">
-                    <h3><i class="fas fa-calendar-week" style="color:#1976d2"></i> توقعات 5 أيام</h3>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;" id="forecastGrid"></div>
-            </section>
+            </div>
+        </section>
 
-            <!-- PROFILE -->
-            <section class="page-section" id="page-profile">
-                <div class="form-card">
-                    <div class="form-card-header"><h3>👤 حسابي</h3></div>
-                    <div class="form-card-body">
-                        <div style="text-align:center;margin-bottom:20px;">
-                            <div style="width:80px;height:80px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;margin:0 auto 10px;" id="profileAvatar">ض</div>
-                            <h3 id="profileName">ضيف</h3>
-                            <p style="color:var(--text-light);" id="profileEmail">-</p>
-                        </div>
-                        <div class="form-group">
-                            <label>الاسم</label>
-                            <input type="text" class="form-input" id="profileNameInput" style="padding-right:14px;">
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الهاتف</label>
-                            <input type="tel" class="form-input" id="profilePhone" style="padding-right:14px;">
-                        </div>
-                        <div class="form-group">
-                            <label>المنطقة</label>
-                            <input type="text" class="form-input" id="profileRegion" style="padding-right:14px;">
-                        </div>
-                        <button class="btn btn-primary" onclick="updateProfile()">
-                            <i class="fas fa-save"></i> حفظ التغييرات
-                        </button>
-                    </div>
-                </div>
-            </section>
+        <!-- PRICES (Dynamic) -->
+        <section class="page-section" id="page-prices">
+            <div class="section-header"><h3><i class="fas fa-chart-line" style="color:var(--primary)"></i> <span data-i18n="priceExchange">بورصة الأسعار</span></h3><span style="font-size:.75rem;color:var(--text-light)" data-i18n="basedOnPlatform">حسب عروض المنصة</span></div>
+            <div id="dynamicPricesContainer"></div>
+            <div class="empty-state hidden" id="emptyPrices"><div class="icon">📊</div><h3 data-i18n="noPricesYet">لا توجد بيانات أسعار بعد</h3><p data-i18n="addProductsForPrices">أضف محاصيل لتظهر الأسعار تلقائياً</p></div>
+        </section>
 
-            <!-- SETTINGS -->
-            <section class="page-section" id="page-settings">
-                <div class="form-card">
-                    <div class="form-card-header"><h3>⚙️ الإعدادات</h3></div>
-                    <div class="form-card-body">
-                        <div class="form-group">
-                            <label>🌐 اللغة</label>
-                            <select class="form-select">
-                                <option>العربية</option>
-                                <option>الأمازيغية</option>
-                                <option>Français</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>📱 مشاركة التطبيق</label>
-                            <button class="btn btn-outline" style="width:100%;" onclick="shareApp()">
-                                <i class="fas fa-share-alt"></i> شارك محصولي مع أصدقائك
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <label style="color:#c62828;">⚠️ حذف الحساب</label>
-                            <button class="btn" style="width:100%;background:#fce4ec;color:#c62828;border:2px solid #ffcdd2;" onclick="confirmDeleteAccount()">
-                                <i class="fas fa-trash-alt"></i> حذف حسابي نهائياً
-                            </button>
-                        </div>
-                    </div>
+        <!-- CHAT -->
+        <section class="page-section" id="page-chat">
+            <div class="chat-container">
+                <div class="section-header"><h3><i class="fas fa-comment-dots" style="color:#1976d2"></i> <span data-i18n="messages">الرسائل</span></h3></div>
+                <!-- Chat List -->
+                <div id="chatListView" class="chat-list"></div>
+                <div class="empty-state" id="emptyChat"><div class="icon">💬</div><h3 data-i18n="noMessages">لا توجد رسائل</h3><p data-i18n="startChatting">ابدأ محادثة من صفحة المنتج</p></div>
+                <!-- Chat Conversation -->
+                <div class="chat-view" id="chatView">
+                    <div class="chat-view-header"><button class="chat-back" onclick="closeChatView()"><i class="fas fa-arrow-right"></i></button><h4 id="chatViewName">محادثة</h4><span id="chatViewProduct" style="font-size:.75rem;color:var(--primary)"></span></div>
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input-area"><input type="text" class="chat-input" id="chatInput" placeholder="اكتب رسالة..." onkeypress="if(event.key==='Enter')sendMessage()"><button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button></div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-        </div>
+        <!-- INVENTORY -->
+        <section class="page-section" id="page-inventory">
+            <div class="section-header"><h3><i class="fas fa-boxes-stacked" style="color:var(--primary)"></i> <span data-i18n="myStock">المخزون</span></h3><button class="btn btn-primary btn-sm" onclick="navigateTo('addProduct')"><i class="fas fa-plus"></i></button></div>
+            <div id="inventoryList"></div>
+            <div class="empty-state" id="emptyInventory"><div class="icon">📦</div><h3 data-i18n="noStock">لا توجد محاصيل</h3><button class="btn btn-primary" style="width:auto;margin:0 auto" onclick="navigateTo('addProduct')"><i class="fas fa-plus"></i> <span data-i18n="publish">نشر</span></button></div>
+        </section>
+
+        <!-- PUBLIC PROFILE -->
+        <section class="page-section" id="page-publicProfile">
+            <div id="publicProfileContent"></div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page-section" id="page-settings">
+            <div class="form-card" style="max-width:500px">
+                <div class="form-card-header"><h3>⚙️ <span data-i18n="settings">الإعدادات</span></h3></div>
+                <div class="form-card-body">
+                    <div class="form-group"><label>🌐 <span data-i18n="language">اللغة</span></label>
+                        <select class="form-select" id="langSelect" onchange="setLanguage(this.value)">
+                            <option value="ar">العربية</option>
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                    <div class="setting-item"><div class="setting-info"><h4 data-i18n="notifications">الإشعارات</h4><p data-i18n="notifDesc">تلقي إشعارات المنتجات الجديدة</p></div><div class="toggle-switch active" onclick="this.classList.toggle('active')"></div></div>
+                    <div class="setting-item"><div class="setting-info"><h4 data-i18n="darkMode">الوضع الداكن</h4><p data-i18n="darkModeDesc">قريباً</p></div><div class="toggle-switch" onclick="showToast('قريباً إن شاء الله','info')"></div></div>
+                    <div class="form-group mt-2"><label>👤 <span data-i18n="editProfile">تعديل الملف</span></label>
+                        <input type="text" class="form-input-simple" id="profileNameInput" placeholder="الاسم" style="margin-bottom:8px">
+                        <input type="tel" class="form-input-simple" id="profilePhone" placeholder="الهاتف" style="margin-bottom:8px">
+                        <input type="text" class="form-input-simple" id="profileRegion" placeholder="المنطقة" style="margin-bottom:8px">
+                        <button class="btn btn-primary" onclick="updateProfile()"><i class="fas fa-save"></i> <span data-i18n="save">حفظ</span></button>
+                    </div>
+                    <div class="form-group mt-2"><label>📱 <span data-i18n="share">مشاركة</span></label><button class="btn btn-outline" onclick="shareApp()"><i class="fas fa-share-alt"></i> <span data-i18n="shareApp">شارك محصولي</span></button></div>
+                    <div class="form-group mt-2"><label style="color:#c62828">⚠️ <span data-i18n="deleteAccount">حذف الحساب</span></label><button class="btn" style="width:100%;background:#fce4ec;color:#c62828;border:2px solid #ffcdd2" onclick="confirmDeleteAccount()"><i class="fas fa-trash-alt"></i> <span data-i18n="deleteMyAccount">حذف حسابي</span></button></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section class="page-section" id="page-admin">
+            <div class="admin-header"><h2>🛡️ لوحة الأدمين</h2></div>
+            <div class="admin-stats"><div class="admin-stat-card"><div class="stat-num" id="adminStatProducts">0</div><div class="stat-label">📦 محاصيل</div></div><div class="admin-stat-card orange"><div class="stat-num" id="adminStatUsers">0</div><div class="stat-label">👥 مستخدمين</div></div><div class="admin-stat-card red"><div class="stat-num" id="adminStatFarmers">0</div><div class="stat-label">🌱 فلاحين</div></div><div class="admin-stat-card blue"><div class="stat-num" id="adminStatRegions">0</div><div class="stat-label">📍 مناطق</div></div></div>
+            <div class="admin-tabs"><button class="admin-tab active" onclick="switchAdminTab('products',this)">📦 محاصيل</button><button class="admin-tab" onclick="switchAdminTab('users',this)">👥 مستخدمين</button></div>
+            <div class="admin-tab-content active" id="adminTab-products"><div id="adminProductsList"></div></div>
+            <div class="admin-tab-content" id="adminTab-users"><div id="adminUsersList"></div></div>
+        </section>
     </div>
 
-    <!-- FAB -->
-    <button class="fab" id="fabBtn" onclick="navigateTo('addProduct')"><i class="fas fa-plus"></i></button>
-
+    <button class="fab visible" id="fabBtn" onclick="requireAuth('addProduct')"><i class="fas fa-plus"></i></button>
 
     <script>
-        // =============================================
-        // 🔧 Firebase Config - بيانات مشروعك الحقيقية
-        // =============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyAHVKypc3f3uJC5aNBrzYHkwLdtTraMS_o",
-            authDomain: "mahsouli-878b3.firebaseapp.com",
-            projectId: "mahsouli-878b3",
-            storageBucket: "mahsouli-878b3.firebasestorage.app",
-            messagingSenderId: "1038523766352",
-            appId: "1:1038523766352:web:2ccbed8e5135221f20e355",
-            measurementId: "G-M5LXRDHWLP"
-        };
+    // =============== FIREBASE ===============
+    const firebaseConfig={apiKey:"AIzaSyAHVKypc3f3uJC5aNBrzYHkwLdtTraMS_o",authDomain:"mahsouli-878b3.firebaseapp.com",projectId:"mahsouli-878b3",storageBucket:"mahsouli-878b3.firebasestorage.app",messagingSenderId:"1038523766352",appId:"1:1038523766352:web:2ccbed8e5135221f20e355"};
+    firebase.initializeApp(firebaseConfig);
+    const auth=firebase.auth(),db=firebase.firestore(),storage=firebase.storage();
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
+    // =============== STATE ===============
+    const ADMIN_EMAIL="admin.salah@gmail.com";
+    let currentUser=null,userProfile=null,isAdmin=false,allProducts=[],allUsers=[],currentFilter='all',pendingPage=null,currentChatId=null,currentLang='ar';
 
-        // =============================================
-        // 📦 App State
-        // =============================================
-        let currentUser = null;
-        let userProfile = null;
-        let allProducts = [];
-        let currentFilter = 'all';
+    // =============== TRANSLATIONS ===============
+    const T={
+        ar:{loading:"جاري التحميل... 🌱",slogan:"سوق الفلاح الذكي",login:"دخول",register:"حساب جديد",logout:"خروج",home:"الرئيسية",market:"السوق",publish:"نشر محصول",prices:"بورصة الأسعار",messages:"الرسائل",myStock:"المخزون",myProfile:"ملفي الشخصي",settings:"الإعدادات",email:"البريد الإلكتروني",password:"كلمة المرور",fullName:"الاسم الكامل",phone:"رقم الهاتف",region:"المنطقة",accountType:"نوع الحساب",createAccount:"إنشاء حساب",forgotPass:"نسيت كلمة المرور؟",orLoginWith:"أو ادخل بواسطة",welcomeAuth:"مرحباً بك في محصولي",authDesc:"سجل لنشر وإدارة محاصيلك",welcomeHome:"مرحباً بك في محصولي! 👋",welcomeDesc:"تصفح المحاصيل واشترِ مباشرة من الفلاح",quickActions:"إجراءات سريعة",latestProducts:"أحدث المحاصيل",viewAll:"عرض الكل ←",availableProducts:"محصول متاح",registeredFarmers:"مستخدم مسجل",regions:"منطقة",addYourProduct:"أضف منتجك",browseOffers:"تصفح العروض",trackPrices:"تابع التقلبات",chatWithSellers:"تواصل مع البائعين",publishProduct:"نشر محصول جديد",productType:"نوع المحصول",productName:"اسم المنتج",priceDH:"السعر (درهم)",unit:"الوحدة",quantity:"الكمية",contactPhone:"رقم التواصل",description:"وصف",photo:"صورة",clickToUpload:"اضغط لإضافة صورة",publishNow:"نشر الآن",priceExchange:"بورصة الأسعار",basedOnPlatform:"حسب عروض المنصة",noResults:"لا توجد نتائج",noMessages:"لا توجد رسائل",startChatting:"ابدأ محادثة من صفحة المنتج",noStock:"لا توجد محاصيل",all:"الكل",vegetables:"خضروات",fruits:"فواكه",grains:"حبوب",legumes:"بقوليات",herbs:"أعشاب",language:"اللغة",notifications:"الإشعارات",notifDesc:"تلقي إشعارات جديدة",darkMode:"الوضع الداكن",darkModeDesc:"قريباً",editProfile:"تعديل الملف",save:"حفظ",share:"مشاركة",shareApp:"شارك محصولي",deleteAccount:"حذف الحساب",deleteMyAccount:"حذف حسابي",mainMenu:"القائمة",account:"الحساب",contact:"تواصل",sendMessage:"أرسل",products:"منتجات",rating:"التقييم",memberSince:"عضو منذ",rateUser:"قيّم هذا البائع",noPricesYet:"لا توجد بيانات أسعار",addProductsForPrices:"أضف محاصيل لتظهر الأسعار",searchProduct:"ابحث عن محصول..."},
+        fr:{loading:"Chargement... 🌱",slogan:"Le marché intelligent",login:"Connexion",register:"Nouveau compte",logout:"Déconnexion",home:"Accueil",market:"Marché",publish:"Publier",prices:"Prix",messages:"Messages",myStock:"Stock",myProfile:"Mon profil",settings:"Paramètres",email:"Email",password:"Mot de passe",fullName:"Nom complet",phone:"Téléphone",region:"Région",accountType:"Type de compte",createAccount:"Créer un compte",forgotPass:"Mot de passe oublié?",orLoginWith:"Ou connectez-vous avec",welcomeAuth:"Bienvenue sur Mahsouli",authDesc:"Connectez-vous pour gérer vos produits",welcomeHome:"Bienvenue! 👋",welcomeDesc:"Parcourez et achetez directement du fermier",quickActions:"Actions rapides",latestProducts:"Derniers produits",viewAll:"Voir tout ←",availableProducts:"produits",registeredFarmers:"utilisateurs",regions:"régions",addYourProduct:"Ajouter produit",browseOffers:"Voir les offres",trackPrices:"Suivre les prix",chatWithSellers:"Contacter vendeurs",publishProduct:"Publier un produit",productType:"Type de produit",productName:"Nom du produit",priceDH:"Prix (DH)",unit:"Unité",quantity:"Quantité",contactPhone:"Téléphone",description:"Description",photo:"Photo",clickToUpload:"Cliquez pour ajouter",publishNow:"Publier maintenant",priceExchange:"Bourse des prix",basedOnPlatform:"Basé sur les offres",noResults:"Aucun résultat",noMessages:"Pas de messages",startChatting:"Commencez depuis un produit",noStock:"Pas de stock",all:"Tout",vegetables:"Légumes",fruits:"Fruits",grains:"Céréales",legumes:"Légumineuses",herbs:"Herbes",language:"Langue",notifications:"Notifications",notifDesc:"Recevoir les notifications",darkMode:"Mode sombre",darkModeDesc:"Bientôt",editProfile:"Modifier profil",save:"Enregistrer",share:"Partager",shareApp:"Partager Mahsouli",deleteAccount:"Supprimer compte",deleteMyAccount:"Supprimer mon compte",mainMenu:"Menu",account:"Compte",contact:"Contact",sendMessage:"Envoyer",products:"produits",rating:"Évaluation",memberSince:"Membre depuis",rateUser:"Évaluer ce vendeur",noPricesYet:"Pas de données",addProductsForPrices:"Ajoutez des produits",searchProduct:"Rechercher..."},
+        en:{loading:"Loading... 🌱",slogan:"Smart Farmer Market",login:"Login",register:"New Account",logout:"Logout",home:"Home",market:"Market",publish:"Publish",prices:"Prices",messages:"Messages",myStock:"Stock",myProfile:"My Profile",settings:"Settings",email:"Email",password:"Password",fullName:"Full Name",phone:"Phone",region:"Region",accountType:"Account Type",createAccount:"Create Account",forgotPass:"Forgot password?",orLoginWith:"Or login with",welcomeAuth:"Welcome to Mahsouli",authDesc:"Login to manage your products",welcomeHome:"Welcome! 👋",welcomeDesc:"Browse and buy directly from the farmer",quickActions:"Quick Actions",latestProducts:"Latest Products",viewAll:"View All ←",availableProducts:"products",registeredFarmers:"users",regions:"regions",addYourProduct:"Add product",browseOffers:"Browse offers",trackPrices:"Track prices",chatWithSellers:"Chat with sellers",publishProduct:"Publish Product",productType:"Product Type",productName:"Product Name",priceDH:"Price (DH)",unit:"Unit",quantity:"Quantity",contactPhone:"Phone",description:"Description",photo:"Photo",clickToUpload:"Click to upload",publishNow:"Publish Now",priceExchange:"Price Exchange",basedOnPlatform:"Based on platform data",noResults:"No results",noMessages:"No messages",startChatting:"Start from a product page",noStock:"No stock",all:"All",vegetables:"Vegetables",fruits:"Fruits",grains:"Grains",legumes:"Legumes",herbs:"Herbs",language:"Language",notifications:"Notifications",notifDesc:"Receive notifications",darkMode:"Dark Mode",darkModeDesc:"Coming soon",editProfile:"Edit Profile",save:"Save",share:"Share",shareApp:"Share Mahsouli",deleteAccount:"Delete Account",deleteMyAccount:"Delete my account",mainMenu:"Menu",account:"Account",contact:"Contact",sendMessage:"Send",products:"products",rating:"Rating",memberSince:"Member since",rateUser:"Rate this seller",noPricesYet:"No price data yet",addProductsForPrices:"Add products for prices",searchProduct:"Search product..."}
+    };
 
-        // =============================================
-        // ⏳ Loading
-        // =============================================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-            }, 1500);
-        });
+    function setLanguage(lang){
+        currentLang=lang;localStorage.setItem('lang',lang);
+        document.documentElement.lang=lang;
+        document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+        document.getElementById('langSelect').value=lang;
+        document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(T[lang]?.[k])el.textContent=T[lang][k]});
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');if(T[lang]?.[k])el.placeholder=T[lang][k]});
+    }
 
-        // =============================================
-        // 🔐 Auth State Observer
-        // =============================================
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                await loadUserProfile(user);
-                showApp();
-                loadProducts();
-                loadPrices();
-                loadWeather();
-                loadInventory();
-            } else {
-                currentUser = null;
-                userProfile = null;
-                showAuth();
-            }
-        });
+    // =============== INIT ===============
+    window.addEventListener('load',()=>{
+        const savedLang=localStorage.getItem('lang')||'ar';setLanguage(savedLang);
+        loadProducts();setTimeout(()=>document.getElementById('loadingScreen').classList.add('hidden'),1000);
+    });
 
-        // =============================================
-        // 🔐 Auth Functions
-        // =============================================
-        function switchAuthTab(tab) {
-            const tabs = document.querySelectorAll('.auth-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            if (tab === 'login') {
-                tabs[0].classList.add('active');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            } else {
-                tabs[1].classList.add('active');
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
-            }
-        }
+    // =============== AUTH STATE ===============
+    auth.onAuthStateChanged(async u=>{
+        if(u){currentUser=u;isAdmin=u.email===ADMIN_EMAIL;await loadUserProfile(u);onUserLoggedIn();loadInventory();loadConversations();if(isAdmin)loadAdminData();if(pendingPage){navigateTo(pendingPage);pendingPage=null}}
+        else{currentUser=null;userProfile=null;isAdmin=false;onUserLoggedOut()}
+    });
 
-        async function handleEmailLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('loginBtn');
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                showToast('تم تسجيل الدخول بنجاح! 🎉', 'success');
-            } catch (error) {
-                showToast(getAuthError(error.code), 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
-            }
-        }
+    function onUserLoggedIn(){
+        document.getElementById('headerLoginBtn').classList.add('hidden');document.getElementById('headerAvatar').classList.remove('hidden');
+        document.getElementById('sidebarLoginLink').classList.add('hidden');document.getElementById('sidebarProfileLink').classList.remove('hidden');
+        document.getElementById('sidebarSettingsLink').classList.remove('hidden');document.getElementById('sidebarLogoutLink').classList.remove('hidden');
+        closeAuthModal();updateUIWithUser();
+        if(isAdmin){document.getElementById('adminSidebarSection').classList.remove('hidden');document.getElementById('adminSidebarLink').classList.remove('hidden');document.getElementById('dropdownAdminBtn').classList.remove('hidden')}
+    }
+    function onUserLoggedOut(){
+        document.getElementById('headerLoginBtn').classList.remove('hidden');document.getElementById('headerAvatar').classList.add('hidden');
+        document.getElementById('sidebarLoginLink').classList.remove('hidden');document.getElementById('sidebarProfileLink').classList.add('hidden');
+        document.getElementById('sidebarSettingsLink').classList.add('hidden');document.getElementById('sidebarLogoutLink').classList.add('hidden');
+        document.getElementById('adminSidebarSection').classList.add('hidden');document.getElementById('adminSidebarLink').classList.add('hidden');document.getElementById('dropdownAdminBtn').classList.add('hidden');
+        document.getElementById('sidebarAvatar').textContent='ض';document.getElementById('sidebarName').textContent='ضيف';document.getElementById('sidebarRole').textContent='زائر';
+        const prot=['addProduct','inventory','profile','settings','admin','chat'];
+        const cur=document.querySelector('.page-section.active')?.id?.replace('page-','');if(prot.includes(cur))navigateTo('home');
+    }
+    function requireAuth(p){if(currentUser)navigateTo(p);else{pendingPage=p;openAuthModal();showToast('يجب تسجيل الدخول','warning')}}
 
-        async function handleEmailRegister(e) {
-            e.preventDefault();
-            const btn = document.getElementById('registerBtn');
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const phone = document.getElementById('registerPhone').value;
-            const region = document.getElementById('registerRegion').value;
-            const role = document.getElementById('registerRole').value;
-            const password = document.getElementById('registerPassword').value;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(email, password);
-                await cred.user.updateProfile({ displayName: name });
-                await db.collection('users').doc(cred.user.uid).set({
-                    name, email, phone, region, role,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    productsCount: 0
-                });
-                showToast('تم إنشاء حسابك بنجاح! مرحباً بك 🌱', 'success');
-            } catch (error) {
-                showToast(getAuthError(error.code), 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء الحساب';
-            }
-        }
+    // =============== AUTH ===============
+    function openAuthModal(){document.getElementById('authModal').classList.add('active');closeSidebar()}
+    function closeAuthModal(){document.getElementById('authModal').classList.remove('active')}
+    function switchAuthTab(t){document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('registerForm').classList.add('hidden')}else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('loginForm').classList.add('hidden');document.getElementById('registerForm').classList.remove('hidden')}}
 
-        async function handleGoogleLogin() {
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'select_account' });
-                const result = await auth.signInWithPopup(provider);
-                const userDoc = await db.collection('users').doc(result.user.uid).get();
-                if (!userDoc.exists) {
-                    await db.collection('users').doc(result.user.uid).set({
-                        name: result.user.displayName || 'مستخدم',
-                        email: result.user.email,
-                        phone: '', region: '', role: 'buyer',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        productsCount: 0
-                    });
-                }
-                showToast('تم تسجيل الدخول بـ Google! 🎉', 'success');
-            } catch (error) {
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    showToast(getAuthError(error.code), 'error');
-                }
-            }
-        }
+    async function handleEmailLogin(e){e.preventDefault();const b=document.getElementById('loginBtn');b.disabled=true;b.innerHTML='<i class="fas fa-spinner fa-spin"></i>';try{await auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value,document.getElementById('loginPassword').value);showToast('تم الدخول! 🎉','success')}catch(e){showToast(getAuthError(e.code),'error')}finally{b.disabled=false;b.innerHTML='<i class="fas fa-sign-in-alt"></i> '+T[currentLang].login}}
+    async function handleEmailRegister(e){e.preventDefault();const b=document.getElementById('registerBtn');const n=document.getElementById('registerName').value,em=document.getElementById('registerEmail').value,ph=document.getElementById('registerPhone').value,rg=document.getElementById('registerRegion').value,rl=document.getElementById('registerRole').value,pw=document.getElementById('registerPassword').value;b.disabled=true;b.innerHTML='<i class="fas fa-spinner fa-spin"></i>';try{const c=await auth.createUserWithEmailAndPassword(em,pw);await c.user.updateProfile({displayName:n});await db.collection('users').doc(c.user.uid).set({name:n,email:em,phone:ph,region:rg,role:rl,createdAt:new Date().toISOString(),productsCount:0,ratingSum:0,ratingCount:0});showToast('تم إنشاء حسابك! 🌱','success')}catch(e){showToast(getAuthError(e.code),'error')}finally{b.disabled=false;b.innerHTML='<i class="fas fa-user-plus"></i> '+T[currentLang].createAccount}}
+    async function handleGoogleLogin(){try{const p=new firebase.auth.GoogleAuthProvider();const r=await auth.signInWithPopup(p);const d=await db.collection('users').doc(r.user.uid).get();if(!d.exists)await db.collection('users').doc(r.user.uid).set({name:r.user.displayName||'مستخدم',email:r.user.email,phone:'',region:'',role:'buyer',createdAt:new Date().toISOString(),productsCount:0,ratingSum:0,ratingCount:0});showToast('تم الدخول بـ Google!','success')}catch(e){if(e.code!=='auth/popup-closed-by-user')showToast(getAuthError(e.code),'error')}}
+    async function handleFacebookLogin(){try{const p=new firebase.auth.FacebookAuthProvider();const r=await auth.signInWithPopup(p);const d=await db.collection('users').doc(r.user.uid).get();if(!d.exists)await db.collection('users').doc(r.user.uid).set({name:r.user.displayName||'مستخدم',email:r.user.email||'',phone:'',region:'',role:'buyer',createdAt:new Date().toISOString(),productsCount:0,ratingSum:0,ratingCount:0});showToast('تم الدخول!','success')}catch(e){if(e.code!=='auth/popup-closed-by-user')showToast(getAuthError(e.code),'error')}}
+    async function handleForgotPassword(){const e=document.getElementById('loginEmail').value;if(!e){showToast('أدخل بريدك','warning');return}try{await auth.sendPasswordResetEmail(e);showToast('تم إرسال رابط التعيين! 📧','success')}catch(e){showToast(getAuthError(e.code),'error')}}
+    async function handleLogout(){try{await auth.signOut();showToast('تم الخروج','info')}catch(e){}}
+    function getAuthError(c){const m={'auth/user-not-found':'❌ لا يوجد حساب','auth/wrong-password':'❌ كلمة مرور خاطئة','auth/email-already-in-use':'❌ البريد مسجل','auth/weak-password':'❌ كلمة مرور ضعيفة','auth/invalid-email':'❌ بريد غير صالح','auth/too-many-requests':'⚠️ انتظر قليلاً','auth/invalid-credential':'❌ بيانات خاطئة'};return m[c]||'❌ '+c}
 
-        async function handleFacebookLogin() {
-            try {
-                const provider = new firebase.auth.FacebookAuthProvider();
-                const result = await auth.signInWithPopup(provider);
-                const userDoc = await db.collection('users').doc(result.user.uid).get();
-                if (!userDoc.exists) {
-                    await db.collection('users').doc(result.user.uid).set({
-                        name: result.user.displayName || 'مستخدم',
-                        email: result.user.email || '',
-                        phone: '', region: '', role: 'buyer',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        productsCount: 0
-                    });
-                }
-                showToast('تم تسجيل الدخول بـ Facebook! 🎉', 'success');
-            } catch (error) {
-                if (error.code !== 'auth/popup-closed-by-user') {
-                    showToast(getAuthError(error.code), 'error');
-                }
-            }
-        }
+    // =============== PROFILE ===============
+    async function loadUserProfile(u){try{const d=await db.collection('users').doc(u.uid).get();userProfile=d.exists?d.data():{name:u.displayName||'مستخدم',email:u.email,role:'buyer',region:'',phone:''}}catch(e){userProfile={name:u.displayName||'مستخدم',email:u.email}}}
+    function updateUIWithUser(){const n=userProfile?.name||currentUser?.displayName||'مستخدم',e=userProfile?.email||currentUser?.email||'',i=n.charAt(0),roles={'farmer':'🌱 فلاح','distributor':'🚛 موزع','buyer':'🛒 مشتري'};
+    document.getElementById('headerAvatar').textContent=i;document.getElementById('dropdownName').textContent=n;document.getElementById('dropdownEmail').textContent=e;
+    document.getElementById('sidebarAvatar').textContent=i;document.getElementById('sidebarName').textContent=n;document.getElementById('sidebarRole').textContent=isAdmin?'🛡️ مدير':(roles[userProfile?.role]||'🛒');
+    document.getElementById('welcomeMsg').textContent=`${T[currentLang].welcomeHome.replace('!','')} ${n}! 👋`;
+    document.getElementById('profileNameInput').value=n;document.getElementById('profilePhone').value=userProfile?.phone||'';document.getElementById('profileRegion').value=userProfile?.region||''}
+    async function updateProfile(){if(!currentUser)return;const n=document.getElementById('profileNameInput').value,p=document.getElementById('profilePhone').value,r=document.getElementById('profileRegion').value;try{await db.collection('users').doc(currentUser.uid).update({name:n,phone:p,region:r});await currentUser.updateProfile({displayName:n});userProfile={...userProfile,name:n,phone:p,region:r};updateUIWithUser();showToast('تم التحديث ✅','success')}catch(e){showToast('خطأ','error')}}
 
-        async function handleForgotPassword() {
-            const email = document.getElementById('loginEmail').value;
-            if (!email) { showToast('أدخل بريدك الإلكتروني أولاً', 'warning'); return; }
-            try {
-                await auth.sendPasswordResetEmail(email);
-                showToast('تم إرسال رابط إعادة تعيين كلمة المرور! 📧', 'success');
-            } catch (error) {
-                showToast(getAuthError(error.code), 'error');
-            }
-        }
+    // =============== PUBLIC PROFILE ===============
+    async function viewProfile(uid){
+        navigateTo('publicProfile');const c=document.getElementById('publicProfileContent');c.innerHTML='<div class="loading-text" style="text-align:center;padding:40px">جاري التحميل...</div>';
+        try{const d=await db.collection('users').doc(uid).get();if(!d.exists){c.innerHTML='<div class="empty-state"><div class="icon">👤</div><h3>المستخدم غير موجود</h3></div>';return}
+        const u=d.data(),roles={'farmer':'🌱 فلاح','distributor':'🚛 موزع','buyer':'🛒 مشتري'};
+        const prods=await db.collection('products').where('sellerId','==',uid).get();
+        const ratings=await db.collection('ratings').where('ratedUserId','==',uid).get();
+        let ratingAvg=0,ratingCount=ratings.size;
+        if(ratingCount>0){let sum=0;ratings.forEach(r=>sum+=r.data().stars);ratingAvg=(sum/ratingCount).toFixed(1)}
+        const starsHtml=Array.from({length:5},(_, i)=>`<i class="fas fa-star ${i<Math.round(ratingAvg)?'active':''}"></i>`).join('');
+        const joinDate=u.createdAt?new Date(u.createdAt).toLocaleDateString(currentLang==='ar'?'ar-MA':currentLang==='fr'?'fr-FR':'en-US',{year:'numeric',month:'long'}):'';
 
-        async function handleLogout() {
-            try {
-                await auth.signOut();
-                showToast('تم تسجيل الخروج', 'info');
-            } catch (error) {
-                showToast('خطأ في تسجيل الخروج', 'error');
-            }
-        }
+        let prodsHtml='';prods.forEach(p=>{const pd=p.data();prodsHtml+=`<div class="product-card"><div class="product-card-image">${pd.imageURL?`<img src="${pd.imageURL}">`:`<span>${pd.emoji||'🌿'}</span>`}<span class="product-badge">${pd.category||''}</span></div><div class="product-card-body"><h4>${pd.name}</h4><div class="product-price-row"><div class="product-price">${pd.price} <small>درهم/${pd.unit}</small></div></div></div></div>`});
 
-        function getAuthError(code) {
-            const errors = {
-                'auth/user-not-found': '❌ لا يوجد حساب بهذا البريد',
-                'auth/wrong-password': '❌ كلمة المرور غير صحيحة',
-                'auth/email-already-in-use': '❌ هذا البريد مسجل مسبقاً',
-                'auth/weak-password': '❌ كلمة المرور ضعيفة (6 أحرف على الأقل)',
-                'auth/invalid-email': '❌ البريد الإلكتروني غير صالح',
-                'auth/too-many-requests': '⚠️ محاولات كثيرة، انتظر قليلاً',
-                'auth/network-request-failed': '📡 تحقق من اتصال الإنترنت',
-                'auth/popup-blocked': '⚠️ المتصفح منع النافذة المنبثقة',
-                'auth/account-exists-with-different-credential': '⚠️ هذا البريد مسجل بطريقة أخرى',
-                'auth/invalid-credential': '❌ بيانات الدخول غير صحيحة'
-            };
-            return errors[code] || '❌ حدث خطأ: ' + code;
-        }
+        let rateSection='';
+        if(currentUser&&currentUser.uid!==uid){rateSection=`<div style="margin-top:15px;padding:15px;background:var(--bg-main);border-radius:var(--radius-md)"><h4 style="margin-bottom:8px">${T[currentLang].rateUser}</h4><div class="stars" id="rateStars">${Array.from({length:5},(_,i)=>`<i class="fas fa-star" data-star="${i+1}" onclick="submitRating('${uid}',${i+1})"></i>`).join('')}</div></div>`}
 
-        // =============================================
-        // 👤 User Profile
-        // =============================================
-        async function loadUserProfile(user) {
-            try {
-                const doc = await db.collection('users').doc(user.uid).get();
-                userProfile = doc.exists ? doc.data() : {
-                    name: user.displayName || 'مستخدم',
-                    email: user.email, role: 'buyer', region: ''
-                };
-            } catch (e) {
-                userProfile = { name: user.displayName || 'مستخدم', email: user.email };
-            }
-            updateUIWithUser();
-        }
+        c.innerHTML=`<div class="profile-cover"><div class="profile-avatar-lg">${(u.name||'م').charAt(0)}</div></div>
+        <div class="profile-info-section"><h2>${u.name||'مستخدم'}</h2><div class="profile-role">${roles[u.role]||'مستخدم'}</div>
+        <div class="profile-region"><i class="fas fa-map-marker-alt"></i> ${u.region||'غير محدد'}</div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px"><div class="stars-display">${starsHtml}</div><span style="font-size:.85rem;color:var(--text-secondary)">${ratingAvg} (${ratingCount})</span></div>
+        <div style="font-size:.75rem;color:var(--text-light);margin-top:4px"><i class="fas fa-calendar"></i> ${T[currentLang].memberSince}: ${joinDate}</div>
+        ${u.phone?`<div style="margin-top:6px"><a href="tel:${u.phone}" style="color:var(--primary);font-size:.85rem"><i class="fas fa-phone"></i> ${u.phone}</a></div>`:''}
+        <div class="profile-stats-row"><div class="profile-stat"><span class="num">${prods.size}</span><span class="label">${T[currentLang].products}</span></div><div class="profile-stat"><span class="num">${ratingAvg||'—'}</span><span class="label">${T[currentLang].rating}</span></div></div>
+        ${rateSection}</div>
+        ${prods.size>0?`<div class="section-header"><h3><i class="fas fa-box" style="color:var(--primary)"></i> ${T[currentLang].products}</h3></div><div class="products-grid">${prodsHtml}</div>`:''}`
+        }catch(e){c.innerHTML='<div class="empty-state"><div class="icon">❌</div><h3>خطأ في التحميل</h3></div>';console.error(e)}
+    }
+    function viewMyProfile(){if(currentUser)viewProfile(currentUser.uid);else openAuthModal()}
 
-        function updateUIWithUser() {
-            const name = userProfile?.name || currentUser?.displayName || 'مستخدم';
-            const email = userProfile?.email || currentUser?.email || '';
-            const initial = name.charAt(0);
-            const roles = { 'farmer': '🌱 فلاح', 'distributor': '🚛 موزع', 'buyer': '🛒 مشتري' };
+    async function submitRating(uid,stars){
+        if(!currentUser)return;
+        try{const existing=await db.collection('ratings').where('raterId','==',currentUser.uid).where('ratedUserId','==',uid).get();
+        if(!existing.empty){existing.forEach(d=>d.ref.update({stars,timestamp:Date.now()}));showToast('تم تحديث التقييم ⭐','success')}
+        else{await db.collection('ratings').add({raterId:currentUser.uid,ratedUserId:uid,stars,timestamp:Date.now()});showToast('شكراً على التقييم! ⭐','success')}
+        viewProfile(uid)}catch(e){showToast('خطأ','error')}
+    }
 
-            document.getElementById('headerAvatar').textContent = initial;
-            document.getElementById('dropdownName').textContent = name;
-            document.getElementById('dropdownEmail').textContent = email;
-            document.getElementById('sidebarAvatar').textContent = initial;
-            document.getElementById('sidebarName').textContent = name;
-            document.getElementById('sidebarRole').textContent = roles[userProfile?.role] || '🛒 مشتري';
-            document.getElementById('welcomeMsg').textContent = `مرحباً ${name}! 👋`;
-            document.getElementById('profileAvatar').textContent = initial;
-            document.getElementById('profileName').textContent = name;
-            document.getElementById('profileEmail').textContent = email;
-            document.getElementById('profileNameInput').value = name;
-            document.getElementById('profilePhone').value = userProfile?.phone || '';
-            document.getElementById('profileRegion').value = userProfile?.region || '';
-        }
+    // =============== PRODUCTS ===============
+    async function handleAddProduct(e){
+        e.preventDefault();if(!currentUser){openAuthModal();return}
+        const b=document.getElementById('publishBtn');b.disabled=true;b.innerHTML='<i class="fas fa-spinner fa-spin"></i>';
+        const pn=document.getElementById('prodName').value;
+        const data={category:document.getElementById('prodCategory').value,name:pn,price:parseFloat(document.getElementById('prodPrice').value),unit:document.getElementById('prodUnit').value,quantity:parseInt(document.getElementById('prodQuantity').value),quantityRemaining:parseInt(document.getElementById('prodQuantity').value),region:document.getElementById('prodRegion').value,description:document.getElementById('prodDescription').value,contactPhone:document.getElementById('prodPhone').value||userProfile?.phone||'',sellerId:currentUser.uid,sellerName:userProfile?.name||'مستخدم',sellerPhone:document.getElementById('prodPhone').value||userProfile?.phone||'',status:'active',createdAt:new Date().toISOString(),timestamp:Date.now(),emoji:getEmoji(pn)};
+        try{const f=document.getElementById('prodImage').files[0];if(f){try{const r=storage.ref(`products/${currentUser.uid}/${Date.now()}`);const s=await r.put(f);data.imageURL=await s.ref.getDownloadURL()}catch(e){}}
+        await db.collection('products').add(data);showToast('تم النشر! 🎉','success');document.getElementById('addProductForm').reset();document.getElementById('imagePreview').classList.add('hidden');navigateTo('market')}
+        catch(e){showToast('خطأ: '+e.message,'error')}finally{b.disabled=false;b.innerHTML='<i class="fas fa-paper-plane"></i> '+T[currentLang].publishNow}
+    }
 
-        async function updateProfile() {
-            if (!currentUser) return;
-            const name = document.getElementById('profileNameInput').value;
-            const phone = document.getElementById('profilePhone').value;
-            const region = document.getElementById('profileRegion').value;
-            try {
-                await db.collection('users').doc(currentUser.uid).update({ name, phone, region });
-                await currentUser.updateProfile({ displayName: name });
-                userProfile = { ...userProfile, name, phone, region };
-                updateUIWithUser();
-                showToast('تم تحديث الملف الشخصي ✅', 'success');
-            } catch (e) {
-                showToast('خطأ في التحديث', 'error');
-            }
-        }
+    function loadProducts(){
+        db.collection('products').onSnapshot(snap=>{
+            allProducts=[];snap.forEach(d=>{const x=d.data();if(x.status==='active')allProducts.push({id:d.id,...x})});
+            allProducts.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+            renderProducts('homeProducts',allProducts.slice(0,6));renderProducts('marketProducts',allProducts);
+            document.getElementById('statProducts').textContent=allProducts.length;
+            document.getElementById('marketBadge').textContent=allProducts.length;
+            document.getElementById('statRegions').textContent=new Set(allProducts.map(p=>p.region).filter(Boolean)).size;
+            db.collection('users').get().then(s=>document.getElementById('statFarmers').textContent=s.size).catch(()=>{});
+            calculateDynamicPrices();
+            if(isAdmin){document.getElementById('adminStatProducts').textContent=allProducts.length;renderAdminProducts()}
+        },e=>console.error(e))
+    }
 
-        // =============================================
-        // 🛒 Products
-        // =============================================
-        async function handleAddProduct(e) {
-            e.preventDefault();
-            if (!currentUser) { showToast('يجب تسجيل الدخول أولاً', 'warning'); return; }
+    function renderProducts(id,products){
+        const c=document.getElementById(id);if(!c)return;
+        if(!products.length){c.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🌾</div><h3>لا توجد محاصيل</h3></div>';return}
+        c.innerHTML=products.map(p=>{
+            const showChat=currentUser&&currentUser.uid!==p.sellerId;
+            return`<div class="product-card"><div class="product-card-image">${p.imageURL?`<img src="${p.imageURL}" onerror="this.parentElement.innerHTML='<span>${p.emoji||'🌿'}</span>'">`:`<span>${p.emoji||'🌿'}</span>`}<span class="product-badge">${p.category||''}</span></div>
+            <div class="product-card-body"><h4>${p.name}</h4>
+            <div class="product-meta"><span><i class="fas fa-map-marker-alt"></i> ${p.region||''}</span><span><i class="fas fa-user"></i> <a class="seller-link" onclick="viewProfile('${p.sellerId}')">${p.sellerName||''}</a></span><span><i class="fas fa-box"></i> ${p.quantityRemaining||p.quantity||0} ${p.unit||''}</span></div>
+            ${p.description?`<p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:6px">${p.description.substring(0,70)}${p.description.length>70?'...':''}</p>`:''}
+            <div class="product-price-row"><div class="product-price">${p.price||0} <small>درهم/${p.unit||''}</small></div>
+            <div class="product-actions">
+            ${p.contactPhone?`<button class="btn-contact" onclick="window.open('https://wa.me/${(p.contactPhone||'').replace(/^0/,'212')}?text=${encodeURIComponent('مرحباً، أنا مهتم بـ '+p.name)}','_blank')"><i class="fab fa-whatsapp"></i></button>`:''}
+            ${showChat?`<button class="btn-chat" onclick="openChat('${p.sellerId}','${(p.sellerName||'').replace(/'/g,"\\'")}','${(p.name||'').replace(/'/g,"\\'")}')"><i class="fas fa-comment"></i></button>`:''}
+            </div></div></div></div>`}).join('')
+    }
 
-            const btn = document.getElementById('publishBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
+    function filterProducts(){const s=document.getElementById('searchInput').value.toLowerCase();let f=allProducts.filter(p=>(p.name||'').toLowerCase().includes(s)||(p.region||'').toLowerCase().includes(s)||(p.category||'').toLowerCase().includes(s));if(currentFilter!=='all')f=f.filter(p=>p.category===currentFilter);renderProducts('marketProducts',f);document.getElementById('emptyMarket').classList.toggle('hidden',f.length>0)}
+    function filterByCategory(c,b){currentFilter=c;document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');filterProducts()}
+    function getEmoji(n){const m={'طماطم':'🍅','بطاطس':'🥔','بصل':'🧅','جزر':'🥕','خيار':'🥒','فلفل':'🌶️','باذنجان':'🍆','خس':'🥬','برتقال':'🍊','ليمون':'🍋','تفاح':'🍎','موز':'🍌','عنب':'🍇','فراولة':'🍓','بطيخ':'🍉','قمح':'🌾','ذرة':'🌽','عدس':'🫘','حمص':'🫘','فول':'🫘','نعناع':'🌿'};for(let k in m)if(n.includes(k))return m[k];return'🌿'}
+    function handleImagePreview(i){if(i.files?.[0]){const r=new FileReader();r.onload=e=>{document.getElementById('previewImg').src=e.target.result;document.getElementById('imagePreview').classList.remove('hidden')};r.readAsDataURL(i.files[0])}}
 
-            const productData = {
-                category: document.getElementById('prodCategory').value,
-                name: document.getElementById('prodName').value,
-                price: parseFloat(document.getElementById('prodPrice').value),
-                unit: document.getElementById('prodUnit').value,
-                quantity: parseInt(document.getElementById('prodQuantity').value),
-                quantityRemaining: parseInt(document.getElementById('prodQuantity').value),
-                region: document.getElementById('prodRegion').value,
-                description: document.getElementById('prodDescription').value,
-                sellerId: currentUser.uid,
-                sellerName: userProfile?.name || currentUser.displayName || 'مستخدم',
-                sellerPhone: userProfile?.phone || '',
-                status: 'active',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                emoji: getProductEmoji(document.getElementById('prodName').value)
-            };
+    // =============== DYNAMIC PRICES ===============
+    function calculateDynamicPrices(){
+        const c=document.getElementById('dynamicPricesContainer');const ep=document.getElementById('emptyPrices');
+        if(!allProducts.length){c.innerHTML='';ep.classList.remove('hidden');return}
+        ep.classList.add('hidden');
+        const groups={};allProducts.forEach(p=>{const key=p.name?.trim();if(!key)return;if(!groups[key])groups[key]={prices:[],category:p.category,emoji:p.emoji||'🌿',unit:p.unit,sellers:new Set()};groups[key].prices.push(p.price);groups[key].sellers.add(p.sellerId)});
+        const categories={};Object.entries(groups).forEach(([name,data])=>{const cat=data.category||'أخرى';if(!categories[cat])categories[cat]=[];const prices=data.prices;const avg=(prices.reduce((a,b)=>a+b,0)/prices.length);categories[cat].push({name:data.emoji+' '+name,avg:avg.toFixed(2),min:Math.min(...prices).toFixed(2),max:Math.max(...prices).toFixed(2),sellers:data.sellers.size,unit:data.unit||'كجم'})});
+        let html='';Object.entries(categories).forEach(([cat,items])=>{
+            html+=`<div class="price-table-container"><div class="price-table-header"><h3><i class="fas fa-chart-bar"></i> ${cat}</h3><span style="font-size:.75rem">${items.length} منتج</span></div>
+            <div style="overflow-x:auto"><table class="price-table"><thead><tr><th>المنتج</th><th>المتوسط</th><th>أقل</th><th>أعلى</th><th>بائعين</th></tr></thead><tbody>
+            ${items.map(i=>`<tr><td><strong>${i.name}</strong></td><td><strong>${i.avg}</strong> د/${i.unit}</td><td>${i.min}</td><td>${i.max}</td><td>${i.sellers}</td></tr>`).join('')}
+            </tbody></table></div></div>`});
+        c.innerHTML=html
+    }
 
-            try {
-                const imageFile = document.getElementById('prodImage').files[0];
-                if (imageFile) {
-                    const ref = storage.ref(`products/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
-                    const snap = await ref.put(imageFile);
-                    productData.imageURL = await snap.ref.getDownloadURL();
-                }
+    // =============== CHAT ===============
+    function getChatId(uid1,uid2){return[uid1,uid2].sort().join('_')}
 
-                await db.collection('products').add(productData);
-                await db.collection('users').doc(currentUser.uid).update({
-                    productsCount: firebase.firestore.FieldValue.increment(1)
-                });
+    async function openChat(sellerId,sellerName,productName){
+        if(!currentUser){openAuthModal();return}
+        const chatId=getChatId(currentUser.uid,sellerId);
+        const chatRef=db.collection('chats').doc(chatId);const doc=await chatRef.get();
+        if(!doc.exists){await chatRef.set({users:[currentUser.uid,sellerId],names:{[currentUser.uid]:userProfile?.name||'مستخدم',[sellerId]:sellerName},productName:productName||'',lastMsg:'',lastTime:Date.now()})}
+        currentChatId=chatId;navigateTo('chat');
+        document.getElementById('chatListView').classList.add('hidden');document.getElementById('emptyChat').classList.add('hidden');
+        const cv=document.getElementById('chatView');cv.classList.add('active');
+        document.getElementById('chatViewName').textContent=sellerName;document.getElementById('chatViewProduct').textContent=productName||'';
+        loadMessages(chatId)
+    }
 
-                showToast('تم نشر المحصول بنجاح! 🎉', 'success');
-                document.getElementById('addProductForm').reset();
-                document.getElementById('imagePreview').classList.add('hidden');
-                navigateTo('market');
-            } catch (error) {
-                showToast('خطأ في نشر المحصول', 'error');
-                console.error(error);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-paper-plane"></i> نشر المحصول الآن';
-            }
-        }
+    function loadConversations(){
+        if(!currentUser)return;
+        db.collection('chats').where('users','array-contains',currentUser.uid).onSnapshot(snap=>{
+            const list=document.getElementById('chatListView');const empty=document.getElementById('emptyChat');
+            if(snap.empty){list.innerHTML='';empty.classList.remove('hidden');return}
+            empty.classList.add('hidden');let chats=[];snap.forEach(d=>chats.push({id:d.id,...d.data()}));
+            chats.sort((a,b)=>(b.lastTime||0)-(a.lastTime||0));
+            let unread=0;
+            list.innerHTML=chats.map(c=>{
+                const otherId=c.users.find(u=>u!==currentUser.uid);const otherName=c.names?.[otherId]||'مستخدم';
+                return`<div class="chat-item" onclick="openExistingChat('${c.id}','${otherName.replace(/'/g,"\\'")}','${(c.productName||'').replace(/'/g,"\\'")}')">
+                <div class="chat-avatar">${otherName.charAt(0)}</div>
+                <div class="chat-info"><h4>${otherName}</h4><div class="chat-product">${c.productName||''}</div><p>${c.lastMsg||'ابدأ المحادثة...'}</p></div>
+                <span class="chat-time">${c.lastTime?timeAgo(c.lastTime):''}</span></div>`}).join('');
+            const badge=document.getElementById('chatBadge');if(chats.length>0){badge.textContent=chats.length;badge.classList.remove('hidden')}
+        },e=>console.error(e))
+    }
 
-        function loadProducts() {
-            db.collection('products')
-                .where('status', '==', 'active')
-                .orderBy('createdAt', 'desc')
-                .onSnapshot((snapshot) => {
-                    allProducts = [];
-                    snapshot.forEach(doc => allProducts.push({ id: doc.id, ...doc.data() }));
-                    renderProducts('homeProducts', allProducts.slice(0, 6));
-                    renderProducts('marketProducts', allProducts);
-                    document.getElementById('statProducts').textContent = allProducts.length;
-                    document.getElementById('marketBadge').textContent = allProducts.length;
-                    const regions = new Set(allProducts.map(p => p.region));
-                    document.getElementById('statRegions').textContent = regions.size;
-                    db.collection('users').get().then(s => {
-                        document.getElementById('statFarmers').textContent = s.size;
-                    });
-                }, (err) => { console.error('Products error:', err); });
-        }
+    function openExistingChat(chatId,name,product){
+        currentChatId=chatId;
+        document.getElementById('chatListView').classList.add('hidden');document.getElementById('emptyChat').classList.add('hidden');
+        document.getElementById('chatView').classList.add('active');
+        document.getElementById('chatViewName').textContent=name;document.getElementById('chatViewProduct').textContent=product||'';
+        loadMessages(chatId)
+    }
 
-        function renderProducts(containerId, products) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            if (products.length === 0) {
-                container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="icon">🌾</div><h3>لا توجد محاصيل حالياً</h3><p>كن أول من ينشر محصوله!</p></div>';
-                return;
-            }
-            container.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <div class="product-card-image">
-                        ${p.imageURL ? `<img src="${p.imageURL}" alt="${p.name}">` : `<span>${p.emoji || '🌿'}</span>`}
-                        <span class="product-badge">${p.category}</span>
-                    </div>
-                    <div class="product-card-body">
-                        <h4>${p.name}</h4>
-                        <div class="product-meta">
-                            <span><i class="fas fa-map-marker-alt"></i> ${p.region}</span>
-                            <span><i class="fas fa-user"></i> ${p.sellerName}</span>
-                            <span><i class="fas fa-box"></i> ${p.quantityRemaining || p.quantity} ${p.unit}</span>
-                        </div>
-                        ${p.description ? `<p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;">${p.description.substring(0, 80)}${p.description.length > 80 ? '...' : ''}</p>` : ''}
-                        <div class="product-price-row">
-                            <div class="product-price">${p.price} <small>درهم/${p.unit}</small></div>
-                            <button class="btn-contact" onclick="contactSeller('${p.sellerPhone || ''}','${p.sellerName}','${p.name}')">
-                                <i class="fas fa-phone"></i> تواصل
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+    function loadMessages(chatId){
+        db.collection('chats').doc(chatId).collection('messages').orderBy('time','asc').onSnapshot(snap=>{
+            const mc=document.getElementById('chatMessages');
+            mc.innerHTML=snap.docs.map(d=>{const m=d.data();const isMine=m.from===currentUser?.uid;
+            return`<div class="chat-msg ${isMine?'sent':'received'}"><div>${m.text}</div><span class="msg-time">${m.time?new Date(m.time).toLocaleTimeString(currentLang==='ar'?'ar-MA':'fr-FR',{hour:'2-digit',minute:'2-digit'}):''}</span></div>`}).join('');
+            mc.scrollTop=mc.scrollHeight
+        })
+    }
 
-        function contactSeller(phone, name, product) {
-            if (!phone) { showToast('رقم الهاتف غير متوفر', 'warning'); return; }
-            const msg = encodeURIComponent(`مرحباً ${name}، أنا مهتم بشراء ${product} من محصولي المباشر`);
-            window.open(`https://wa.me/${phone.replace(/^0/, '212')}?text=${msg}`, '_blank');
-        }
+    async function sendMessage(){
+        if(!currentUser||!currentChatId)return;
+        const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;input.value='';
+        try{await db.collection('chats').doc(currentChatId).collection('messages').add({from:currentUser.uid,text,time:Date.now()});
+        await db.collection('chats').doc(currentChatId).update({lastMsg:text,lastTime:Date.now()})}catch(e){showToast('خطأ في الإرسال','error')}
+    }
 
-        function filterProducts() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = allProducts.filter(p =>
-                p.name.toLowerCase().includes(search) ||
-                p.region.toLowerCase().includes(search) ||
-                p.category.toLowerCase().includes(search)
-            );
-            if (currentFilter !== 'all') filtered = filtered.filter(p => p.category === currentFilter);
-            renderProducts('marketProducts', filtered);
-            document.getElementById('emptyMarket').classList.toggle('hidden', filtered.length > 0);
-        }
+    function closeChatView(){document.getElementById('chatView').classList.remove('active');document.getElementById('chatListView').classList.remove('hidden');currentChatId=null;document.getElementById('emptyChat').classList.remove('hidden');loadConversations()}
 
-        function filterByCategory(cat, btn) {
-            currentFilter = cat;
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            filterProducts();
-        }
+    function timeAgo(ts){const d=Date.now()-ts;const m=Math.floor(d/60000);if(m<1)return'الآن';if(m<60)return m+'د';const h=Math.floor(m/60);if(h<24)return h+'س';return Math.floor(h/24)+'ي'}
 
-        function getProductEmoji(name) {
-            const map = {
-                'طماطم':'🍅','بندورة':'🍅','بطاطس':'🥔','بطاطا':'🥔','بصل':'🧅','ثوم':'🧄',
-                'جزر':'🥕','خيار':'🥒','فلفل':'🌶️','باذنجان':'🍆','خس':'🥬','كوسا':'🥒',
-                'برتقال':'🍊','ليمون':'🍋','تفاح':'🍎','موز':'🍌','عنب':'🍇','فراولة':'🍓',
-                'بطيخ':'🍉','قمح':'🌾','شعير':'🌾','ذرة':'🌽','عدس':'🫘','حمص':'🫘',
-                'فول':'🫘','نعناع':'🌿','بقدونس':'🌿','كزبرة':'🌿','زعتر':'🌿'
-            };
-            for (let k in map) { if (name.includes(k)) return map[k]; }
-            return '🌿';
-        }
+    // =============== INVENTORY ===============
+    function loadInventory(){if(!currentUser)return;db.collection('products').where('sellerId','==',currentUser.uid).onSnapshot(snap=>{const prods=[];snap.forEach(d=>prods.push({id:d.id,...d.data()}));prods.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));const c=document.getElementById('inventoryList'),e=document.getElementById('emptyInventory');if(!prods.length){c.innerHTML='';e.classList.remove('hidden');return}e.classList.add('hidden');c.innerHTML=prods.map(p=>{const rem=p.quantityRemaining||p.quantity||0,total=p.quantity||1,pct=Math.round(rem/total*100);let bar='high';if(pct<30)bar='low';else if(pct<60)bar='medium';return`<div class="inventory-card"><div class="inventory-icon">${p.emoji||'🌿'}</div><div class="inventory-info"><h4>${p.name}</h4><p>${p.region} • ${p.price} د/${p.unit}</p><div class="progress-bar"><div class="progress-bar-fill ${bar}" style="width:${pct}%"></div></div></div><div><div class="inventory-qty">${rem}</div><div class="inventory-unit">${p.unit}</div></div></div>`}).join('')},e=>console.error(e))}
 
-        function handleImagePreview(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('imagePreview').classList.remove('hidden');
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+    // =============== ADMIN ===============
+    function loadAdminData(){db.collection('users').onSnapshot(snap=>{allUsers=[];let f=0;snap.forEach(d=>{const u={id:d.id,...d.data()};allUsers.push(u);if(u.role==='farmer')f++});document.getElementById('adminStatUsers').textContent=allUsers.length;document.getElementById('adminStatFarmers').textContent=f;document.getElementById('adminStatRegions').textContent=new Set(allProducts.map(p=>p.region).filter(Boolean)).size;renderAdminUsers()},e=>console.error(e))}
+    function switchAdminTab(t,b){document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.admin-tab-content').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(`adminTab-${t}`).classList.add('active')}
+    function renderAdminProducts(){const c=document.getElementById('adminProductsList');if(!allProducts.length){c.innerHTML='<div class="empty-state"><div class="icon">📦</div><h3>لا محاصيل</h3></div>';return}c.innerHTML=allProducts.map(p=>`<div class="admin-row"><span class="row-icon">${p.emoji||'🌿'}</span><div class="row-info"><h4>${p.name} - ${p.price}د/${p.unit}</h4><p>${p.sellerName} • ${p.region} • ${p.quantityRemaining||p.quantity} ${p.unit}</p></div><div class="row-actions"><button class="btn btn-warning btn-sm" onclick="adminEditProduct('${p.id}')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="adminDeleteProduct('${p.id}','${p.name}')"><i class="fas fa-trash"></i></button></div></div>`).join('')}
+    function renderAdminUsers(){const c=document.getElementById('adminUsersList');if(!allUsers.length){c.innerHTML='<div class="empty-state"><div class="icon">👥</div><h3>لا مستخدمين</h3></div>';return}const r={'farmer':'🌱','distributor':'🚛','buyer':'🛒'};c.innerHTML=allUsers.map(u=>`<div class="admin-row"><div class="sidebar-user-avatar" style="width:40px;height:40px;font-size:.9rem">${(u.name||'م').charAt(0)}</div><div class="row-info"><h4>${u.name||'-'} ${u.email===ADMIN_EMAIL?'🛡️':''}</h4><p>${u.email||'-'} • ${u.phone||'-'} • ${u.region||'-'} • ${r[u.role]||'👤'}</p></div><div class="row-actions"><button class="btn btn-sm" style="background:var(--primary);color:#fff" onclick="viewProfile('${u.id}')"><i class="fas fa-eye"></i></button><button class="btn btn-danger btn-sm" onclick="adminDeleteUser('${u.id}','${u.name}')" ${u.email===ADMIN_EMAIL?'disabled style="opacity:.3"':''}><i class="fas fa-trash"></i></button></div></div>`).join('')}
+    async function adminDeleteProduct(id,n){if(!confirm(`حذف "${n}"؟`))return;try{await db.collection('products').doc(id).delete();showToast('تم ✅','success')}catch(e){showToast('خطأ','error')}}
+    function adminEditProduct(id){const p=allProducts.find(x=>x.id===id);if(!p)return;const np=prompt(`سعر "${p.name}": ${p.price}\nالجديد:`,p.price);if(np&&!isNaN(np)){const nq=prompt(`الكمية: ${p.quantityRemaining||p.quantity}\nالجديدة:`,p.quantityRemaining||p.quantity);if(nq&&!isNaN(nq))db.collection('products').doc(id).update({price:parseFloat(np),quantityRemaining:parseInt(nq)}).then(()=>showToast('تم ✅','success')).catch(()=>showToast('خطأ','error'))}}
+    async function adminDeleteUser(id,n){if(!confirm(`حذف "${n}"؟`))return;try{await db.collection('users').doc(id).delete();const p=await db.collection('products').where('sellerId','==',id).get();const b=db.batch();p.forEach(d=>b.delete(d.ref));await b.commit();showToast('تم ✅','success')}catch(e){showToast('خطأ','error')}}
 
-        // =============================================
-        // 📊 Prices
-        // =============================================
-        function loadPrices() {
-            const vegs = [
-                { name:'🍅 طماطم', price:4.5, change:12, min:3, max:6 },
-                { name:'🥔 بطاطس', price:3.8, change:-5, min:3, max:5 },
-                { name:'🧅 بصل', price:5.0, change:8, min:4, max:7 },
-                { name:'🥕 جزر', price:3.5, change:0, min:2.5, max:4.5 },
-                { name:'🌶️ فلفل', price:6.0, change:15, min:4, max:8 },
-                { name:'🥒 خيار', price:3.0, change:-3, min:2, max:4.5 },
-                { name:'🍆 باذنجان', price:4.0, change:7, min:3, max:5.5 },
-                { name:'🥬 خس', price:2.5, change:-2, min:2, max:3.5 }
-            ];
-            const fruits = [
-                { name:'🍊 برتقال', price:5.5, change:10, min:4, max:7 },
-                { name:'🍌 موز', price:8.0, change:-2, min:7, max:10 },
-                { name:'🍎 تفاح', price:12, change:5, min:10, max:15 },
-                { name:'🍇 عنب', price:15, change:-8, min:12, max:20 },
-                { name:'🍉 بطيخ', price:3.0, change:20, min:2, max:4 },
-                { name:'🍋 ليمون', price:6.0, change:12, min:4, max:8 },
-                { name:'🍓 فراولة', price:18, change:-5, min:14, max:22 }
-            ];
-            renderPriceTable('priceTableBody', vegs);
-            renderPriceTable('fruitPriceTable', fruits);
-            const now = new Date();
-            document.getElementById('priceUpdateTime').textContent =
-                now.toLocaleDateString('ar-MA') + ' ' + now.toLocaleTimeString('ar-MA', { hour:'2-digit', minute:'2-digit' });
-        }
+    // =============== NAVIGATION ===============
+    function navigateTo(p){const prot=['addProduct','inventory','profile','settings'];if(prot.includes(p)&&!currentUser){requireAuth(p);return}if(p==='admin'&&!isAdmin){showToast('🚫 غير مصرح','error');return}
+    document.querySelectorAll('.page-section').forEach(x=>x.classList.remove('active'));const t=document.getElementById(`page-${p}`);if(t)t.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));const n=document.querySelector(`.nav-item[data-page="${p}"]`);if(n)n.classList.add('active');
+    closeSidebar();closeUserDropdown();document.getElementById('fabBtn').classList.toggle('visible',!['addProduct','admin','chat'].includes(p));window.scrollTo({top:0,behavior:'smooth'})}
 
-        function renderPriceTable(id, data) {
-            document.getElementById(id).innerHTML = data.map(item => {
-                let cls='stable', icon='fas fa-minus', txt='0%';
-                if (item.change > 0) { cls='up'; icon='fas fa-arrow-up'; txt=`+${item.change}%`; }
-                else if (item.change < 0) { cls='down'; icon='fas fa-arrow-down'; txt=`${item.change}%`; }
-                return `<tr><td><strong>${item.name}</strong></td><td><strong>${item.price.toFixed(2)}</strong> درهم</td><td><span class="price-change ${cls}"><i class="${icon}"></i> ${txt}</span></td><td>${item.min.toFixed(2)}</td><td>${item.max.toFixed(2)}</td></tr>`;
-            }).join('');
-        }
-
-        // =============================================
-        // 📦 Inventory
-        // =============================================
-        function loadInventory() {
-            if (!currentUser) return;
-            db.collection('products')
-                .where('sellerId', '==', currentUser.uid)
-                .orderBy('createdAt', 'desc')
-                .onSnapshot((snapshot) => {
-                    const products = [];
-                    snapshot.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
-                    const container = document.getElementById('inventoryList');
-                    const empty = document.getElementById('emptyInventory');
-                    if (products.length === 0) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
-                    empty.classList.add('hidden');
-                    container.innerHTML = products.map(p => {
-                        const rem = p.quantityRemaining || p.quantity;
-                        const pct = Math.round((rem / p.quantity) * 100);
-                        let bar = 'high'; if (pct < 30) bar = 'low'; else if (pct < 60) bar = 'medium';
-                        return `<div class="inventory-card"><div class="inventory-icon">${p.emoji||'🌿'}</div><div class="inventory-info"><h4>${p.name}</h4><p>${p.region} • ${p.price} درهم/${p.unit}</p><div class="progress-bar"><div class="progress-bar-fill ${bar}" style="width:${pct}%"></div></div></div><div class="inventory-status"><div class="inventory-qty">${rem}</div><div class="inventory-unit">${p.unit} متبقي</div></div></div>`;
-                    }).join('');
-                });
-        }
-
-        // =============================================
-        // 🌤️ Weather
-        // =============================================
-        function loadWeather() {
-            const region = userProfile?.region || 'المغرب';
-            setDemoWeather(region);
-        }
-
-        function setDemoWeather(region) {
-            document.getElementById('weatherCity').textContent = region;
-            document.getElementById('weatherTemp').textContent = '28';
-            document.getElementById('weatherDesc').textContent = 'مشمس جزئياً';
-            document.getElementById('weatherIcon').textContent = '⛅';
-            document.getElementById('weatherHumidity').textContent = '45%';
-            document.getElementById('weatherWind').textContent = '12 كم/س';
-            document.getElementById('weatherRain').textContent = '10%';
-            document.getElementById('weatherAdvice').innerHTML = '<i class="fas fa-lightbulb"></i><span>☀️ طقس جيد للحصاد والعمل في الحقل</span>';
-            document.getElementById('weatherDate').textContent =
-                new Date().toLocaleDateString('ar-MA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-
-            const days = ['غداً','بعد غدٍ','الخميس','الجمعة','السبت'];
-            const icons = ['☀️','⛅','🌧️','☀️','⛅'];
-            const temps = [30,27,22,29,26];
-            document.getElementById('forecastGrid').innerHTML = days.map((d,i) =>
-                `<div style="background:var(--bg-card);border-radius:var(--radius-md);padding:15px;text-align:center;box-shadow:var(--shadow-sm);"><div style="font-size:0.85rem;color:var(--text-light);margin-bottom:5px;">${d}</div><div style="font-size:2rem;">${icons[i]}</div><div style="font-size:1.3rem;font-weight:800;">${temps[i]}°</div></div>`
-            ).join('');
-        }
-
-        // =============================================
-        // 🧭 Navigation
-        // =============================================
-        function navigateTo(page) {
-            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`page-${page}`);
-            if (target) target.classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            const nav = document.querySelector(`.nav-item[data-page="${page}"]`);
-            if (nav) nav.classList.add('active');
-            closeSidebar();
-            closeUserDropdown();
-            const fab = document.getElementById('fabBtn');
-            fab.classList.toggle('visible', page !== 'addProduct' && !!currentUser);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // =============================================
-        // 📱 UI Controls
-        // =============================================
-        function showApp() {
-            document.getElementById('authPage').classList.add('hidden');
-            document.getElementById('appContainer').classList.remove('hidden');
-            document.getElementById('fabBtn').classList.add('visible');
-        }
-
-        function showAuth() {
-            document.getElementById('authPage').classList.remove('hidden');
-            document.getElementById('appContainer').classList.add('hidden');
-            document.getElementById('fabBtn').classList.remove('visible');
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('sidebarOverlay').classList.remove('active');
-        }
-
-        function toggleUserDropdown() { document.getElementById('userDropdown').classList.toggle('active'); }
-        function closeUserDropdown() { document.getElementById('userDropdown').classList.remove('active'); }
-
-        function toggleNotifications() {
-            document.getElementById('notifPanel').classList.toggle('active');
-            document.getElementById('notifBadge').style.display = 'none';
-        }
-
-        function togglePassword(id, btn) {
-            const input = document.getElementById(id);
-            const icon = btn.querySelector('i');
-            if (input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-            else { input.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
-        }
-
-        function showToast(msg, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icons = { success:'fa-check-circle', error:'fa-times-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
-            toast.onclick = () => toast.remove();
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 4000);
-        }
-
-        function shareApp() {
-            if (navigator.share) {
-                navigator.share({ title:'محصولي المباشر', text:'سوق الفلاح الذكي!', url: window.location.href });
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                showToast('تم نسخ رابط المنصة! 📋', 'success');
-            }
-        }
-
-        function confirmDeleteAccount() {
-            if (confirm('⚠️ هل أنت متأكد من حذف حسابك نهائياً؟')) {
-                if (confirm('لا يمكن التراجع! هل تريد المتابعة؟')) deleteAccount();
-            }
-        }
-
-        async function deleteAccount() {
-            try {
-                await db.collection('users').doc(currentUser.uid).delete();
-                const prods = await db.collection('products').where('sellerId','==',currentUser.uid).get();
-                prods.forEach(doc => doc.ref.delete());
-                await currentUser.delete();
-                showToast('تم حذف الحساب', 'info');
-            } catch (e) { showToast('خطأ في الحذف. أعد تسجيل الدخول وحاول مجدداً', 'error'); }
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#userDropdown') && !e.target.closest('#headerAvatar')) closeUserDropdown();
-            if (!e.target.closest('#notifPanel') && !e.target.closest('#notifBtn'))
-                document.getElementById('notifPanel').classList.remove('active');
-        });
+    // =============== UI ===============
+    function toggleSidebar(){document.getElementById('sidebar').classList.toggle('active');document.getElementById('sidebarOverlay').classList.toggle('active')}
+    function closeSidebar(){document.getElementById('sidebar').classList.remove('active');document.getElementById('sidebarOverlay').classList.remove('active')}
+    function toggleUserDropdown(){document.getElementById('userDropdown').classList.toggle('active')}
+    function closeUserDropdown(){document.getElementById('userDropdown').classList.remove('active')}
+    function togglePassword(id,b){const i=document.getElementById(id),ic=b.querySelector('i');if(i.type==='password'){i.type='text';ic.classList.replace('fa-eye','fa-eye-slash')}else{i.type='password';ic.classList.replace('fa-eye-slash','fa-eye')}}
+    function showToast(m,t='info'){const c=document.getElementById('toastContainer'),el=document.createElement('div');el.className=`toast ${t}`;const icons={success:'fa-check-circle',error:'fa-times-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'};el.innerHTML=`<i class="fas ${icons[t]}"></i> ${m}`;el.onclick=()=>el.remove();c.appendChild(el);setTimeout(()=>el.remove(),4000)}
+    function shareApp(){if(navigator.share)navigator.share({title:'محصولي المباشر',text:'سوق الفلاح الذكي!',url:location.href});else{navigator.clipboard.writeText(location.href);showToast('تم نسخ الرابط! 📋','success')}}
+    function confirmDeleteAccount(){if(confirm('⚠️ حذف حسابك؟')&&confirm('نهائي! متأكد؟'))deleteAccount()}
+    async function deleteAccount(){try{await db.collection('users').doc(currentUser.uid).delete();const p=await db.collection('products').where('sellerId','==',currentUser.uid).get();p.forEach(d=>d.ref.delete());await currentUser.delete();showToast('تم الحذف','info')}catch(e){showToast('أعد الدخول وحاول','error')}}
+    document.addEventListener('click',e=>{if(!e.target.closest('#userDropdown')&&!e.target.closest('#headerAvatar'))closeUserDropdown()})
     </script>
 </body>
 </html>
