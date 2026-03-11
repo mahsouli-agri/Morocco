@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>محصولي المباشر</title>
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -37,626 +36,452 @@
       --radius: 16px;
       --radius-sm: 10px;
     }
-
     [data-theme="dark"] {
-      --bg-main: #0f172a;
-      --bg-card: #1e293b;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --shadow: 0 4px 20px rgba(0,0,0,0.3);
-      --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
-      --chat-me: #064e3b;
-      --chat-other: #334155;
-      --primary-light: #064e3b;
-      --secondary-light: #451a03;
-      --danger-light: #450a0a;
-      --blue-light: #1e3a5f;
+      --bg-main: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9;
+      --text-muted: #94a3b8; --border: #334155;
+      --shadow: 0 4px 20px rgba(0,0,0,0.3); --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
+      --chat-me: #064e3b; --chat-other: #334155;
+      --primary-light: #064e3b; --secondary-light: #451a03;
+      --danger-light: #450a0a; --blue-light: #1e3a5f;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    *::-webkit-scrollbar { width: 6px; }
-    *::-webkit-scrollbar-track { background: transparent; }
-    *::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
+    *::-webkit-scrollbar { width:6px; }
+    *::-webkit-scrollbar-track { background:transparent; }
+    *::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; }
     body {
-      font-family: 'Tajawal', sans-serif;
-      background: var(--bg-main);
-      color: var(--text-main);
-      padding-top: var(--header-h);
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: var(--trans);
-      -webkit-tap-highlight-color: transparent;
+      font-family:'Tajawal',sans-serif; background:var(--bg-main);
+      color:var(--text-main); padding-top:var(--header-h);
+      min-height:100vh; overflow-x:hidden; transition:var(--trans);
+      -webkit-tap-highlight-color:transparent;
     }
+    .hidden { display:none !important; }
 
-    .hidden { display: none !important; }
-
-    /* ===== HEADER ===== */
     .header {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: var(--header-h);
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px; z-index: 1000;
-      transition: var(--trans);
+      position:fixed; top:0; left:0; right:0; height:var(--header-h);
+      background:rgba(255,255,255,0.85); backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; z-index:1000; transition:var(--trans);
     }
-    [data-theme="dark"] .header { background: rgba(30,41,59,0.85); }
+    [data-theme="dark"] .header { background:rgba(30,41,59,0.85); }
+    .header-logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .header-logo i { color:var(--primary); font-size:1.5rem; }
+    .header-logo h1 { font-weight:900; font-size:1.15rem; }
+    .header-actions { display:flex; align-items:center; gap:8px; }
 
-    .header-logo {
-      display: flex; align-items: center; gap: 10px; cursor: pointer;
-    }
-    .header-logo i { color: var(--primary); font-size: 1.5rem; }
-    .header-logo h1 { font-weight: 900; font-size: 1.15rem; }
-
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-
-    /* ===== BUTTONS ===== */
     .icon-btn {
-      width: 40px; height: 40px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--bg-card);
-      color: var(--text-main); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--trans); font-size: 1rem; position: relative;
+      width:40px; height:40px; border-radius:var(--radius-sm);
+      border:1px solid var(--border); background:var(--bg-card);
+      color:var(--text-main); cursor:pointer; display:flex;
+      align-items:center; justify-content:center; transition:var(--trans);
+      font-size:1rem; position:relative;
     }
-    .icon-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .icon-btn:active { transform: scale(0.92); }
+    .icon-btn:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .icon-btn:active { transform:scale(0.92); }
 
     .btn-main {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; border: none; padding: 11px 22px;
-      border-radius: 99px; font-weight: 700; cursor: pointer;
-      transition: var(--trans); display: inline-flex;
-      align-items: center; gap: 8px; font-family: inherit; font-size: 0.95rem;
-      box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff; border:none; padding:11px 22px; border-radius:99px;
+      font-weight:700; cursor:pointer; transition:var(--trans);
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:inherit; font-size:0.95rem;
+      box-shadow:0 4px 15px rgba(16,185,129,0.3);
     }
-    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.4); }
-    .btn-main:active { transform: scale(0.95); }
-    .btn-main.outline {
-      background: transparent; color: var(--primary);
-      border: 2px solid var(--primary); box-shadow: none;
-    }
-    .btn-main.danger { background: linear-gradient(135deg, var(--danger), #dc2626); box-shadow: 0 4px 15px rgba(239,68,68,0.3); }
-    .btn-main.secondary { background: linear-gradient(135deg, var(--secondary), #d97706); box-shadow: 0 4px 15px rgba(245,158,11,0.3); }
-    .btn-main.blue { background: linear-gradient(135deg, var(--blue), #2563eb); box-shadow: 0 4px 15px rgba(59,130,246,0.3); }
-    .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-main:hover { transform:translateY(-2px); box-shadow:0 6px 25px rgba(16,185,129,0.4); }
+    .btn-main:active { transform:scale(0.95); }
+    .btn-main.outline { background:transparent; color:var(--primary); border:2px solid var(--primary); box-shadow:none; }
+    .btn-main.danger { background:linear-gradient(135deg,var(--danger),#dc2626); box-shadow:0 4px 15px rgba(239,68,68,0.3); }
+    .btn-main.secondary { background:linear-gradient(135deg,var(--secondary),#d97706); box-shadow:0 4px 15px rgba(245,158,11,0.3); }
+    .btn-main.blue { background:linear-gradient(135deg,var(--blue),#2563eb); box-shadow:0 4px 15px rgba(59,130,246,0.3); }
+    .btn-main:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-    /* ===== SIDEBAR ===== */
     .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-      z-index: 1001; opacity: 0; visibility: hidden; transition: var(--trans);
+      position:fixed; inset:0; background:rgba(0,0,0,0.5);
+      z-index:1001; opacity:0; visibility:hidden; transition:var(--trans);
     }
-    .overlay.on { opacity: 1; visibility: visible; }
+    .overlay.on { opacity:1; visibility:visible; }
 
     .sidebar {
-      position: fixed; top: 0; width: 280px; height: 100vh;
-      background: var(--bg-card); z-index: 1002;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex; flex-direction: column;
-      box-shadow: var(--shadow-lg);
+      position:fixed; top:0; width:280px; height:100vh;
+      background:var(--bg-card); z-index:1002;
+      transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      display:flex; flex-direction:column; box-shadow:var(--shadow-lg);
     }
-    [dir="rtl"] .sidebar { right: 0; transform: translateX(100%); }
-    [dir="rtl"] .sidebar.on { transform: translateX(0); }
-    [dir="ltr"] .sidebar { left: 0; transform: translateX(-100%); }
-    [dir="ltr"] .sidebar.on { transform: translateX(0); }
+    [dir="rtl"] .sidebar { right:0; transform:translateX(100%); }
+    [dir="rtl"] .sidebar.on { transform:translateX(0); }
+    [dir="ltr"] .sidebar { left:0; transform:translateX(-100%); }
+    [dir="ltr"] .sidebar.on { transform:translateX(0); }
 
     .sb-header {
-      padding: 30px 20px 20px; text-align: center;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
+      padding:30px 20px 20px; text-align:center;
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff;
     }
-    .sb-header i { font-size: 2.2rem; margin-bottom: 8px; }
-    .sb-header h2 { font-weight: 900; font-size: 1.3rem; }
-    .sb-header p { font-size: 0.8rem; opacity: 0.8; margin-top: 5px; }
-
-    .sb-body { flex: 1; overflow-y: auto; padding: 10px 0; }
-
+    .sb-header i { font-size:2.2rem; margin-bottom:8px; }
+    .sb-header h2 { font-weight:900; font-size:1.3rem; }
+    .sb-header p { font-size:0.8rem; opacity:0.8; margin-top:5px; }
+    .sb-body { flex:1; overflow-y:auto; padding:10px 0; }
     .sb-item {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 20px; color: var(--text-main);
-      font-weight: 600; cursor: pointer; transition: var(--trans);
-      border-radius: 0; margin: 0;
+      display:flex; align-items:center; gap:14px; padding:14px 20px;
+      color:var(--text-main); font-weight:600; cursor:pointer; transition:var(--trans);
     }
-    .sb-item:hover { background: var(--primary-light); color: var(--primary); }
-    .sb-item i { width: 22px; text-align: center; font-size: 1.05rem; }
-    .sb-item.active { background: var(--primary-light); color: var(--primary); font-weight: 800; }
-    .sb-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+    .sb-item:hover { background:var(--primary-light); color:var(--primary); }
+    .sb-item i { width:22px; text-align:center; font-size:1.05rem; }
+    .sb-divider { height:1px; background:var(--border); margin:8px 16px; }
+    .sb-footer { padding:15px 20px; border-top:1px solid var(--border); }
 
-    .sb-footer {
-      padding: 15px 20px; border-top: 1px solid var(--border);
-    }
-
-    /* ===== MAIN LAYOUT ===== */
-    .main { max-width: 1200px; margin: 0 auto; padding: 16px; }
-
-    .page {
-      display: none;
-      animation: pageIn 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .page.on { display: block; }
-    @keyframes pageIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .main { max-width:1200px; margin:0 auto; padding:16px; }
+    .page { display:none; animation:pageIn 0.45s cubic-bezier(0.4,0,0.2,1); }
+    .page.on { display:block; }
+    @keyframes pageIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
     .page-head {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 20px; padding-bottom: 15px;
-      border-bottom: 2px solid var(--border);
+      display:flex; align-items:center; gap:12px;
+      margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid var(--border);
     }
-    .page-head h2 { font-weight: 800; font-size: 1.3rem; }
+    .page-head h2 { font-weight:800; font-size:1.3rem; }
 
-    /* ===== HERO SECTION ===== */
     .hero {
-      background: linear-gradient(135deg, #059669, #10b981, #34d399);
-      color: #fff; padding: 40px 25px; border-radius: var(--radius);
-      text-align: center; margin-bottom: 25px; position: relative; overflow: hidden;
+      background:linear-gradient(135deg,#059669,#10b981,#34d399);
+      color:#fff; padding:40px 25px; border-radius:var(--radius);
+      text-align:center; margin-bottom:25px; position:relative; overflow:hidden;
     }
     .hero::before {
-      content: ''; position: absolute; top: -50%; right: -50%;
-      width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-      animation: heroGlow 8s ease-in-out infinite alternate;
+      content:''; position:absolute; top:-50%; right:-50%; width:200%; height:200%;
+      background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 60%);
+      animation:heroGlow 8s ease-in-out infinite alternate;
     }
-    @keyframes heroGlow {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-20%, 20%); }
-    }
-    .hero h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; position: relative; }
-    .hero p { opacity: 0.9; margin-bottom: 20px; position: relative; font-size: 1rem; }
-    .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; position: relative; }
-    .hero-btns .btn-main {
-      background: #fff; color: var(--primary-dark); box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
+    @keyframes heroGlow { 0%{transform:translate(0,0)} 100%{transform:translate(-20%,20%)} }
+    .hero h1 { font-size:1.8rem; font-weight:900; margin-bottom:10px; position:relative; }
+    .hero p { opacity:0.9; margin-bottom:20px; position:relative; font-size:1rem; }
+    .hero-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; position:relative; }
+    .hero-btns .btn-main { background:#fff; color:var(--primary-dark); box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 
-    /* ===== STATS CARDS ===== */
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px; margin-bottom: 25px;
-    }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:25px; }
     .stat-card {
-      background: var(--bg-card); padding: 20px 15px; border-radius: var(--radius);
-      text-align: center; border: 1px solid var(--border);
-      box-shadow: var(--shadow); transition: var(--trans);
+      background:var(--bg-card); padding:20px 15px; border-radius:var(--radius);
+      text-align:center; border:1px solid var(--border); box-shadow:var(--shadow); transition:var(--trans);
     }
-    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .stat-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
     .stat-card .stat-icon {
-      width: 45px; height: 45px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 10px; font-size: 1.2rem;
+      width:45px; height:45px; border-radius:12px; display:flex;
+      align-items:center; justify-content:center; margin:0 auto 10px; font-size:1.2rem;
     }
-    .stat-card h3 { font-size: 1.8rem; font-weight: 900; }
-    .stat-card p { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+    .stat-card h3 { font-size:1.8rem; font-weight:900; }
+    .stat-card p { font-size:0.8rem; color:var(--text-muted); font-weight:600; }
 
-    /* ===== SECTION HEADERS ===== */
-    .section-head {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .section-head h2 { font-weight: 800; font-size: 1.2rem; }
-    .section-head a {
-      color: var(--primary); font-weight: 700; cursor: pointer;
-      text-decoration: none; font-size: 0.9rem;
-    }
+    .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; }
+    .section-head h2 { font-weight:800; font-size:1.2rem; }
+    .section-head a { color:var(--primary); font-weight:700; cursor:pointer; text-decoration:none; font-size:0.9rem; }
 
-    /* ===== PRODUCT CARDS ===== */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 15px;
-    }
-
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:15px; }
     .card {
-      background: var(--bg-card); border-radius: var(--radius);
-      border: 1px solid var(--border); overflow: hidden;
-      box-shadow: var(--shadow); transition: var(--trans);
-      cursor: pointer; position: relative;
+      background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border);
+      overflow:hidden; box-shadow:var(--shadow); transition:var(--trans); cursor:pointer; position:relative;
     }
-    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-
+    .card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
     .card-img {
-      height: 180px; background: var(--bg-main);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; position: relative; overflow: hidden;
+      height:180px; background:var(--bg-main); display:flex; align-items:center;
+      justify-content:center; font-size:3.5rem; position:relative; overflow:hidden;
     }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .card:hover .card-img img { transform: scale(1.05); }
+    .card-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .card:hover .card-img img { transform:scale(1.05); }
 
     .out-overlay {
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      pointer-events: none;
+      position:absolute; inset:0; background:rgba(255,255,255,0.6);
+      backdrop-filter:blur(4px); display:flex; align-items:center;
+      justify-content:center; pointer-events:none;
     }
-    [data-theme="dark"] .out-overlay { background: rgba(0,0,0,0.6); }
+    [data-theme="dark"] .out-overlay { background:rgba(0,0,0,0.6); }
     .out-stamp {
-      border: 3px solid var(--danger); color: var(--danger);
-      padding: 6px 18px; font-weight: 900; font-size: 0.9rem;
-      transform: rotate(-12deg); border-radius: var(--radius-sm);
-      background: var(--bg-card);
+      border:3px solid var(--danger); color:var(--danger); padding:6px 18px;
+      font-weight:900; font-size:0.9rem; transform:rotate(-12deg);
+      border-radius:var(--radius-sm); background:var(--bg-card);
     }
-
     .card-badge {
-      position: absolute; top: 10px; right: 10px;
-      background: var(--primary); color: #fff;
-      padding: 4px 10px; border-radius: 99px;
-      font-size: 0.75rem; font-weight: 700;
+      position:absolute; top:10px; right:10px; background:var(--primary);
+      color:#fff; padding:4px 10px; border-radius:99px; font-size:0.75rem; font-weight:700;
     }
-    [dir="ltr"] .card-badge { right: auto; left: 10px; }
+    [dir="ltr"] .card-badge { right:auto; left:10px; }
+    .card-body { padding:15px; }
+    .card-body h4 { font-weight:800; font-size:1.05rem; margin-bottom:4px; }
+    .card-meta { color:var(--text-muted); font-size:0.82rem; margin-bottom:10px; }
+    .card-meta i { margin-inline-end:4px; }
+    .card-footer { display:flex; justify-content:space-between; align-items:center; }
+    .card-price { color:var(--primary); font-weight:900; font-size:1.15rem; }
+    .card-actions { display:flex; gap:6px; }
+    .card-actions .icon-btn { width:34px; height:34px; font-size:0.85rem; border-radius:8px; }
 
-    .card-body { padding: 15px; }
-    .card-body h4 { font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; }
-    .card-meta { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 10px; }
-    .card-meta i { margin-inline-end: 4px; }
-    .card-footer {
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .card-price { color: var(--primary); font-weight: 900; font-size: 1.15rem; }
-    .card-actions { display: flex; gap: 6px; }
-    .card-actions .icon-btn { width: 34px; height: 34px; font-size: 0.85rem; border-radius: 8px; }
-
-    /* ===== FORMS ===== */
     .form-card {
-      background: var(--bg-card); padding: 25px; border-radius: var(--radius);
-      border: 1px solid var(--border); box-shadow: var(--shadow);
+      background:var(--bg-card); padding:25px; border-radius:var(--radius);
+      border:1px solid var(--border); box-shadow:var(--shadow);
     }
-    .form-group { margin-bottom: 18px; }
-    .form-group label {
-      display: block; font-weight: 700; margin-bottom: 6px;
-      font-size: 0.9rem; color: var(--text-main);
-    }
-    .form-group label i { margin-inline-end: 6px; color: var(--primary); }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-weight:700; margin-bottom:6px; font-size:0.9rem; color:var(--text-main); }
+    .form-group label i { margin-inline-end:6px; color:var(--primary); }
     .input-field {
-      width: 100%; padding: 12px 16px;
-      border: 2px solid var(--border); border-radius: var(--radius-sm);
-      background: var(--bg-main); color: var(--text-main);
-      font-family: inherit; font-size: 0.95rem;
-      transition: var(--trans);
+      width:100%; padding:12px 16px; border:2px solid var(--border);
+      border-radius:var(--radius-sm); background:var(--bg-main);
+      color:var(--text-main); font-family:inherit; font-size:0.95rem; transition:var(--trans);
     }
-    .input-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
-    select.input-field { cursor: pointer; }
-    .input-field::placeholder { color: var(--text-muted); }
+    .input-field:focus { border-color:var(--primary); outline:none; box-shadow:0 0 0 3px rgba(16,185,129,0.15); }
+    select.input-field { cursor:pointer; }
+    .input-field::placeholder { color:var(--text-muted); }
 
     .img-preview {
-      width: 100%; height: 150px; border: 2px dashed var(--border);
-      border-radius: var(--radius-sm); display: flex; align-items: center;
-      justify-content: center; flex-direction: column; gap: 8px;
-      cursor: pointer; transition: var(--trans); color: var(--text-muted);
-      overflow: hidden; position: relative;
+      width:100%; height:150px; border:2px dashed var(--border);
+      border-radius:var(--radius-sm); display:flex; align-items:center;
+      justify-content:center; flex-direction:column; gap:8px;
+      cursor:pointer; transition:var(--trans); color:var(--text-muted); overflow:hidden; position:relative;
     }
-    .img-preview:hover { border-color: var(--primary); color: var(--primary); }
-    .img-preview img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-    .img-preview i { font-size: 2rem; }
+    .img-preview:hover { border-color:var(--primary); color:var(--primary); }
+    .img-preview img { width:100%; height:100%; object-fit:cover; position:absolute; }
+    .img-preview i { font-size:2rem; }
 
-    /* ===== CHAT ===== */
+    /* CHAT */
     .chat-layout {
-      display: flex; height: calc(100vh - 130px);
-      border: 1px solid var(--border); border-radius: var(--radius);
-      overflow: hidden; box-shadow: var(--shadow);
+      display:flex; height:calc(100vh - 130px); border:1px solid var(--border);
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
     }
-
     .chat-list {
-      width: 300px; border-inline-end: 1px solid var(--border);
-      background: var(--bg-card); overflow-y: auto;
+      width:300px; border-inline-end:1px solid var(--border);
+      background:var(--bg-card); overflow-y:auto;
     }
     .chat-list-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 15px; border-bottom: 1px solid var(--border);
-      cursor: pointer; transition: var(--trans);
+      display:flex; align-items:center; gap:12px; padding:15px;
+      border-bottom:1px solid var(--border); cursor:pointer; transition:var(--trans);
     }
-    .chat-list-item:hover { background: var(--primary-light); }
-    .chat-list-item.active { background: var(--primary-light); border-inline-start: 3px solid var(--primary); }
+    .chat-list-item:hover { background:var(--primary-light); }
+    .chat-list-item.active { background:var(--primary-light); border-inline-start:3px solid var(--primary); }
     .chat-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 1rem; flex-shrink: 0;
+      width:42px; height:42px; border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:1rem; flex-shrink:0;
     }
-    .chat-list-info h4 { font-weight: 700; font-size: 0.9rem; }
-    .chat-list-info p { font-size: 0.78rem; color: var(--text-muted); }
+    .chat-list-info h4 { font-weight:700; font-size:0.9rem; }
+    .chat-list-info p { font-size:0.78rem; color:var(--text-muted); }
 
     .chat-main {
-      flex: 1; display: flex; flex-direction: column;
-      background: var(--bg-main); position: relative;
+      flex:1; display:flex; flex-direction:column; background:var(--bg-main); position:relative;
     }
     .chat-header {
-      padding: 15px 20px; background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 12px;
+      padding:15px 20px; background:var(--bg-card);
+      border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px;
     }
-    .chat-header h3 { font-weight: 700; }
+    .chat-header h3 { font-weight:700; }
 
     .chat-msgs {
-      flex: 1; overflow-y: auto; display: flex;
-      flex-direction: column; padding: 15px; gap: 4px;
+      flex:1; overflow-y:auto; display:flex; flex-direction:column; padding:15px; gap:4px;
     }
-
     .bubble {
-      max-width: 75%; padding: 10px 15px; border-radius: 16px;
-      position: relative; font-size: 0.92rem; line-height: 1.5;
-      word-wrap: break-word;
+      max-width:75%; padding:10px 15px; border-radius:16px;
+      position:relative; font-size:0.92rem; line-height:1.5; word-wrap:break-word;
     }
     .bubble.me {
-      background: var(--chat-me); align-self: flex-end;
-      border-bottom-right-radius: 4px;
+      background:var(--chat-me); align-self:flex-end; border-bottom-right-radius:4px;
     }
-    [dir="ltr"] .bubble.me { border-bottom-right-radius: 16px; border-bottom-left-radius: 4px; }
+    [dir="ltr"] .bubble.me { border-bottom-right-radius:16px; border-bottom-left-radius:4px; }
     .bubble.other {
-      background: var(--chat-other); align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      background:var(--chat-other); align-self:flex-start; border-bottom-left-radius:4px;
     }
-    [dir="ltr"] .bubble.other { border-bottom-left-radius: 16px; border-bottom-right-radius: 4px; }
-    .bubble .time {
-      font-size: 0.65rem; color: var(--text-muted);
-      margin-top: 4px; display: block;
-    }
+    [dir="ltr"] .bubble.other { border-bottom-left-radius:16px; border-bottom-right-radius:4px; }
+    .bubble .time { font-size:0.65rem; color:var(--text-muted); margin-top:4px; display:block; }
     .bubble .del-btn {
-      position: absolute; top: -8px; right: -8px;
-      background: var(--danger); color: #fff; border: 2px solid var(--bg-main);
-      border-radius: 50%; width: 22px; height: 22px;
-      font-size: 10px; cursor: pointer; display: none;
-      align-items: center; justify-content: center;
+      position:absolute; top:-8px; right:-8px; background:var(--danger);
+      color:#fff; border:2px solid var(--bg-main); border-radius:50%;
+      width:22px; height:22px; font-size:10px; cursor:pointer;
+      display:none; align-items:center; justify-content:center;
     }
-    .bubble:hover .del-btn { display: flex; }
+    .bubble:hover .del-btn { display:flex; }
 
     .chat-input-area {
-      padding: 12px 15px; background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      display: flex; gap: 8px; align-items: center;
+      padding:12px 15px; background:var(--bg-card);
+      border-top:1px solid var(--border); display:flex; gap:8px; align-items:center;
     }
-    .chat-input-area .input-field { border-radius: 99px; }
+    .chat-input-area .input-field { border-radius:99px; }
     .send-btn {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--trans); flex-shrink: 0;
+      width:42px; height:42px; border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff; border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:var(--trans); flex-shrink:0;
     }
-    .send-btn:hover { transform: scale(1.08); }
+    .send-btn:hover { transform:scale(1.08); }
 
     .recording-indicator {
-      display: none; align-items: center; gap: 8px;
-      color: var(--danger); font-weight: 700; font-size: 0.85rem;
+      display:none; align-items:center; gap:8px;
+      color:var(--danger); font-weight:700; font-size:0.85rem;
     }
-    .recording-indicator.on { display: flex; }
-    .rec-dot {
-      width: 10px; height: 10px; background: var(--danger);
-      border-radius: 50%; animation: pulse 1s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .recording-indicator.on { display:flex; }
+    .rec-dot { width:10px; height:10px; background:var(--danger); border-radius:50%; animation:pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     .empty-chat {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 15px; color: var(--text-muted);
+      flex:1; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:15px; color:var(--text-muted);
     }
-    .empty-chat i { font-size: 4rem; opacity: 0.3; }
+    .empty-chat i { font-size:4rem; opacity:0.3; }
 
-    /* ===== AUTH MODAL ===== */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(5px); z-index: 2000;
-      display: none; align-items: center; justify-content: center;
-      padding: 20px;
+      position:fixed; inset:0; background:rgba(0,0,0,0.5);
+      backdrop-filter:blur(5px); z-index:2000;
+      display:none; align-items:center; justify-content:center; padding:20px;
     }
-    .modal-overlay.on { display: flex; }
+    .modal-overlay.on { display:flex; }
     .modal {
-      background: var(--bg-card); width: 100%; max-width: 420px;
-      padding: 30px; border-radius: var(--radius);
-      box-shadow: var(--shadow-lg); position: relative;
-      animation: modalIn 0.3s ease;
+      background:var(--bg-card); width:100%; max-width:420px;
+      padding:30px; border-radius:var(--radius);
+      box-shadow:var(--shadow-lg); position:relative; animation:modalIn 0.3s ease;
     }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
+    @keyframes modalIn { from{opacity:0;transform:scale(0.9) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
     .modal-close {
-      position: absolute; top: 12px; left: 12px;
-      background: none; border: none; font-size: 1.3rem;
-      color: var(--text-muted); cursor: pointer;
+      position:absolute; top:12px; left:12px;
+      background:none; border:none; font-size:1.3rem;
+      color:var(--text-muted); cursor:pointer;
     }
-    [dir="ltr"] .modal-close { left: auto; right: 12px; }
-    .modal h2 { text-align: center; margin-bottom: 5px; font-weight: 900; }
-    .modal .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem; }
+    [dir="ltr"] .modal-close { left:auto; right:12px; }
+    .modal h2 { text-align:center; margin-bottom:5px; font-weight:900; }
 
-    .auth-tabs {
-      display: flex; background: var(--bg-main); border-radius: 99px;
-      padding: 4px; margin-bottom: 20px;
-    }
+    .auth-tabs { display:flex; background:var(--bg-main); border-radius:99px; padding:4px; margin-bottom:20px; }
     .auth-tab {
-      flex: 1; text-align: center; padding: 10px;
-      border-radius: 99px; font-weight: 700; cursor: pointer;
-      transition: var(--trans); font-size: 0.9rem;
-      border: none; background: none; color: var(--text-muted);
-      font-family: inherit;
+      flex:1; text-align:center; padding:10px; border-radius:99px;
+      font-weight:700; cursor:pointer; transition:var(--trans);
+      font-size:0.9rem; border:none; background:none;
+      color:var(--text-muted); font-family:inherit;
     }
-    .auth-tab.active { background: var(--primary); color: #fff; }
+    .auth-tab.active { background:var(--primary); color:#fff; }
 
-    .divider {
-      display: flex; align-items: center; gap: 15px;
-      margin: 20px 0; color: var(--text-muted); font-size: 0.85rem;
-    }
-    .divider::before, .divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
+    .divider { display:flex; align-items:center; gap:15px; margin:20px 0; color:var(--text-muted); font-size:0.85rem; }
+    .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--border); }
 
     .google-btn {
-      width: 100%; padding: 12px; border: 2px solid var(--border);
-      border-radius: var(--radius-sm); background: var(--bg-card);
-      color: var(--text-main); font-family: inherit; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 10px; transition: var(--trans);
-      font-size: 0.95rem;
+      width:100%; padding:12px; border:2px solid var(--border);
+      border-radius:var(--radius-sm); background:var(--bg-card);
+      color:var(--text-main); font-family:inherit; font-weight:700;
+      cursor:pointer; display:flex; align-items:center;
+      justify-content:center; gap:10px; transition:var(--trans); font-size:0.95rem;
     }
-    .google-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-    .google-btn img { width: 20px; }
+    .google-btn:hover { border-color:var(--primary); background:var(--primary-light); }
+    .google-btn img { width:20px; }
 
-    /* ===== TOASTS ===== */
     .toast-wrap {
-      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
-      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
-      pointer-events: none; width: 90%; max-width: 400px;
+      position:fixed; top:80px; left:50%; transform:translateX(-50%);
+      z-index:9999; display:flex; flex-direction:column; gap:8px;
+      pointer-events:none; width:90%; max-width:400px;
     }
     .toast {
-      padding: 12px 20px; border-radius: var(--radius-sm);
-      font-weight: 700; pointer-events: auto;
-      animation: toastIn 0.4s ease; display: flex;
-      align-items: center; gap: 10px; font-size: 0.9rem;
-      box-shadow: var(--shadow-lg);
+      padding:12px 20px; border-radius:var(--radius-sm);
+      font-weight:700; pointer-events:auto;
+      animation:toastIn 0.4s ease; display:flex;
+      align-items:center; gap:10px; font-size:0.9rem; box-shadow:var(--shadow-lg);
     }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(-20px) scale(0.9); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .toast.success { background: var(--primary); color: #fff; }
-    .toast.error { background: var(--danger); color: #fff; }
-    .toast.warning { background: var(--secondary); color: #fff; }
-    .toast.info { background: var(--blue); color: #fff; }
+    @keyframes toastIn { from{opacity:0;transform:translateY(-20px) scale(0.9)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .toast.success { background:var(--primary); color:#fff; }
+    .toast.error { background:var(--danger); color:#fff; }
+    .toast.warning { background:var(--secondary); color:#fff; }
+    .toast.info { background:var(--blue); color:#fff; }
 
-    /* ===== INVENTORY ===== */
     .inv-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 15px;
-      display: flex; align-items: center; gap: 15px;
-      margin-bottom: 10px; box-shadow: var(--shadow);
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:15px;
+      display:flex; align-items:center; gap:15px;
+      margin-bottom:10px; box-shadow:var(--shadow);
     }
     .inv-img {
-      width: 60px; height: 60px; border-radius: var(--radius-sm);
-      overflow: hidden; background: var(--bg-main);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      width:60px; height:60px; border-radius:var(--radius-sm);
+      overflow:hidden; background:var(--bg-main);
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
     }
-    .inv-img img { width: 100%; height: 100%; object-fit: cover; }
-    .inv-info { flex: 1; }
-    .inv-info h4 { font-weight: 700; }
-    .inv-bar {
-      height: 6px; background: var(--border); border-radius: 99px;
-      margin-top: 6px; overflow: hidden;
-    }
-    .inv-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s; }
-    .inv-actions { display: flex; gap: 6px; }
+    .inv-img img { width:100%; height:100%; object-fit:cover; }
+    .inv-info { flex:1; }
+    .inv-info h4 { font-weight:700; }
+    .inv-bar { height:6px; background:var(--border); border-radius:99px; margin-top:6px; overflow:hidden; }
+    .inv-bar-fill { height:100%; border-radius:99px; transition:width 0.5s; }
+    .inv-actions { display:flex; gap:6px; }
 
-    /* ===== PRICES ===== */
     .price-table {
-      width: 100%; border-collapse: separate; border-spacing: 0;
-      background: var(--bg-card); border-radius: var(--radius);
-      overflow: hidden; box-shadow: var(--shadow);
-      border: 1px solid var(--border);
+      width:100%; border-collapse:separate; border-spacing:0;
+      background:var(--bg-card); border-radius:var(--radius);
+      overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border);
     }
-    .price-table th {
-      background: var(--primary); color: #fff;
-      padding: 12px 15px; font-weight: 700; text-align: start;
-    }
-    .price-table td {
-      padding: 12px 15px; border-bottom: 1px solid var(--border);
-    }
-    .price-table tr:last-child td { border-bottom: none; }
-    .price-table tr:hover td { background: var(--primary-light); }
+    .price-table th { background:var(--primary); color:#fff; padding:12px 15px; font-weight:700; text-align:start; }
+    .price-table td { padding:12px 15px; border-bottom:1px solid var(--border); }
+    .price-table tr:last-child td { border-bottom:none; }
+    .price-table tr:hover td { background:var(--primary-light); }
 
-    /* ===== ADMIN ===== */
-    .admin-section { margin-bottom: 25px; }
-    .admin-section h3 {
-      font-weight: 800; margin-bottom: 12px;
-      display: flex; align-items: center; gap: 8px;
-    }
+    .admin-section { margin-bottom:25px; }
+    .admin-section h3 { font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
     .admin-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 12px 15px;
-      margin-bottom: 8px; display: flex; align-items: center;
-      justify-content: space-between; box-shadow: var(--shadow);
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-sm); padding:12px 15px;
+      margin-bottom:8px; display:flex; align-items:center;
+      justify-content:space-between; box-shadow:var(--shadow);
     }
 
-    /* ===== PROFILE ===== */
     .profile-header {
-      text-align: center; padding: 30px 20px;
-      background: var(--bg-card); border-radius: var(--radius);
-      border: 1px solid var(--border); margin-bottom: 20px;
-      box-shadow: var(--shadow);
+      text-align:center; padding:30px 20px; background:var(--bg-card);
+      border-radius:var(--radius); border:1px solid var(--border);
+      margin-bottom:20px; box-shadow:var(--shadow);
     }
     .profile-avatar {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; font-weight: 900; margin: 0 auto 15px;
+      width:80px; height:80px; border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-size:2rem; font-weight:900; margin:0 auto 15px;
     }
 
-    /* ===== SUPER BANNER ===== */
     .super-banner {
-      background: var(--danger-light); color: var(--danger);
-      padding: 8px 15px; text-align: center; font-size: 0.8rem;
-      font-weight: 700; display: flex; align-items: center;
-      justify-content: center; gap: 8px;
+      background:var(--danger-light); color:var(--danger);
+      padding:8px 15px; text-align:center; font-size:0.8rem;
+      font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;
     }
 
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center; padding: 50px 20px; color: var(--text-muted);
-    }
-    .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 15px; }
-    .empty-state p { font-size: 1rem; }
+    .empty-state { text-align:center; padding:50px 20px; color:var(--text-muted); }
+    .empty-state i { font-size:4rem; opacity:0.3; margin-bottom:15px; display:block; }
+    .empty-state p { font-size:1rem; }
 
-    /* ===== LOADING SPINNER ===== */
     .spinner {
-      width: 30px; height: 30px; border: 3px solid var(--border);
-      border-top-color: var(--primary); border-radius: 50%;
-      animation: spin 0.8s linear infinite; margin: 30px auto;
+      width:30px; height:30px; border:3px solid var(--border);
+      border-top-color:var(--primary); border-radius:50%;
+      animation:spin 0.8s linear infinite; margin:30px auto;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin { to{transform:rotate(360deg)} }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-      .chat-layout { flex-direction: column; height: calc(100vh - 120px); }
-      .chat-list { width: 100%; height: 200px; border-inline-end: none; border-bottom: 1px solid var(--border); }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
-      .card-img { height: 130px; }
-      .hero { padding: 30px 20px; }
-      .hero h1 { font-size: 1.4rem; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .price-table { font-size: 0.85rem; }
-      .price-table th, .price-table td { padding: 10px; }
+    @media(max-width:768px) {
+      .chat-layout { flex-direction:column; height:calc(100vh - 120px); }
+      .chat-list { width:100%; height:200px; border-inline-end:none; border-bottom:1px solid var(--border); }
+      .grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; }
+      .card-img { height:130px; }
+      .hero { padding:30px 20px; }
+      .hero h1 { font-size:1.4rem; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
     }
-
-    @media (max-width: 480px) {
-      .grid { grid-template-columns: 1fr; }
-      .btn-main { padding: 10px 16px; font-size: 0.85rem; }
+    @media(max-width:480px) {
+      .grid { grid-template-columns:1fr; }
+      .btn-main { padding:10px 16px; font-size:0.85rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- TOASTS -->
 <div class="toast-wrap" id="toastBox"></div>
 
 <!-- HEADER -->
 <header class="header">
   <div class="header-logo" onclick="go('home')">
-    <button class="icon-btn" onclick="event.stopPropagation(); toggleSidebar()" style="border:none; background:transparent;">
-      <i class="fas fa-bars"></i>
-    </button>
+    <button class="icon-btn" onclick="event.stopPropagation();toggleSidebar()" style="border:none;background:transparent;"><i class="fas fa-bars"></i></button>
     <i class="fas fa-leaf"></i>
     <h1 data-t="appName">محصولي المباشر</h1>
   </div>
   <div class="header-actions">
-    <button class="icon-btn" onclick="toggleTheme()" title="تبديل الوضع">
-      <i class="fas fa-moon" id="themeIcon"></i>
-    </button>
-    <button class="btn-main" id="loginBtn" onclick="openAuth()">
-      <i class="fas fa-user"></i> <span data-t="login">دخول</span>
-    </button>
-    <button class="icon-btn hidden" id="avatarBtn" onclick="go('profile')"
-      style="background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; font-weight:900; border:none;">
-      م
-    </button>
+    <button class="icon-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+    <button class="btn-main" id="loginBtn" onclick="openAuth()"><i class="fas fa-user"></i> <span data-t="login">دخول</span></button>
+    <button class="icon-btn hidden" id="avatarBtn" onclick="go('profile')" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-weight:900;border:none;">م</button>
   </div>
 </header>
 
-<!-- SIDEBAR OVERLAY -->
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
 <!-- SIDEBAR -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sb-header">
     <i class="fas fa-leaf"></i>
@@ -673,15 +498,11 @@
     <div class="sb-item" onclick="needAuth('inventory')"><i class="fas fa-boxes-stacked"></i> <span data-t="myStock">مخزوني</span></div>
     <div class="sb-item" onclick="needAuth('profile')"><i class="fas fa-user-circle"></i> <span data-t="profile">حسابي</span></div>
     <div class="sb-divider"></div>
-    <div class="sb-item hidden" id="sbAdmin" onclick="go('admin')" style="color:var(--secondary)">
-      <i class="fas fa-shield-halved"></i> <span>لوحة الأدمين</span>
-    </div>
+    <div class="sb-item hidden" id="sbAdmin" onclick="go('admin')" style="color:var(--secondary)"><i class="fas fa-shield-halved"></i> <span>الأدمين</span></div>
     <div class="sb-item" onclick="go('settings')"><i class="fas fa-gear"></i> <span data-t="settings">الإعدادات</span></div>
   </div>
   <div class="sb-footer">
-    <button class="btn-main danger hidden" id="sbLogout" onclick="auth.signOut(); toast('تم تسجيل الخروج','info')" style="width:100%; justify-content:center;">
-      <i class="fas fa-right-from-bracket"></i> <span data-t="logout">خروج</span>
-    </button>
+    <button class="btn-main danger hidden" id="sbLogout" onclick="auth.signOut();toast('تم تسجيل الخروج','info')" style="width:100%;justify-content:center;"><i class="fas fa-right-from-bracket"></i> <span data-t="logout">خروج</span></button>
   </div>
 </aside>
 
@@ -689,82 +510,37 @@
 <div class="modal-overlay" id="authModal">
   <div class="modal">
     <button class="modal-close" onclick="closeAuth()"><i class="fas fa-xmark"></i></button>
-
-    <div style="text-align:center; margin-bottom:15px;">
-      <i class="fas fa-leaf" style="font-size:2.5rem; color:var(--primary);"></i>
-    </div>
-
+    <div style="text-align:center;margin-bottom:15px;"><i class="fas fa-leaf" style="font-size:2.5rem;color:var(--primary);"></i></div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')" data-t="login">دخول</button>
       <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')" data-t="register">تسجيل</button>
     </div>
-
-    <!-- LOGIN FORM -->
     <div id="loginForm">
-      <div class="form-group">
-        <label><i class="fas fa-envelope"></i> <span data-t="email">البريد الإلكتروني</span></label>
-        <input type="email" id="lEmail" class="input-field" placeholder="example@mail.com">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> <span data-t="password">كلمة المرور</span></label>
-        <input type="password" id="lPass" class="input-field" placeholder="••••••••">
-      </div>
-      <button class="btn-main" style="width:100%; justify-content:center;" onclick="emailLogin()" id="loginSubmitBtn">
-        <i class="fas fa-sign-in-alt"></i> <span data-t="login">دخول</span>
-      </button>
+      <div class="form-group"><label><i class="fas fa-envelope"></i> <span data-t="email">البريد</span></label><input type="email" id="lEmail" class="input-field" placeholder="example@mail.com"></div>
+      <div class="form-group"><label><i class="fas fa-lock"></i> <span data-t="password">كلمة المرور</span></label><input type="password" id="lPass" class="input-field" placeholder="••••••••"></div>
+      <button class="btn-main" style="width:100%;justify-content:center;" onclick="emailLogin()" id="loginSubmitBtn"><i class="fas fa-sign-in-alt"></i> <span data-t="login">دخول</span></button>
     </div>
-
-    <!-- REGISTER FORM -->
     <div id="registerForm" class="hidden">
-      <div class="form-group">
-        <label><i class="fas fa-user"></i> <span data-t="fullName">الاسم الكامل</span></label>
-        <input type="text" id="rName" class="input-field" placeholder="محمد أحمد">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-envelope"></i> <span data-t="email">البريد الإلكتروني</span></label>
-        <input type="email" id="rEmail" class="input-field" placeholder="example@mail.com">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-phone"></i> <span data-t="phone">رقم الهاتف</span></label>
-        <input type="tel" id="rPhone" class="input-field" placeholder="0612345678">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-map-marker-alt"></i> <span data-t="region">المنطقة</span></label>
+      <div class="form-group"><label><i class="fas fa-user"></i> الاسم</label><input type="text" id="rName" class="input-field" placeholder="الاسم الكامل"></div>
+      <div class="form-group"><label><i class="fas fa-envelope"></i> البريد</label><input type="email" id="rEmail" class="input-field" placeholder="example@mail.com"></div>
+      <div class="form-group"><label><i class="fas fa-phone"></i> الهاتف</label><input type="tel" id="rPhone" class="input-field" placeholder="0612345678"></div>
+      <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> المنطقة</label>
         <select id="rRegion" class="input-field">
           <option value="">اختر المنطقة</option>
-          <option value="سوس ماسة">سوس ماسة</option>
-          <option value="مراكش آسفي">مراكش آسفي</option>
-          <option value="فاس مكناس">فاس مكناس</option>
-          <option value="الرباط سلا">الرباط سلا القنيطرة</option>
-          <option value="الدار البيضاء">الدار البيضاء سطات</option>
-          <option value="طنجة تطوان">طنجة تطوان الحسيمة</option>
-          <option value="الشرق">الشرق</option>
-          <option value="بني ملال">بني ملال خنيفرة</option>
+          <option value="سوس ماسة">سوس ماسة</option><option value="مراكش آسفي">مراكش آسفي</option>
+          <option value="فاس مكناس">فاس مكناس</option><option value="الرباط سلا">الرباط سلا القنيطرة</option>
+          <option value="الدار البيضاء">الدار البيضاء سطات</option><option value="طنجة تطوان">طنجة تطوان الحسيمة</option>
+          <option value="الشرق">الشرق</option><option value="بني ملال">بني ملال خنيفرة</option>
           <option value="درعة تافيلالت">درعة تافيلالت</option>
-          <option value="كلميم">كلميم واد نون</option>
-          <option value="العيون">العيون الساقية الحمراء</option>
-          <option value="الداخلة">الداخلة وادي الذهب</option>
         </select>
       </div>
-      <div class="form-group">
-        <label><i class="fas fa-user-tag"></i> <span data-t="role">الدور</span></label>
-        <select id="rRole" class="input-field">
-          <option value="فلاح">🌾 فلاح</option>
-          <option value="مشتري">🛒 مشتري</option>
-          <option value="موزع">🚛 موزع</option>
-        </select>
+      <div class="form-group"><label><i class="fas fa-user-tag"></i> الدور</label>
+        <select id="rRole" class="input-field"><option value="فلاح">🌾 فلاح</option><option value="مشتري">🛒 مشتري</option><option value="موزع">🚛 موزع</option></select>
       </div>
-      <div class="form-group">
-        <label><i class="fas fa-lock"></i> <span data-t="password">كلمة المرور</span></label>
-        <input type="password" id="rPass" class="input-field" placeholder="6 أحرف على الأقل">
-      </div>
-      <button class="btn-main" style="width:100%; justify-content:center;" onclick="emailRegister()" id="regSubmitBtn">
-        <i class="fas fa-user-plus"></i> <span data-t="register">تسجيل</span>
-      </button>
+      <div class="form-group"><label><i class="fas fa-lock"></i> كلمة المرور</label><input type="password" id="rPass" class="input-field" placeholder="6 أحرف على الأقل"></div>
+      <button class="btn-main" style="width:100%;justify-content:center;" onclick="emailRegister()" id="regSubmitBtn"><i class="fas fa-user-plus"></i> تسجيل</button>
     </div>
-
     <div class="divider"><span data-t="or">أو</span></div>
-
     <button class="google-btn" onclick="googleLogin()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
       <span data-t="googleLogin">الدخول بـ Google</span>
@@ -772,348 +548,186 @@
   </div>
 </div>
 
-<!-- ===================== MAIN CONTENT ===================== -->
 <main class="main">
 
-  <!-- HOME PAGE -->
+  <!-- HOME -->
   <section class="page on" id="p-home">
     <div class="hero">
       <h1 data-t="welcomeHome">🌿 سوق الفلاح بين يديك</h1>
-      <p data-t="welcomeDesc">اشترِ مباشرة من الفلاح، بدون وسيط. طازج من الأرض إلى بيتك.</p>
+      <p data-t="welcomeDesc">اشترِ مباشرة من الفلاح بدون وسيط</p>
       <div class="hero-btns">
         <button class="btn-main" onclick="go('market')"><i class="fas fa-store"></i> <span data-t="browseMarket">تصفح السوق</span></button>
-        <button class="btn-main" onclick="needAuth('add')" style="background:rgba(255,255,255,0.2); box-shadow:none; border:2px solid #fff;">
-          <i class="fas fa-plus"></i> <span data-t="addProduct">أضف محصولك</span>
-        </button>
+        <button class="btn-main" onclick="needAuth('add')" style="background:rgba(255,255,255,0.2);box-shadow:none;border:2px solid #fff;"><i class="fas fa-plus"></i> <span data-t="addProduct">أضف محصولك</span></button>
       </div>
     </div>
-
-    <!-- Admin Stats -->
     <div id="adminStats" class="stats-grid hidden">
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--primary-light); color:var(--primary);"><i class="fas fa-box"></i></div>
-        <h3 id="stProds">0</h3>
-        <p>محصول</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--blue-light); color:var(--blue);"><i class="fas fa-users"></i></div>
-        <h3 id="stUsers">0</h3>
-        <p>مستخدم</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--secondary-light); color:var(--secondary);"><i class="fas fa-comments"></i></div>
-        <h3 id="stChats">0</h3>
-        <p>محادثة</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--danger-light); color:var(--danger);"><i class="fas fa-ban"></i></div>
-        <h3 id="stOut">0</h3>
-        <p>نفذ</p>
-      </div>
+      <div class="stat-card"><div class="stat-icon" style="background:var(--primary-light);color:var(--primary);"><i class="fas fa-box"></i></div><h3 id="stProds">0</h3><p>محصول</p></div>
+      <div class="stat-card"><div class="stat-icon" style="background:var(--blue-light);color:var(--blue);"><i class="fas fa-users"></i></div><h3 id="stUsers">0</h3><p>مستخدم</p></div>
+      <div class="stat-card"><div class="stat-icon" style="background:var(--secondary-light);color:var(--secondary);"><i class="fas fa-comments"></i></div><h3 id="stChats">0</h3><p>محادثة</p></div>
+      <div class="stat-card"><div class="stat-icon" style="background:var(--danger-light);color:var(--danger);"><i class="fas fa-ban"></i></div><h3 id="stOut">0</h3><p>نفذ</p></div>
     </div>
-
-    <!-- Categories -->
-    <div class="section-head">
-      <h2><i class="fas fa-th-large" style="color:var(--secondary); margin-inline-end:8px;"></i> <span data-t="categories">التصنيفات</span></h2>
+    <div class="section-head"><h2><i class="fas fa-th-large" style="color:var(--secondary);margin-inline-end:8px;"></i> <span data-t="categories">التصنيفات</span></h2></div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:10px;margin-bottom:20px;">
+      <button class="btn-main outline" onclick="filterCat('')" style="flex-shrink:0;">الكل</button>
+      <button class="btn-main outline" onclick="filterCat('خضروات')" style="flex-shrink:0;">🥬 خضروات</button>
+      <button class="btn-main outline" onclick="filterCat('فواكه')" style="flex-shrink:0;">🍊 فواكه</button>
+      <button class="btn-main outline" onclick="filterCat('حبوب')" style="flex-shrink:0;">🌾 حبوب</button>
+      <button class="btn-main outline" onclick="filterCat('زيتون')" style="flex-shrink:0;">🫒 زيتون</button>
+      <button class="btn-main outline" onclick="filterCat('تمور')" style="flex-shrink:0;">🌴 تمور</button>
+      <button class="btn-main outline" onclick="filterCat('أعشاب')" style="flex-shrink:0;">🌿 أعشاب</button>
     </div>
-    <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; margin-bottom:20px;" id="catScroll">
-      <button class="btn-main outline" onclick="filterCat('')" style="flex-shrink:0;" data-t="all">الكل</button>
-      <button class="btn-main outline" onclick="filterCat('خضروات')" style="flex-shrink:0;">🥬 <span data-t="vegetables">خضروات</span></button>
-      <button class="btn-main outline" onclick="filterCat('فواكه')" style="flex-shrink:0;">🍊 <span data-t="fruits">فواكه</span></button>
-      <button class="btn-main outline" onclick="filterCat('حبوب')" style="flex-shrink:0;">🌾 <span data-t="grains">حبوب</span></button>
-      <button class="btn-main outline" onclick="filterCat('زيتون')" style="flex-shrink:0;">🫒 <span data-t="olives">زيتون وزيوت</span></button>
-      <button class="btn-main outline" onclick="filterCat('تمور')" style="flex-shrink:0;">🌴 <span data-t="dates">تمور</span></button>
-      <button class="btn-main outline" onclick="filterCat('أعشاب')" style="flex-shrink:0;">🌿 <span data-t="herbs">أعشاب</span></button>
-    </div>
-
-    <!-- Latest Products -->
-    <div class="section-head">
-      <h2><i class="fas fa-fire" style="color:var(--danger); margin-inline-end:8px;"></i> <span data-t="latestProducts">أحدث العروض</span></h2>
-      <a onclick="go('market')" data-t="seeAll">عرض الكل ←</a>
-    </div>
+    <div class="section-head"><h2><i class="fas fa-fire" style="color:var(--danger);margin-inline-end:8px;"></i> <span data-t="latestProducts">أحدث العروض</span></h2><a onclick="go('market')" data-t="seeAll">عرض الكل ←</a></div>
     <div class="grid" id="homeProds"></div>
   </section>
 
-  <!-- MARKET PAGE -->
+  <!-- MARKET -->
   <section class="page" id="p-market">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-store" style="color:var(--primary); margin-inline-end:8px;"></i> <span data-t="market">السوق المباشر</span></h2>
-    </div>
-    <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-      <input type="text" id="searchIn" class="input-field" placeholder="🔍 ابحث عن محصول..." oninput="filterProds()" style="flex:1; min-width:200px;">
-      <select id="filterCatSel" class="input-field" onchange="filterProds()" style="width:auto; min-width:120px;">
-        <option value="" data-t="allCategories">كل التصنيفات</option>
-        <option value="خضروات">🥬 خضروات</option>
-        <option value="فواكه">🍊 فواكه</option>
-        <option value="حبوب">🌾 حبوب</option>
-        <option value="زيتون">🫒 زيتون</option>
-        <option value="تمور">🌴 تمور</option>
-        <option value="أعشاب">🌿 أعشاب</option>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-store" style="color:var(--primary);margin-inline-end:8px;"></i> <span data-t="market">السوق</span></h2></div>
+    <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
+      <input type="text" id="searchIn" class="input-field" placeholder="🔍 ابحث..." oninput="filterProds()" style="flex:1;min-width:200px;">
+      <select id="filterCatSel" class="input-field" onchange="filterProds()" style="width:auto;min-width:120px;">
+        <option value="">كل التصنيفات</option>
+        <option value="خضروات">🥬 خضروات</option><option value="فواكه">🍊 فواكه</option>
+        <option value="حبوب">🌾 حبوب</option><option value="زيتون">🫒 زيتون</option>
+        <option value="تمور">🌴 تمور</option><option value="أعشاب">🌿 أعشاب</option>
       </select>
     </div>
     <div class="grid" id="marketProds"></div>
-    <div class="empty-state hidden" id="marketEmpty">
-      <i class="fas fa-search"></i>
-      <p data-t="noResults">لا توجد نتائج</p>
-    </div>
+    <div class="empty-state hidden" id="marketEmpty"><i class="fas fa-search"></i><p>لا توجد نتائج</p></div>
   </section>
 
-  <!-- ADD PRODUCT PAGE -->
+  <!-- ADD PRODUCT -->
   <section class="page" id="p-add">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-plus-circle" style="color:var(--primary); margin-inline-end:8px;"></i> <span data-t="publishProduct">نشر محصول جديد</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-plus-circle" style="color:var(--primary);margin-inline-end:8px;"></i> نشر محصول</h2></div>
     <div class="form-card">
-      <div class="form-group">
-        <label><i class="fas fa-tag"></i> <span data-t="productName">اسم المحصول</span></label>
-        <input type="text" id="pName" class="input-field" placeholder="مثال: طماطم بلدية">
+      <div class="form-group"><label><i class="fas fa-tag"></i> اسم المحصول</label><input type="text" id="pName" class="input-field" placeholder="مثال: طماطم بلدية"></div>
+      <div class="form-group"><label><i class="fas fa-layer-group"></i> التصنيف</label>
+        <select id="pCat" class="input-field"><option value="خضروات">🥬 خضروات</option><option value="فواكه">🍊 فواكه</option><option value="حبوب">🌾 حبوب</option><option value="زيتون">🫒 زيتون</option><option value="تمور">🌴 تمور</option><option value="أعشاب">🌿 أعشاب</option></select>
       </div>
-      <div class="form-group">
-        <label><i class="fas fa-layer-group"></i> <span data-t="category">التصنيف</span></label>
-        <select id="pCat" class="input-field">
-          <option value="خضروات">🥬 خضروات</option>
-          <option value="فواكه">🍊 فواكه</option>
-          <option value="حبوب">🌾 حبوب</option>
-          <option value="زيتون">🫒 زيتون وزيوت</option>
-          <option value="تمور">🌴 تمور</option>
-          <option value="أعشاب">🌿 أعشاب</option>
-        </select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group"><label><i class="fas fa-weight-hanging"></i> الكمية (كغ)</label><input type="number" id="pQty" class="input-field" placeholder="100" min="1"></div>
+        <div class="form-group"><label><i class="fas fa-coins"></i> السعر (د/كغ)</label><input type="number" id="pPrice" class="input-field" placeholder="5" min="0.1" step="0.1"></div>
       </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <div class="form-group">
-          <label><i class="fas fa-weight-hanging"></i> <span data-t="quantity">الكمية (كغ)</span></label>
-          <input type="number" id="pQty" class="input-field" placeholder="100" min="1">
-        </div>
-        <div class="form-group">
-          <label><i class="fas fa-coins"></i> <span data-t="priceDH">السعر (درهم/كغ)</span></label>
-          <input type="number" id="pPrice" class="input-field" placeholder="5" min="0.1" step="0.1">
-        </div>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-align-left"></i> <span data-t="description">الوصف (اختياري)</span></label>
-        <textarea id="pDesc" class="input-field" rows="3" placeholder="وصف المحصول..."></textarea>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-camera"></i> <span data-t="productImage">صورة المحصول</span></label>
-        <div class="img-preview" id="imgPreview" onclick="$('pImg').click()">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <span data-t="clickToUpload">اضغط لرفع صورة</span>
-        </div>
+      <div class="form-group"><label><i class="fas fa-align-left"></i> الوصف</label><textarea id="pDesc" class="input-field" rows="3" placeholder="وصف المحصول..."></textarea></div>
+      <div class="form-group"><label><i class="fas fa-camera"></i> الصورة</label>
+        <div class="img-preview" id="imgPreview" onclick="$('pImg').click()"><i class="fas fa-cloud-upload-alt"></i><span>اضغط لرفع صورة</span></div>
         <input type="file" id="pImg" class="hidden" accept="image/*" onchange="previewImg(this)">
       </div>
-      <button class="btn-main" style="width:100%; justify-content:center; padding:14px;" onclick="addProd()" id="addProdBtn">
-        <i class="fas fa-paper-plane"></i> <span data-t="publishNow">نشر الآن</span>
-      </button>
+      <button class="btn-main" style="width:100%;justify-content:center;padding:14px;" onclick="addProd()" id="addProdBtn"><i class="fas fa-paper-plane"></i> نشر الآن</button>
     </div>
   </section>
 
-  <!-- PRODUCT DETAIL PAGE -->
+  <!-- PRODUCT DETAIL -->
   <section class="page" id="p-detail">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-info-circle" style="color:var(--blue); margin-inline-end:8px;"></i> <span data-t="productDetails">تفاصيل المحصول</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-info-circle" style="color:var(--blue);margin-inline-end:8px;"></i> تفاصيل المحصول</h2></div>
     <div id="detailContent"></div>
   </section>
 
-  <!-- CHAT PAGE -->
+  <!-- CHAT -->
   <section class="page" id="p-chat">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-comments" style="color:var(--blue); margin-inline-end:8px;"></i> <span data-t="messages">المراسلات</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-comments" style="color:var(--blue);margin-inline-end:8px;"></i> المراسلات</h2></div>
     <div class="chat-layout">
       <div class="chat-list" id="chatList">
-        <div class="empty-state" style="padding:30px;">
-          <i class="fas fa-inbox" style="font-size:2rem;"></i>
-          <p style="font-size:0.85rem;" data-t="noChats">لا توجد محادثات بعد</p>
-        </div>
+        <div class="empty-state" style="padding:30px;"><i class="fas fa-inbox" style="font-size:2rem;"></i><p style="font-size:0.85rem;">لا توجد محادثات</p></div>
       </div>
       <div class="chat-main">
         <div class="chat-header" id="chatHeader">
           <div class="chat-avatar" id="chatAvatar"><i class="fas fa-comments"></i></div>
-          <div>
-            <h3 id="chatTitle" data-t="selectChat">اختر محادثة</h3>
-            <p style="font-size:0.75rem; color:var(--text-muted);" id="chatStatus"></p>
-          </div>
+          <div><h3 id="chatTitle">اختر محادثة</h3><p style="font-size:0.75rem;color:var(--text-muted);" id="chatStatus"></p></div>
         </div>
-        <div class="super-banner hidden" id="superBanner">
-          <i class="fas fa-eye"></i> وضع المراقبة — لا يمكنك إرسال رسائل
-        </div>
+        <div class="super-banner hidden" id="superBanner"><i class="fas fa-eye"></i> وضع المراقبة</div>
         <div class="chat-msgs" id="chatMsgs">
-          <div class="empty-chat" id="emptyChatMsg">
-            <i class="fas fa-paper-plane"></i>
-            <p data-t="startChat">ابدأ المحادثة الآن</p>
-          </div>
+          <div class="empty-chat" id="emptyChatMsg"><i class="fas fa-paper-plane"></i><p>ابدأ المحادثة</p></div>
         </div>
         <div class="chat-input-area" id="chatInputArea">
-          <button class="icon-btn" style="border:none; flex-shrink:0;" onclick="$('cImgUp').click()" title="إرسال صورة">
-            <i class="fas fa-image" style="color:var(--blue);"></i>
-          </button>
+          <button class="icon-btn" style="border:none;flex-shrink:0;" onclick="$('cImgUp').click()"><i class="fas fa-image" style="color:var(--blue);"></i></button>
           <input type="file" id="cImgUp" class="hidden" accept="image/*" onchange="sendImg(this)">
-          <button class="icon-btn" style="border:none; flex-shrink:0; color:var(--danger);"
-            onmousedown="startRec()" onmouseup="stopRec()" ontouchstart="startRec()" ontouchend="stopRec()" title="تسجيل صوتي">
-            <i class="fas fa-microphone"></i>
-          </button>
-          <div class="recording-indicator" id="recIndicator">
-            <div class="rec-dot"></div>
-            <span>جارِ التسجيل...</span>
-          </div>
-          <input type="text" id="chatIn" class="input-field" placeholder="اكتب رسالتك..."
-            onkeypress="if(event.key==='Enter')sendMsg()">
+          <button class="icon-btn" style="border:none;flex-shrink:0;color:var(--danger);" onmousedown="startRec()" onmouseup="stopRec()" ontouchstart="startRec()" ontouchend="stopRec()"><i class="fas fa-microphone"></i></button>
+          <div class="recording-indicator" id="recIndicator"><div class="rec-dot"></div><span>جارِ التسجيل...</span></div>
+          <input type="text" id="chatIn" class="input-field" placeholder="اكتب رسالتك..." onkeypress="if(event.key==='Enter')sendMsg()">
           <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- INVENTORY PAGE -->
+  <!-- INVENTORY -->
   <section class="page" id="p-inventory">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-boxes-stacked" style="color:var(--secondary); margin-inline-end:8px;"></i> <span data-t="myStock">مخزوني</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-boxes-stacked" style="color:var(--secondary);margin-inline-end:8px;"></i> مخزوني</h2></div>
     <div id="invList"></div>
-    <div class="empty-state hidden" id="invEmpty">
-      <i class="fas fa-box-open"></i>
-      <p data-t="noProducts">لم تنشر أي محصول بعد</p>
-      <button class="btn-main" onclick="go('add')" style="margin-top:15px;">
-        <i class="fas fa-plus"></i> <span data-t="addFirst">أضف أول محصول</span>
-      </button>
-    </div>
+    <div class="empty-state hidden" id="invEmpty"><i class="fas fa-box-open"></i><p>لم تنشر أي محصول بعد</p><button class="btn-main" onclick="go('add')" style="margin-top:15px;"><i class="fas fa-plus"></i> أضف محصول</button></div>
   </section>
 
-  <!-- PRICES PAGE -->
+  <!-- PRICES -->
   <section class="page" id="p-prices">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-chart-line" style="color:var(--secondary); margin-inline-end:8px;"></i> <span data-t="prices">أسعار السوق</span></h2>
-    </div>
-    <p style="color:var(--text-muted); margin-bottom:15px; font-size:0.9rem;" data-t="pricesDesc">متوسط الأسعار بناءً على المنتجات المعروضة حالياً</p>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-chart-line" style="color:var(--secondary);margin-inline-end:8px;"></i> الأسعار</h2></div>
+    <p style="color:var(--text-muted);margin-bottom:15px;font-size:0.9rem;">متوسط الأسعار بناءً على المنتجات المعروضة</p>
     <div id="pricesContent"></div>
   </section>
 
-  <!-- PROFILE PAGE -->
+  <!-- PROFILE -->
   <section class="page" id="p-profile">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-user-circle" style="color:var(--primary); margin-inline-end:8px;"></i> <span data-t="profile">حسابي</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-user-circle" style="color:var(--primary);margin-inline-end:8px;"></i> حسابي</h2></div>
     <div class="profile-header">
       <div class="profile-avatar" id="profileAvatar">م</div>
       <h2 id="profileName">مستخدم</h2>
       <p style="color:var(--text-muted);" id="profileEmail">-</p>
-      <div style="margin-top:10px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-        <span id="profileRole" style="background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:99px; font-size:0.85rem; font-weight:700;">-</span>
-        <span id="profileRegion" style="background:var(--blue-light); color:var(--blue); padding:4px 12px; border-radius:99px; font-size:0.85rem; font-weight:700;">-</span>
+      <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <span id="profileRole" style="background:var(--primary-light);color:var(--primary);padding:4px 12px;border-radius:99px;font-size:0.85rem;font-weight:700;">-</span>
+        <span id="profileRegion" style="background:var(--blue-light);color:var(--blue);padding:4px 12px;border-radius:99px;font-size:0.85rem;font-weight:700;">-</span>
       </div>
     </div>
     <div class="form-card">
-      <h3 style="margin-bottom:15px; font-weight:800;"><i class="fas fa-edit" style="color:var(--primary);"></i> تعديل الملف الشخصي</h3>
-      <div class="form-group">
-        <label><i class="fas fa-user"></i> الاسم</label>
-        <input type="text" id="profName" class="input-field">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-phone"></i> الهاتف</label>
-        <input type="tel" id="profPhone" class="input-field">
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-map-marker-alt"></i> المنطقة</label>
+      <h3 style="margin-bottom:15px;font-weight:800;"><i class="fas fa-edit" style="color:var(--primary);"></i> تعديل الملف</h3>
+      <div class="form-group"><label><i class="fas fa-user"></i> الاسم</label><input type="text" id="profName" class="input-field"></div>
+      <div class="form-group"><label><i class="fas fa-phone"></i> الهاتف</label><input type="tel" id="profPhone" class="input-field"></div>
+      <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> المنطقة</label>
         <select id="profRegion" class="input-field">
-          <option value="سوس ماسة">سوس ماسة</option>
-          <option value="مراكش آسفي">مراكش آسفي</option>
-          <option value="فاس مكناس">فاس مكناس</option>
-          <option value="الرباط سلا">الرباط سلا القنيطرة</option>
-          <option value="الدار البيضاء">الدار البيضاء سطات</option>
-          <option value="طنجة تطوان">طنجة تطوان الحسيمة</option>
-          <option value="الشرق">الشرق</option>
-          <option value="بني ملال">بني ملال خنيفرة</option>
+          <option value="سوس ماسة">سوس ماسة</option><option value="مراكش آسفي">مراكش آسفي</option>
+          <option value="فاس مكناس">فاس مكناس</option><option value="الرباط سلا">الرباط سلا القنيطرة</option>
+          <option value="الدار البيضاء">الدار البيضاء سطات</option><option value="طنجة تطوان">طنجة تطوان الحسيمة</option>
+          <option value="الشرق">الشرق</option><option value="بني ملال">بني ملال خنيفرة</option>
           <option value="درعة تافيلالت">درعة تافيلالت</option>
-          <option value="كلميم">كلميم واد نون</option>
-          <option value="العيون">العيون الساقية الحمراء</option>
-          <option value="الداخلة">الداخلة وادي الذهب</option>
         </select>
       </div>
-      <button class="btn-main" style="width:100%; justify-content:center;" onclick="updateProfile()">
-        <i class="fas fa-save"></i> حفظ التعديلات
-      </button>
-      <button class="btn-main danger" style="width:100%; justify-content:center; margin-top:10px;" onclick="auth.signOut(); go('home');">
-        <i class="fas fa-right-from-bracket"></i> تسجيل الخروج
-      </button>
+      <button class="btn-main" style="width:100%;justify-content:center;" onclick="updateProfile()"><i class="fas fa-save"></i> حفظ</button>
+      <button class="btn-main danger" style="width:100%;justify-content:center;margin-top:10px;" onclick="auth.signOut();go('home');"><i class="fas fa-right-from-bracket"></i> خروج</button>
     </div>
   </section>
 
-  <!-- SETTINGS PAGE -->
+  <!-- SETTINGS -->
   <section class="page" id="p-settings">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-gear" style="color:var(--text-muted); margin-inline-end:8px;"></i> <span data-t="settings">الإعدادات</span></h2>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-gear" style="color:var(--text-muted);margin-inline-end:8px;"></i> الإعدادات</h2></div>
     <div class="form-card">
-      <div class="form-group">
-        <label><i class="fas fa-language"></i> <span data-t="language">اللغة</span></label>
-        <select id="langSel" class="input-field" onchange="setLang(this.value)">
-          <option value="ar">🇲🇦 العربية</option>
-          <option value="fr">🇫🇷 Français</option>
-          <option value="en">🇬🇧 English</option>
-        </select>
+      <div class="form-group"><label><i class="fas fa-language"></i> اللغة</label>
+        <select id="langSel" class="input-field" onchange="setLang(this.value)"><option value="ar">🇲🇦 العربية</option><option value="fr">🇫🇷 Français</option><option value="en">🇬🇧 English</option></select>
       </div>
-      <div class="form-group">
-        <label><i class="fas fa-palette"></i> <span data-t="theme">المظهر</span></label>
-        <div style="display:flex; gap:10px;">
-          <button class="btn-main outline" onclick="setTheme('light')" style="flex:1; justify-content:center;">
-            <i class="fas fa-sun"></i> <span data-t="light">فاتح</span>
-          </button>
-          <button class="btn-main outline" onclick="setTheme('dark')" style="flex:1; justify-content:center;">
-            <i class="fas fa-moon"></i> <span data-t="dark">داكن</span>
-          </button>
+      <div class="form-group"><label><i class="fas fa-palette"></i> المظهر</label>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-main outline" onclick="setTheme('light')" style="flex:1;justify-content:center;"><i class="fas fa-sun"></i> فاتح</button>
+          <button class="btn-main outline" onclick="setTheme('dark')" style="flex:1;justify-content:center;"><i class="fas fa-moon"></i> داكن</button>
         </div>
       </div>
     </div>
     <div class="form-card" style="margin-top:15px;">
       <h3 style="margin-bottom:10px;"><i class="fas fa-info-circle" style="color:var(--blue);"></i> حول التطبيق</h3>
-      <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.8;">
-        <strong>محصولي المباشر</strong> هو منصة رقمية تربط الفلاح المغربي مباشرة بالمشتري والموزع.
-        بدون وسطاء، بأسعار عادلة، ومحاصيل طازجة من الأرض.
-        <br><br>
-        <strong>الإصدار:</strong> 2.0.0<br>
-        <strong>تطوير:</strong> فريق محصولي 🌿
-      </p>
+      <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.8;"><strong>محصولي المباشر</strong> — منصة تربط الفلاح مباشرة بالمشتري.<br><strong>الإصدار:</strong> 2.1.0 🌿</p>
     </div>
   </section>
 
-  <!-- ADMIN PAGE -->
+  <!-- ADMIN -->
   <section class="page" id="p-admin">
-    <div class="page-head">
-      <button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button>
-      <h2><i class="fas fa-shield-halved" style="color:var(--secondary); margin-inline-end:8px;"></i> لوحة الأدمين</h2>
-    </div>
-
-    <div class="admin-section">
-      <h3><i class="fas fa-box" style="color:var(--primary);"></i> إدارة المحاصيل</h3>
-      <div id="adminProds"></div>
-    </div>
-
-    <div class="admin-section">
-      <h3><i class="fas fa-users" style="color:var(--blue);"></i> إدارة المستخدمين</h3>
-      <div id="adminUsers"></div>
-    </div>
-
-    <div class="admin-section">
-      <h3><i class="fas fa-comments" style="color:var(--secondary);"></i> مراقبة المحادثات</h3>
-      <div id="adminChats"></div>
-    </div>
+    <div class="page-head"><button class="icon-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-shield-halved" style="color:var(--secondary);margin-inline-end:8px;"></i> لوحة الأدمين</h2></div>
+    <div class="admin-section"><h3><i class="fas fa-box" style="color:var(--primary);"></i> المحاصيل</h3><div id="adminProds"></div></div>
+    <div class="admin-section"><h3><i class="fas fa-users" style="color:var(--blue);"></i> المستخدمون</h3><div id="adminUsers"></div></div>
+    <div class="admin-section"><h3><i class="fas fa-comments" style="color:var(--secondary);"></i> المحادثات</h3><div id="adminChats"></div></div>
   </section>
 
 </main>
 
-<!-- ===================== JAVASCRIPT ===================== -->
 <script>
 // ==========================================
-// 🔧 FIREBASE CONFIG
+// 🔧 FIREBASE INIT
 // ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAHVKypc3f3uJC5aNBrzYHkwLdtTraMS_o",
@@ -1129,118 +743,59 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 // ==========================================
-// 📦 STATE & HELPERS
+// 📦 STATE
 // ==========================================
 const $ = id => document.getElementById(id);
 const ADMIN_EMAIL = 'admin.salah@gmail.com';
 
+/*
+ * ⚠️ الاسم الصحيح للمجموعة الفرعية = "messages"
+ * يجب أن يتطابق مع قواعد Firestore
+ */
+const MSGS_COL = 'messages';
+
 let user = null, isAdmin = false, isAdminChat = false;
 let prods = [], allUsers = [], navHistory = ['home'];
-let activeChat = null, chatUnsub = null;
-let currentCat = '';
+let activeChat = null, chatUnsub = null, currentCat = '';
 
-// 🐛 Falsy Zero Bug Fix
+// 🐛 Falsy Zero Fix
 function getRem(p) {
   return typeof p.quantityRemaining === 'number' ? p.quantityRemaining : (p.quantity || 0);
 }
 
-// Category emoji map
-const catEmoji = {
-  'خضروات': '🥬', 'فواكه': '🍊', 'حبوب': '🌾',
-  'زيتون': '🫒', 'تمور': '🌴', 'أعشاب': '🌿'
-};
+const catEmoji = {'خضروات':'🥬','فواكه':'🍊','حبوب':'🌾','زيتون':'🫒','تمور':'🌴','أعشاب':'🌿'};
 
 // ==========================================
-// 🔔 TOAST NOTIFICATIONS
+// 🔔 TOAST
 // ==========================================
 function toast(msg, type = 'info') {
   const box = $('toastBox');
   const d = document.createElement('div');
   d.className = `toast ${type}`;
-  const icons = { success: 'check-circle', error: 'exclamation-circle', warning: 'exclamation-triangle', info: 'info-circle' };
-  d.innerHTML = `<i class="fas fa-${icons[type] || 'info-circle'}"></i> ${msg}`;
+  const icons = {success:'check-circle',error:'exclamation-circle',warning:'exclamation-triangle',info:'info-circle'};
+  d.innerHTML = `<i class="fas fa-${icons[type]||'info-circle'}"></i> ${msg}`;
   box.appendChild(d);
-  setTimeout(() => { d.style.opacity = '0'; d.style.transform = 'translateY(-20px)'; setTimeout(() => d.remove(), 300); }, 3000);
+  setTimeout(() => { d.style.opacity='0'; d.style.transform='translateY(-20px)'; setTimeout(()=>d.remove(),300); }, 3000);
 }
 
 // ==========================================
-// 🌐 i18n TRANSLATIONS
+// 🌐 i18n
 // ==========================================
 const T = {
-  ar: {
-    appName: "محصولي المباشر", home: "الرئيسية", market: "السوق", publish: "نشر محصول",
-    messages: "المراسلات", settings: "الإعدادات", login: "دخول", register: "تسجيل",
-    logout: "خروج", profile: "حسابي", myStock: "مخزوني", prices: "الأسعار",
-    welcomeHome: "🌿 سوق الفلاح بين يديك", welcomeDesc: "اشترِ مباشرة من الفلاح، بدون وسيط. طازج من الأرض إلى بيتك.",
-    browseMarket: "تصفح السوق", addProduct: "أضف محصولك", latestProducts: "أحدث العروض",
-    categories: "التصنيفات", all: "الكل", vegetables: "خضروات", fruits: "فواكه",
-    grains: "حبوب", olives: "زيتون وزيوت", dates: "تمور", herbs: "أعشاب",
-    seeAll: "عرض الكل ←", publishProduct: "نشر محصول جديد", productName: "اسم المحصول",
-    category: "التصنيف", quantity: "الكمية (كغ)", priceDH: "السعر (درهم/كغ)",
-    description: "الوصف", productImage: "صورة المحصول", clickToUpload: "اضغط لرفع صورة",
-    publishNow: "نشر الآن", email: "البريد الإلكتروني", password: "كلمة المرور",
-    fullName: "الاسم الكامل", phone: "رقم الهاتف", region: "المنطقة", role: "الدور",
-    or: "أو", googleLogin: "الدخول بـ Google", language: "اللغة", theme: "المظهر",
-    light: "فاتح", dark: "داكن", noResults: "لا توجد نتائج", noChats: "لا توجد محادثات بعد",
-    selectChat: "اختر محادثة", startChat: "ابدأ المحادثة الآن", noProducts: "لم تنشر أي محصول بعد",
-    addFirst: "أضف أول محصول", productDetails: "تفاصيل المحصول", pricesDesc: "متوسط الأسعار بناءً على المنتجات المعروضة",
-    allCategories: "كل التصنيفات"
-  },
-  fr: {
-    appName: "Mahsouli Direct", home: "Accueil", market: "Marché", publish: "Publier",
-    messages: "Messages", settings: "Paramètres", login: "Connexion", register: "Inscription",
-    logout: "Déconnexion", profile: "Mon Profil", myStock: "Mon Stock", prices: "Prix",
-    welcomeHome: "🌿 Le marché du fermier à portée de main", welcomeDesc: "Achetez directement du fermier, sans intermédiaire.",
-    browseMarket: "Parcourir", addProduct: "Ajouter", latestProducts: "Dernières offres",
-    categories: "Catégories", all: "Tout", vegetables: "Légumes", fruits: "Fruits",
-    grains: "Céréales", olives: "Olives", dates: "Dattes", herbs: "Herbes",
-    seeAll: "Voir tout →", publishProduct: "Publier un produit", productName: "Nom du produit",
-    category: "Catégorie", quantity: "Quantité (kg)", priceDH: "Prix (DH/kg)",
-    description: "Description", productImage: "Photo", clickToUpload: "Cliquer pour uploader",
-    publishNow: "Publier", email: "Email", password: "Mot de passe",
-    fullName: "Nom complet", phone: "Téléphone", region: "Région", role: "Rôle",
-    or: "ou", googleLogin: "Se connecter avec Google", language: "Langue", theme: "Thème",
-    light: "Clair", dark: "Sombre", noResults: "Aucun résultat", noChats: "Aucune conversation",
-    selectChat: "Sélectionner", startChat: "Commencez la conversation", noProducts: "Aucun produit",
-    addFirst: "Ajouter", productDetails: "Détails", pricesDesc: "Prix moyens basés sur les offres actuelles",
-    allCategories: "Toutes catégories"
-  },
-  en: {
-    appName: "Mahsouli Direct", home: "Home", market: "Market", publish: "Publish",
-    messages: "Messages", settings: "Settings", login: "Login", register: "Register",
-    logout: "Logout", profile: "Profile", myStock: "My Stock", prices: "Prices",
-    welcomeHome: "🌿 Farm Market at Your Fingertips", welcomeDesc: "Buy directly from farmers, no middleman. Fresh from the field.",
-    browseMarket: "Browse", addProduct: "Add Product", latestProducts: "Latest Offers",
-    categories: "Categories", all: "All", vegetables: "Vegetables", fruits: "Fruits",
-    grains: "Grains", olives: "Olives", dates: "Dates", herbs: "Herbs",
-    seeAll: "See all →", publishProduct: "Publish Product", productName: "Product Name",
-    category: "Category", quantity: "Quantity (kg)", priceDH: "Price (DH/kg)",
-    description: "Description", productImage: "Photo", clickToUpload: "Click to upload",
-    publishNow: "Publish", email: "Email", password: "Password",
-    fullName: "Full Name", phone: "Phone", region: "Region", role: "Role",
-    or: "or", googleLogin: "Login with Google", language: "Language", theme: "Theme",
-    light: "Light", dark: "Dark", noResults: "No results", noChats: "No conversations yet",
-    selectChat: "Select chat", startChat: "Start chatting now", noProducts: "No products yet",
-    addFirst: "Add first", productDetails: "Details", pricesDesc: "Average prices based on current offers",
-    allCategories: "All categories"
-  }
+  ar:{appName:"محصولي المباشر",home:"الرئيسية",market:"السوق",publish:"نشر محصول",messages:"المراسلات",settings:"الإعدادات",login:"دخول",register:"تسجيل",logout:"خروج",profile:"حسابي",myStock:"مخزوني",prices:"الأسعار",welcomeHome:"🌿 سوق الفلاح بين يديك",welcomeDesc:"اشترِ مباشرة من الفلاح بدون وسيط",browseMarket:"تصفح السوق",addProduct:"أضف محصولك",latestProducts:"أحدث العروض",categories:"التصنيفات",seeAll:"عرض الكل ←",or:"أو",googleLogin:"الدخول بـ Google",email:"البريد",password:"كلمة المرور"},
+  fr:{appName:"Mahsouli Direct",home:"Accueil",market:"Marché",publish:"Publier",messages:"Messages",settings:"Paramètres",login:"Connexion",register:"Inscription",logout:"Déconnexion",profile:"Profil",myStock:"Mon Stock",prices:"Prix",welcomeHome:"🌿 Le marché du fermier",welcomeDesc:"Achetez directement du fermier",browseMarket:"Parcourir",addProduct:"Ajouter",latestProducts:"Dernières offres",categories:"Catégories",seeAll:"Voir tout →",or:"ou",googleLogin:"Google Login",email:"Email",password:"Mot de passe"},
+  en:{appName:"Mahsouli Direct",home:"Home",market:"Market",publish:"Publish",messages:"Messages",settings:"Settings",login:"Login",register:"Register",logout:"Logout",profile:"Profile",myStock:"My Stock",prices:"Prices",welcomeHome:"🌿 Farm Market at Your Fingertips",welcomeDesc:"Buy directly from farmers",browseMarket:"Browse",addProduct:"Add Product",latestProducts:"Latest Offers",categories:"Categories",seeAll:"See all →",or:"or",googleLogin:"Login with Google",email:"Email",password:"Password"}
 };
 
 function setLang(l) {
   document.documentElement.lang = l;
   document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
   localStorage.setItem('lang', l);
-
-  // Update back arrow icons
-  const arrowClass = l === 'ar' ? 'fas fa-arrow-right' : 'fas fa-arrow-left';
-  document.querySelectorAll('.page-head .icon-btn i.fa-arrow-right, .page-head .icon-btn i.fa-arrow-left').forEach(i => {
-    i.className = arrowClass;
-  });
-
-  // Translate all data-t elements
+  const arrow = l === 'ar' ? 'fas fa-arrow-right' : 'fas fa-arrow-left';
+  document.querySelectorAll('.page-head .icon-btn i.fa-arrow-right,.page-head .icon-btn i.fa-arrow-left').forEach(i => i.className = arrow);
   document.querySelectorAll('[data-t]').forEach(el => {
-    const key = el.getAttribute('data-t');
-    if (T[l] && T[l][key]) el.innerText = T[l][key];
+    const k = el.getAttribute('data-t');
+    if (T[l] && T[l][k]) el.innerText = T[l][k];
   });
 }
 
@@ -1248,443 +803,233 @@ function setLang(l) {
 // 🎨 THEME
 // ==========================================
 function setTheme(t) {
-  const h = document.documentElement;
-  const i = $('themeIcon');
-  if (t === 'dark') {
-    h.setAttribute('data-theme', 'dark');
-    if (i) i.className = 'fas fa-sun';
-  } else {
-    h.removeAttribute('data-theme');
-    if (i) i.className = 'fas fa-moon';
-  }
+  const h = document.documentElement, i = $('themeIcon');
+  if (t === 'dark') { h.setAttribute('data-theme','dark'); if(i) i.className='fas fa-sun'; }
+  else { h.removeAttribute('data-theme'); if(i) i.className='fas fa-moon'; }
   localStorage.setItem('theme', t);
 }
-
 function toggleTheme() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  setTheme(isDark ? 'light' : 'dark');
+  setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
 
 // ==========================================
-// 📱 NAVIGATION (SPA Router)
+// 📱 NAVIGATION
 // ==========================================
-function toggleSidebar() {
-  const s = $('sidebar');
-  const o = $('overlay');
-  s.classList.toggle('on');
-  o.classList.toggle('on');
-}
-
+function toggleSidebar() { $('sidebar').classList.toggle('on'); $('overlay').classList.toggle('on'); }
 function go(p, isBack = false) {
-  if (!isBack) {
-    if (p === 'home') navHistory = ['home'];
-    else if (navHistory[navHistory.length - 1] !== p) navHistory.push(p);
-  }
+  if (!isBack) { if(p==='home') navHistory=['home']; else if(navHistory[navHistory.length-1]!==p) navHistory.push(p); }
   document.querySelectorAll('.page').forEach(el => el.classList.remove('on'));
-  const page = $(`p-${p}`);
-  if (page) page.classList.add('on');
-
-  // Close sidebar
-  $('sidebar').classList.remove('on');
-  $('overlay').classList.remove('on');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Page-specific actions
-  if (p === 'inventory') renderInventory();
-  if (p === 'prices') renderPrices();
-  if (p === 'admin' && isAdmin) loadAdmin();
-  if (p === 'profile' && user) loadProfile();
+  const page = $(`p-${p}`); if(page) page.classList.add('on');
+  $('sidebar').classList.remove('on'); $('overlay').classList.remove('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(p==='inventory') renderInventory();
+  if(p==='prices') renderPrices();
+  if(p==='admin' && isAdmin) loadAdmin();
+  if(p==='profile' && user) loadProfile();
 }
-
-function goBack() {
-  if (navHistory.length > 1) {
-    navHistory.pop();
-    go(navHistory[navHistory.length - 1], true);
-  } else go('home');
-}
-
-function needAuth(p) {
-  if (user) go(p);
-  else { openAuth(); toast('سجّل الدخول أولاً', 'warning'); }
-}
+function goBack() { if(navHistory.length>1){navHistory.pop();go(navHistory[navHistory.length-1],true);} else go('home'); }
+function needAuth(p) { if(user) go(p); else { openAuth(); toast('سجّل الدخول أولاً','warning'); } }
 
 // ==========================================
-// 🔐 AUTH SYSTEM
+// 🔐 AUTH
 // ==========================================
 function openAuth() { $('authModal').classList.add('on'); }
 function closeAuth() { $('authModal').classList.remove('on'); }
-
 function switchAuthTab(tab) {
-  $('tabLogin').classList.toggle('active', tab === 'login');
-  $('tabRegister').classList.toggle('active', tab === 'register');
-  $('loginForm').classList.toggle('hidden', tab !== 'login');
-  $('registerForm').classList.toggle('hidden', tab !== 'register');
+  $('tabLogin').classList.toggle('active', tab==='login');
+  $('tabRegister').classList.toggle('active', tab==='register');
+  $('loginForm').classList.toggle('hidden', tab!=='login');
+  $('registerForm').classList.toggle('hidden', tab!=='register');
 }
 
-auth.onAuthStateChanged(async (u) => {
-  user = u;
-  isAdmin = u && u.email === ADMIN_EMAIL;
-
+auth.onAuthStateChanged(async u => {
+  user = u; isAdmin = u && u.email === ADMIN_EMAIL;
   if (u) {
-    $('loginBtn').classList.add('hidden');
-    $('avatarBtn').classList.remove('hidden');
-    $('avatarBtn').innerText = (u.displayName || u.email || 'م').charAt(0).toUpperCase();
+    $('loginBtn').classList.add('hidden'); $('avatarBtn').classList.remove('hidden');
+    $('avatarBtn').innerText = (u.displayName||u.email||'م').charAt(0).toUpperCase();
     $('sbAdmin').classList.toggle('hidden', !isAdmin);
     $('adminStats').classList.toggle('hidden', !isAdmin);
     $('sbLogout').classList.remove('hidden');
     $('sbUserInfo').innerText = u.displayName || u.email || 'مستخدم';
-    closeAuth();
-    loadChatList();
-
-    // Load user doc
-    const userDoc = await db.collection('users').doc(u.uid).get();
-    if (userDoc.exists) {
-      const ud = userDoc.data();
-      $('sbUserInfo').innerText = ud.name || u.displayName || 'مستخدم';
-    }
-
-    if (isAdmin) loadAdminStats();
+    closeAuth(); loadChatList();
+    try {
+      const doc = await db.collection('users').doc(u.uid).get();
+      if(doc.exists) $('sbUserInfo').innerText = doc.data().name || u.displayName || 'مستخدم';
+    } catch(e){}
+    if(isAdmin) loadAdminStats();
   } else {
-    $('loginBtn').classList.remove('hidden');
-    $('avatarBtn').classList.add('hidden');
-    $('sbAdmin').classList.add('hidden');
-    $('adminStats').classList.add('hidden');
-    $('sbLogout').classList.add('hidden');
-    $('sbUserInfo').innerText = 'مرحباً بك';
+    $('loginBtn').classList.remove('hidden'); $('avatarBtn').classList.add('hidden');
+    $('sbAdmin').classList.add('hidden'); $('adminStats').classList.add('hidden');
+    $('sbLogout').classList.add('hidden'); $('sbUserInfo').innerText = 'مرحباً بك';
   }
 });
 
 async function emailLogin() {
-  const email = $('lEmail').value.trim();
-  const pass = $('lPass').value;
-  if (!email || !pass) return toast('أدخل البريد وكلمة المرور', 'warning');
-
-  const btn = $('loginSubmitBtn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div>';
-
-  try {
-    await auth.signInWithEmailAndPassword(email, pass);
-    toast('مرحباً بك! 👋', 'success');
-  } catch (e) {
-    const msgs = {
-      'auth/user-not-found': 'الحساب غير موجود',
-      'auth/wrong-password': 'كلمة المرور خاطئة',
-      'auth/invalid-email': 'بريد إلكتروني غير صحيح',
-      'auth/too-many-requests': 'محاولات كثيرة، حاول لاحقاً',
-      'auth/invalid-credential': 'بيانات الدخول غير صحيحة'
-    };
-    toast(msgs[e.code] || 'خطأ في الدخول', 'error');
+  const email=$('lEmail').value.trim(), pass=$('lPass').value;
+  if(!email||!pass) return toast('أدخل البريد وكلمة المرور','warning');
+  const btn=$('loginSubmitBtn'); btn.disabled=true;
+  try { await auth.signInWithEmailAndPassword(email,pass); toast('مرحباً! 👋','success'); }
+  catch(e) {
+    const m={'auth/user-not-found':'حساب غير موجود','auth/wrong-password':'كلمة مرور خاطئة','auth/invalid-credential':'بيانات غير صحيحة','auth/too-many-requests':'محاولات كثيرة'};
+    toast(m[e.code]||'خطأ في الدخول','error');
   }
-  btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span data-t="login">دخول</span>';
+  btn.disabled=false;
 }
 
 async function emailRegister() {
-  const name = $('rName').value.trim();
-  const email = $('rEmail').value.trim();
-  const phone = $('rPhone').value.trim();
-  const region = $('rRegion').value;
-  const role = $('rRole').value;
-  const pass = $('rPass').value;
-
-  if (!name || !email || !pass) return toast('أكمل جميع الحقول المطلوبة', 'warning');
-  if (pass.length < 6) return toast('كلمة المرور قصيرة (6 أحرف على الأقل)', 'warning');
-
-  const btn = $('regSubmitBtn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div>';
-
+  const name=$('rName').value.trim(), email=$('rEmail').value.trim(), phone=$('rPhone').value.trim();
+  const region=$('rRegion').value, role=$('rRole').value, pass=$('rPass').value;
+  if(!name||!email||!pass) return toast('أكمل الحقول المطلوبة','warning');
+  if(pass.length<6) return toast('كلمة المرور قصيرة','warning');
+  const btn=$('regSubmitBtn'); btn.disabled=true;
   try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    await cred.user.updateProfile({ displayName: name });
-    await db.collection('users').doc(cred.user.uid).set({
-      name, email, phone, region, role,
-      createdAt: Date.now()
-    });
-    toast('تم إنشاء حسابك بنجاح! 🎉', 'success');
-  } catch (e) {
-    const msgs = {
-      'auth/email-already-in-use': 'هذا البريد مستخدم مسبقاً',
-      'auth/weak-password': 'كلمة المرور ضعيفة',
-      'auth/invalid-email': 'بريد إلكتروني غير صحيح'
-    };
-    toast(msgs[e.code] || 'خطأ في التسجيل', 'error');
+    const cred = await auth.createUserWithEmailAndPassword(email,pass);
+    await cred.user.updateProfile({displayName:name});
+    await db.collection('users').doc(cred.user.uid).set({name,email,phone,region,role,createdAt:Date.now()});
+    toast('تم إنشاء حسابك! 🎉','success');
+  } catch(e) {
+    const m={'auth/email-already-in-use':'البريد مستخدم','auth/weak-password':'كلمة مرور ضعيفة'};
+    toast(m[e.code]||'خطأ في التسجيل','error');
   }
-  btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> <span data-t="register">تسجيل</span>';
+  btn.disabled=false;
 }
 
 async function googleLogin() {
   try {
-    const result = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    const u = result.user;
-    // Save to Firestore if new user
-    const doc = await db.collection('users').doc(u.uid).get();
-    if (!doc.exists) {
-      await db.collection('users').doc(u.uid).set({
-        name: u.displayName || '', email: u.email || '',
-        phone: '', region: '', role: 'مشتري',
-        createdAt: Date.now()
-      });
-    }
-    toast('مرحباً بك! 👋', 'success');
-  } catch (e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      toast('خطأ في الدخول بـ Google', 'error');
-    }
-  }
+    const r = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    const doc = await db.collection('users').doc(r.user.uid).get();
+    if(!doc.exists) await db.collection('users').doc(r.user.uid).set({name:r.user.displayName||'',email:r.user.email||'',phone:'',region:'',role:'مشتري',createdAt:Date.now()});
+    toast('مرحباً! 👋','success');
+  } catch(e) { if(e.code!=='auth/popup-closed-by-user') toast('خطأ','error'); }
 }
 
 // ==========================================
 // 📦 PRODUCTS
 // ==========================================
-db.collection('products').orderBy('timestamp', 'desc').limit(200).onSnapshot(snap => {
-  prods = [];
-  snap.forEach(d => prods.push({ id: d.id, ...d.data() }));
-
-  if (isAdmin) {
-    $('stProds').innerText = prods.length;
-    $('stOut').innerText = prods.filter(p => getRem(p) <= 0).length;
-  }
-
-  renderProds('homeProds', prods.slice(0, 6));
+db.collection('products').orderBy('timestamp','desc').limit(200).onSnapshot(snap => {
+  prods = []; snap.forEach(d => prods.push({id:d.id,...d.data()}));
+  if(isAdmin){ $('stProds').innerText=prods.length; $('stOut').innerText=prods.filter(p=>getRem(p)<=0).length; }
+  renderProds('homeProds', prods.slice(0,6));
   filterProds();
 });
 
-function renderProds(containerId, list) {
-  const c = $(containerId);
-  if (!c) return;
-
-  if (list.length === 0) {
-    c.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-seedling"></i><p>لا توجد محاصيل حالياً</p></div>`;
-    return;
-  }
-
+function renderProds(cId, list) {
+  const c = $(cId); if(!c) return;
+  if(list.length===0){ c.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-seedling"></i><p>لا توجد محاصيل</p></div>`; return; }
   c.innerHTML = list.map(p => {
-    const rem = getRem(p);
-    const isOut = rem <= 0;
-    const isMe = user && user.uid === p.sellerId;
-    const emoji = catEmoji[p.category] || '🌿';
-    const img = p.imageURL
-      ? `<img src="${p.imageURL}" alt="${p.name}" loading="lazy">`
-      : `<div style="font-size:3.5rem">${emoji}</div>`;
-    const overlay = isOut ? `<div class="out-overlay"><div class="out-stamp">غير متوفر</div></div>` : '';
-    const badge = p.category ? `<div class="card-badge">${emoji} ${p.category}</div>` : '';
-
-    let actions = '';
-    if (!isOut) {
-      actions += `<button class="icon-btn" onclick="event.stopPropagation(); contactWhatsApp('${p.sellerName || ''}','${p.name}')" title="واتساب"><i class="fab fa-whatsapp" style="color:#25d366"></i></button>`;
-      if (user && p.sellerId !== user.uid) {
-        actions += `<button class="icon-btn" onclick="event.stopPropagation(); openChat('${p.sellerId}','${p.sellerName || 'البائع'}')" title="رسالة"><i class="fas fa-comment-dots" style="color:var(--blue)"></i></button>`;
-      }
+    const rem=getRem(p), isOut=rem<=0, isMe=user&&user.uid===p.sellerId;
+    const emoji=catEmoji[p.category]||'🌿';
+    const img=p.imageURL?`<img src="${p.imageURL}" loading="lazy">`:`<div style="font-size:3.5rem">${emoji}</div>`;
+    const overlay=isOut?`<div class="out-overlay"><div class="out-stamp">غير متوفر</div></div>`:'';
+    const badge=p.category?`<div class="card-badge">${emoji} ${p.category}</div>`:'';
+    const percent=p.quantity>0?Math.round((rem/p.quantity)*100):0;
+    const barColor=percent>50?'var(--primary)':percent>20?'var(--secondary)':'var(--danger)';
+    
+    // ⚠️ إصلاح: تنظيف الأسماء من الأحرف الخاصة
+    const safeName = (p.sellerName||'البائع').replace(/'/g,"\\'");
+    const safeSellerId = p.sellerId||'';
+    
+    let acts='';
+    if(!isOut){
+      acts+=`<button class="icon-btn" onclick="event.stopPropagation();contactWA('${(p.name||'').replace(/'/g,"\\'")}')"><i class="fab fa-whatsapp" style="color:#25d366"></i></button>`;
+      if(user && safeSellerId!==user.uid)
+        acts+=`<button class="icon-btn" onclick="event.stopPropagation();openChat('${safeSellerId}','${safeName}')"><i class="fas fa-comment-dots" style="color:var(--blue)"></i></button>`;
     }
-    if (isMe && !isOut) {
-      actions += `<button class="icon-btn" onclick="event.stopPropagation(); sellQty('${p.id}',${rem})" title="بيع كمية"><i class="fas fa-minus-circle" style="color:var(--secondary)"></i></button>`;
-    }
-    if (isAdmin) {
-      actions += `<button class="icon-btn" onclick="event.stopPropagation(); deleteProd('${p.id}')" title="حذف"><i class="fas fa-trash" style="color:var(--danger)"></i></button>`;
-    }
+    if(isMe&&!isOut) acts+=`<button class="icon-btn" onclick="event.stopPropagation();sellQty('${p.id}',${rem})"><i class="fas fa-minus-circle" style="color:var(--secondary)"></i></button>`;
+    if(isAdmin) acts+=`<button class="icon-btn" onclick="event.stopPropagation();deleteProd('${p.id}')"><i class="fas fa-trash" style="color:var(--danger)"></i></button>`;
 
-    const percent = p.quantity > 0 ? Math.round((rem / p.quantity) * 100) : 0;
-    const barColor = percent > 50 ? 'var(--primary)' : percent > 20 ? 'var(--secondary)' : 'var(--danger)';
-
-    return `
-      <div class="card" onclick="showDetail('${p.id}')">
-        <div class="card-img">${img}${overlay}${badge}</div>
-        <div class="card-body">
-          <h4>${p.name || 'محصول'}</h4>
-          <div class="card-meta">
-            <i class="fas fa-user"></i> ${p.sellerName || 'فلاح'}
-            ${p.region ? ` · <i class="fas fa-map-pin"></i> ${p.region}` : ''}
-          </div>
-          <div style="margin-bottom:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted); margin-bottom:3px;">
-              <span>المخزون: ${rem} كغ</span>
-              <span>${percent}%</span>
-            </div>
-            <div class="inv-bar"><div class="inv-bar-fill" style="width:${percent}%; background:${barColor};"></div></div>
-          </div>
-          <div class="card-footer">
-            <div class="card-price">${p.price} د/كغ</div>
-            <div class="card-actions">${actions}</div>
-          </div>
-        </div>
-      </div>`;
+    return `<div class="card" onclick="showDetail('${p.id}')"><div class="card-img">${img}${overlay}${badge}</div><div class="card-body"><h4>${p.name||'محصول'}</h4><div class="card-meta"><i class="fas fa-user"></i> ${p.sellerName||'فلاح'}</div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:3px;"><span>${rem} كغ</span><span>${percent}%</span></div><div class="inv-bar"><div class="inv-bar-fill" style="width:${percent}%;background:${barColor};"></div></div></div><div class="card-footer"><div class="card-price">${p.price} د/كغ</div><div class="card-actions">${acts}</div></div></div></div>`;
   }).join('');
 }
 
 function filterProds() {
-  const q = ($('searchIn')?.value || '').toLowerCase();
-  const cat = $('filterCatSel')?.value || currentCat || '';
-  const filtered = prods.filter(p => {
-    const matchQ = !q || (p.name || '').toLowerCase().includes(q) || (p.sellerName || '').toLowerCase().includes(q);
-    const matchCat = !cat || p.category === cat;
-    return matchQ && matchCat;
+  const q=($('searchIn')?.value||'').toLowerCase();
+  const cat=$('filterCatSel')?.value||currentCat||'';
+  const f=prods.filter(p=>{
+    const mq=!q||(p.name||'').toLowerCase().includes(q)||(p.sellerName||'').toLowerCase().includes(q);
+    const mc=!cat||p.category===cat;
+    return mq&&mc;
   });
-  renderProds('marketProds', filtered);
-  const empty = $('marketEmpty');
-  if (empty) empty.classList.toggle('hidden', filtered.length > 0);
+  renderProds('marketProds',f);
+  const em=$('marketEmpty'); if(em) em.classList.toggle('hidden',f.length>0);
 }
 
-function filterCat(cat) {
-  currentCat = cat;
-  $('filterCatSel') && ($('filterCatSel').value = cat);
-  go('market');
-  filterProds();
-}
+function filterCat(c) { currentCat=c; if($('filterCatSel')) $('filterCatSel').value=c; go('market'); filterProds(); }
+function contactWA(product) { window.open(`https://wa.me/?text=${encodeURIComponent('مرحباً، أنا مهتم بـ "'+product+'" على محصولي')}`,'_blank'); }
 
-function contactWhatsApp(seller, product) {
-  const msg = encodeURIComponent(`مرحباً، أنا مهتم بمحصول "${product}" المعروض على محصولي المباشر.`);
-  window.open(`https://wa.me/?text=${msg}`, '_blank');
-}
-
-async function sellQty(id, remaining) {
-  const q = prompt('كم كيلوغرام بعت؟', '1');
-  if (!q || isNaN(q) || parseInt(q) <= 0) return;
-  const newRem = Math.max(0, remaining - parseInt(q));
-  try {
-    await db.collection('products').doc(id).update({ quantityRemaining: newRem });
-    toast(`تم تسجيل البيع ✅ (المتبقي: ${newRem} كغ)`, 'success');
-  } catch (e) { toast('خطأ', 'error'); }
+async function sellQty(id,rem) {
+  const q=prompt('كم كيلوغرام بعت؟','1');
+  if(!q||isNaN(q)||parseInt(q)<=0) return;
+  try { await db.collection('products').doc(id).update({quantityRemaining:Math.max(0,rem-parseInt(q))}); toast('تم ✅','success'); }
+  catch(e){ toast('خطأ','error'); }
 }
 
 async function deleteProd(id) {
-  if (!confirm('هل تريد حذف هذا المحصول نهائياً؟')) return;
-  try {
-    await db.collection('products').doc(id).delete();
-    toast('تم الحذف', 'success');
-  } catch (e) { toast('خطأ في الحذف', 'error'); }
+  if(!confirm('حذف هذا المحصول؟')) return;
+  try { await db.collection('products').doc(id).delete(); toast('تم الحذف','success'); }
+  catch(e){ toast('خطأ','error'); }
 }
 
-function previewImg(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    $('imgPreview').innerHTML = `<img src="${e.target.result}">`;
-  };
-  reader.readAsDataURL(file);
+function previewImg(inp) {
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{ $('imgPreview').innerHTML=`<img src="${e.target.result}">`; };
+  r.readAsDataURL(f);
 }
 
 async function addProd() {
-  if (!user) return needAuth('add');
-  const name = $('pName').value.trim();
-  const cat = $('pCat').value;
-  const qty = parseInt($('pQty').value);
-  const price = parseFloat($('pPrice').value);
-  const desc = $('pDesc')?.value?.trim() || '';
-
-  if (!name) return toast('أدخل اسم المحصول', 'warning');
-  if (!qty || qty <= 0) return toast('أدخل كمية صحيحة', 'warning');
-  if (!price || price <= 0) return toast('أدخل سعراً صحيحاً', 'warning');
-
-  const btn = $('addProdBtn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div> جارِ النشر...';
-
+  if(!user) return needAuth('add');
+  const name=$('pName').value.trim(), cat=$('pCat').value;
+  const qty=parseInt($('pQty').value), price=parseFloat($('pPrice').value);
+  const desc=$('pDesc')?.value?.trim()||'';
+  if(!name) return toast('أدخل اسم المحصول','warning');
+  if(!qty||qty<=0) return toast('أدخل كمية صحيحة','warning');
+  if(!price||price<=0) return toast('أدخل سعراً صحيحاً','warning');
+  const btn=$('addProdBtn'); btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div> جارِ النشر...';
   try {
-    let imageURL = '';
-    const file = $('pImg').files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { toast('حجم الصورة كبير (الحد: 5MB)', 'warning'); btn.disabled = false; return; }
-      const ref = storage.ref(`products/${Date.now()}_${file.name}`);
-      await ref.put(file);
-      imageURL = await ref.getDownloadURL();
-    }
-
-    // Get user info
-    let sellerName = user.displayName || 'فلاح';
-    let region = '';
-    const userDoc = await db.collection('users').doc(user.uid).get();
-    if (userDoc.exists) {
-      sellerName = userDoc.data().name || sellerName;
-      region = userDoc.data().region || '';
-    }
-
-    await db.collection('products').add({
-      name, category: cat, price, quantity: qty,
-      quantityRemaining: qty, description: desc,
-      sellerId: user.uid, sellerName, region, imageURL,
-      timestamp: Date.now()
-    });
-
-    toast('تم نشر المحصول بنجاح! 🎉', 'success');
-    // Reset form
-    $('pName').value = ''; $('pQty').value = ''; $('pPrice').value = '';
-    if ($('pDesc')) $('pDesc').value = '';
-    $('pImg').value = '';
-    $('imgPreview').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><span>اضغط لرفع صورة</span>';
+    let imageURL=''; const file=$('pImg').files[0];
+    if(file){ if(file.size>5*1024*1024){toast('حجم الصورة كبير','warning');btn.disabled=false;return;} const ref=storage.ref(`products/${Date.now()}_${file.name}`); await ref.put(file); imageURL=await ref.getDownloadURL(); }
+    let sellerName=user.displayName||'فلاح', region='';
+    try{const ud=await db.collection('users').doc(user.uid).get();if(ud.exists){sellerName=ud.data().name||sellerName;region=ud.data().region||'';}}catch(e){}
+    await db.collection('products').add({name,category:cat,price,quantity:qty,quantityRemaining:qty,description:desc,sellerId:user.uid,sellerName,region,imageURL,timestamp:Date.now()});
+    toast('تم نشر المحصول! 🎉','success');
+    $('pName').value='';$('pQty').value='';$('pPrice').value='';if($('pDesc'))$('pDesc').value='';$('pImg').value='';
+    $('imgPreview').innerHTML='<i class="fas fa-cloud-upload-alt"></i><span>اضغط لرفع صورة</span>';
     go('market');
-  } catch (e) {
-    console.error(e);
-    toast('خطأ في نشر المحصول', 'error');
-  }
-  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span data-t="publishNow">نشر الآن</span>';
+  } catch(e){ console.error(e); toast('خطأ في النشر','error'); }
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> نشر الآن';
 }
 
-// ==========================================
-// 📄 PRODUCT DETAIL
-// ==========================================
 function showDetail(id) {
-  const p = prods.find(x => x.id === id);
-  if (!p) return;
-
-  const rem = getRem(p);
-  const isOut = rem <= 0;
-  const emoji = catEmoji[p.category] || '🌿';
-  const percent = p.quantity > 0 ? Math.round((rem / p.quantity) * 100) : 0;
-  const barColor = percent > 50 ? 'var(--primary)' : percent > 20 ? 'var(--secondary)' : 'var(--danger)';
-
-  $('detailContent').innerHTML = `
-    <div style="background:var(--bg-card); border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow);">
-      <div style="height:250px; background:var(--bg-main); display:flex; align-items:center; justify-content:center; position:relative;">
-        ${p.imageURL ? `<img src="${p.imageURL}" style="width:100%;height:100%;object-fit:cover;">` : `<div style="font-size:5rem">${emoji}</div>`}
-        ${isOut ? `<div class="out-overlay"><div class="out-stamp" style="font-size:1.2rem;">غير متوفر</div></div>` : ''}
+  const p=prods.find(x=>x.id===id); if(!p) return;
+  const rem=getRem(p), isOut=rem<=0, emoji=catEmoji[p.category]||'🌿';
+  const percent=p.quantity>0?Math.round((rem/p.quantity)*100):0;
+  const barColor=percent>50?'var(--primary)':percent>20?'var(--secondary)':'var(--danger)';
+  const safeName=(p.sellerName||'البائع').replace(/'/g,"\\'");
+  $('detailContent').innerHTML=`
+    <div style="background:var(--bg-card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div style="height:250px;background:var(--bg-main);display:flex;align-items:center;justify-content:center;position:relative;">
+        ${p.imageURL?`<img src="${p.imageURL}" style="width:100%;height:100%;object-fit:cover;">`:`<div style="font-size:5rem">${emoji}</div>`}
+        ${isOut?`<div class="out-overlay"><div class="out-stamp" style="font-size:1.2rem;">غير متوفر</div></div>`:''}
       </div>
       <div style="padding:25px;">
-        <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
-          <div>
-            <h2 style="font-weight:900; font-size:1.5rem;">${p.name}</h2>
-            <p style="color:var(--text-muted);">${emoji} ${p.category || ''}</p>
-          </div>
-          <div style="text-align:end;">
-            <div style="font-size:1.8rem; font-weight:900; color:var(--primary);">${p.price} <span style="font-size:0.9rem;">د/كغ</span></div>
-          </div>
+        <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px;margin-bottom:15px;">
+          <div><h2 style="font-weight:900;font-size:1.5rem;">${p.name}</h2><p style="color:var(--text-muted);">${emoji} ${p.category||''}</p></div>
+          <div style="text-align:end;"><div style="font-size:1.8rem;font-weight:900;color:var(--primary);">${p.price} <span style="font-size:0.9rem;">د/كغ</span></div></div>
         </div>
-
-        ${p.description ? `<p style="color:var(--text-muted); margin-bottom:15px; line-height:1.8;">${p.description}</p>` : ''}
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
-          <div style="background:var(--bg-main); padding:12px; border-radius:var(--radius-sm); text-align:center;">
-            <i class="fas fa-user" style="color:var(--primary); margin-bottom:5px; display:block;"></i>
-            <strong>${p.sellerName || 'فلاح'}</strong>
-          </div>
-          <div style="background:var(--bg-main); padding:12px; border-radius:var(--radius-sm); text-align:center;">
-            <i class="fas fa-map-pin" style="color:var(--blue); margin-bottom:5px; display:block;"></i>
-            <strong>${p.region || 'غير محدد'}</strong>
-          </div>
+        ${p.description?`<p style="color:var(--text-muted);margin-bottom:15px;line-height:1.8;">${p.description}</p>`:''}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div style="background:var(--bg-main);padding:12px;border-radius:var(--radius-sm);text-align:center;"><i class="fas fa-user" style="color:var(--primary);margin-bottom:5px;display:block;"></i><strong>${p.sellerName||'فلاح'}</strong></div>
+          <div style="background:var(--bg-main);padding:12px;border-radius:var(--radius-sm);text-align:center;"><i class="fas fa-map-pin" style="color:var(--blue);margin-bottom:5px;display:block;"></i><strong>${p.region||'غير محدد'}</strong></div>
         </div>
-
         <div style="margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:5px;">
-            <span>المخزون المتبقي</span>
-            <span style="font-weight:bold;">${rem} / ${p.quantity} كغ</span>
-          </div>
-          <div class="inv-bar" style="height:10px;"><div class="inv-bar-fill" style="width:${percent}%; background:${barColor};"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:5px;"><span>المخزون</span><span style="font-weight:bold;">${rem}/${p.quantity} كغ</span></div>
+          <div class="inv-bar" style="height:10px;"><div class="inv-bar-fill" style="width:${percent}%;background:${barColor};"></div></div>
         </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${!isOut && user && p.sellerId !== user.uid ? `
-            <button class="btn-main blue" onclick="openChat('${p.sellerId}','${p.sellerName || 'البائع'}')" style="flex:1;">
-              <i class="fas fa-comment-dots"></i> مراسلة البائع
-            </button>
-          ` : ''}
-          ${!isOut ? `
-            <button class="btn-main" onclick="contactWhatsApp('${p.sellerName || ''}','${p.name}')" style="flex:1; background:#25d366; box-shadow:0 4px 15px rgba(37,211,102,0.3);">
-              <i class="fab fa-whatsapp"></i> واتساب
-            </button>
-          ` : ''}
-          ${user && user.uid === p.sellerId && !isOut ? `
-            <button class="btn-main secondary" onclick="sellQty('${p.id}',${rem})" style="flex:1;">
-              <i class="fas fa-minus-circle"></i> تسجيل بيع
-            </button>
-          ` : ''}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${!isOut&&user&&p.sellerId!==user.uid?`<button class="btn-main blue" onclick="openChat('${p.sellerId}','${safeName}')" style="flex:1;"><i class="fas fa-comment-dots"></i> مراسلة</button>`:''}
+          ${!isOut?`<button class="btn-main" onclick="contactWA('${(p.name||'').replace(/'/g,"\\'")}')" style="flex:1;background:#25d366;"><i class="fab fa-whatsapp"></i> واتساب</button>`:''}
+          ${user&&user.uid===p.sellerId&&!isOut?`<button class="btn-main secondary" onclick="sellQty('${p.id}',${rem})" style="flex:1;"><i class="fas fa-minus-circle"></i> تسجيل بيع</button>`:''}
         </div>
       </div>
     </div>`;
@@ -1692,142 +1037,91 @@ function showDetail(id) {
 }
 
 // ==========================================
-// 📊 INVENTORY
+// 📊 INVENTORY & PRICES
 // ==========================================
 function renderInventory() {
-  if (!user) return;
-  const myProds = prods.filter(p => p.sellerId === user.uid);
-  const container = $('invList');
-  const empty = $('invEmpty');
-
-  if (myProds.length === 0) {
-    container.innerHTML = '';
-    empty.classList.remove('hidden');
-    return;
-  }
-
-  empty.classList.add('hidden');
-  container.innerHTML = myProds.map(p => {
-    const rem = getRem(p);
-    const percent = p.quantity > 0 ? Math.round((rem / p.quantity) * 100) : 0;
-    const barColor = percent > 50 ? 'var(--primary)' : percent > 20 ? 'var(--secondary)' : 'var(--danger)';
-    const emoji = catEmoji[p.category] || '🌿';
-
-    return `
-      <div class="inv-card">
-        <div class="inv-img">
-          ${p.imageURL ? `<img src="${p.imageURL}">` : `<span style="font-size:1.8rem">${emoji}</span>`}
-        </div>
-        <div class="inv-info">
-          <h4>${p.name}</h4>
-          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">
-            ${rem} / ${p.quantity} كغ · ${p.price} د/كغ
-          </div>
-          <div class="inv-bar"><div class="inv-bar-fill" style="width:${percent}%; background:${barColor};"></div></div>
-        </div>
-        <div class="inv-actions">
-          ${rem > 0 ? `<button class="icon-btn" onclick="sellQty('${p.id}',${rem})" title="بيع"><i class="fas fa-minus" style="color:var(--secondary)"></i></button>` : ''}
-          <button class="icon-btn" onclick="deleteProd('${p.id}')" title="حذف"><i class="fas fa-trash" style="color:var(--danger)"></i></button>
-        </div>
-      </div>`;
+  if(!user) return;
+  const my=prods.filter(p=>p.sellerId===user.uid);
+  if(my.length===0){$('invList').innerHTML='';$('invEmpty').classList.remove('hidden');return;}
+  $('invEmpty').classList.add('hidden');
+  $('invList').innerHTML=my.map(p=>{
+    const rem=getRem(p),percent=p.quantity>0?Math.round((rem/p.quantity)*100):0;
+    const barColor=percent>50?'var(--primary)':percent>20?'var(--secondary)':'var(--danger)';
+    const emoji=catEmoji[p.category]||'🌿';
+    return `<div class="inv-card"><div class="inv-img">${p.imageURL?`<img src="${p.imageURL}">`:`<span style="font-size:1.8rem">${emoji}</span>`}</div><div class="inv-info"><h4>${p.name}</h4><div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">${rem}/${p.quantity} كغ · ${p.price} د</div><div class="inv-bar"><div class="inv-bar-fill" style="width:${percent}%;background:${barColor};"></div></div></div><div class="inv-actions">${rem>0?`<button class="icon-btn" onclick="sellQty('${p.id}',${rem})"><i class="fas fa-minus" style="color:var(--secondary)"></i></button>`:''}<button class="icon-btn" onclick="deleteProd('${p.id}')"><i class="fas fa-trash" style="color:var(--danger)"></i></button></div></div>`;
   }).join('');
 }
 
-// ==========================================
-// 📊 PRICES
-// ==========================================
 function renderPrices() {
-  const groups = {};
-  prods.forEach(p => {
-    const cat = p.category || 'أخرى';
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(p);
-  });
-
-  let html = '';
-  for (const cat in groups) {
-    const items = groups[cat];
-    const emoji = catEmoji[cat] || '🌿';
-    html += `
-      <h3 style="margin:20px 0 10px; font-weight:800;">${emoji} ${cat}</h3>
-      <table class="price-table">
-        <thead><tr><th>المحصول</th><th>أقل سعر</th><th>أعلى سعر</th><th>المتوسط</th></tr></thead>
-        <tbody>`;
-
-    // Group by product name
-    const byName = {};
-    items.forEach(p => {
-      const n = p.name || 'محصول';
-      if (!byName[n]) byName[n] = [];
-      byName[n].push(p.price);
-    });
-
-    for (const name in byName) {
-      const prices = byName[name];
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      const avg = (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(1);
-      html += `<tr><td><strong>${name}</strong></td><td style="color:var(--primary);">${min} د</td><td style="color:var(--danger);">${max} د</td><td style="color:var(--blue); font-weight:bold;">${avg} د</td></tr>`;
-    }
-    html += `</tbody></table>`;
+  const g={}; prods.forEach(p=>{const c=p.category||'أخرى';if(!g[c])g[c]=[];g[c].push(p);});
+  let h='';
+  for(const cat in g){
+    const emoji=catEmoji[cat]||'🌿';
+    h+=`<h3 style="margin:20px 0 10px;font-weight:800;">${emoji} ${cat}</h3><table class="price-table"><thead><tr><th>المحصول</th><th>أقل</th><th>أعلى</th><th>المتوسط</th></tr></thead><tbody>`;
+    const bn={};g[cat].forEach(p=>{const n=p.name||'محصول';if(!bn[n])bn[n]=[];bn[n].push(p.price);});
+    for(const n in bn){const pr=bn[n];h+=`<tr><td><strong>${n}</strong></td><td style="color:var(--primary);">${Math.min(...pr)} د</td><td style="color:var(--danger);">${Math.max(...pr)} د</td><td style="color:var(--blue);font-weight:bold;">${(pr.reduce((a,b)=>a+b,0)/pr.length).toFixed(1)} د</td></tr>`;}
+    h+=`</tbody></table>`;
   }
-
-  if (!html) html = '<div class="empty-state"><i class="fas fa-chart-bar"></i><p>لا توجد بيانات أسعار بعد</p></div>';
-  $('pricesContent').innerHTML = html;
+  if(!h) h='<div class="empty-state"><i class="fas fa-chart-bar"></i><p>لا توجد بيانات</p></div>';
+  $('pricesContent').innerHTML=h;
 }
 
 // ==========================================
 // 👤 PROFILE
 // ==========================================
 async function loadProfile() {
-  if (!user) return;
-  $('profileAvatar').innerText = (user.displayName || user.email || 'م').charAt(0).toUpperCase();
-  $('profileName').innerText = user.displayName || 'مستخدم';
-  $('profileEmail').innerText = user.email || '';
-
-  const doc = await db.collection('users').doc(user.uid).get();
-  if (doc.exists) {
-    const d = doc.data();
-    $('profileName').innerText = d.name || user.displayName || 'مستخدم';
-    $('profileRole').innerText = d.role || 'مستخدم';
-    $('profileRegion').innerText = d.region || 'غير محدد';
-    $('profName').value = d.name || '';
-    $('profPhone').value = d.phone || '';
-    $('profRegion').value = d.region || '';
-  }
+  if(!user) return;
+  $('profileAvatar').innerText=(user.displayName||user.email||'م').charAt(0).toUpperCase();
+  $('profileName').innerText=user.displayName||'مستخدم';
+  $('profileEmail').innerText=user.email||'';
+  try{
+    const doc=await db.collection('users').doc(user.uid).get();
+    if(doc.exists){const d=doc.data();$('profileName').innerText=d.name||user.displayName||'مستخدم';$('profileRole').innerText=d.role||'-';$('profileRegion').innerText=d.region||'-';$('profName').value=d.name||'';$('profPhone').value=d.phone||'';$('profRegion').value=d.region||'';}
+  }catch(e){}
 }
-
 async function updateProfile() {
-  if (!user) return;
-  try {
-    const name = $('profName').value.trim();
-    const phone = $('profPhone').value.trim();
-    const region = $('profRegion').value;
-
-    await db.collection('users').doc(user.uid).update({ name, phone, region });
-    if (name) await user.updateProfile({ displayName: name });
-    toast('تم حفظ التعديلات ✅', 'success');
-    loadProfile();
-  } catch (e) {
-    toast('خطأ في الحفظ', 'error');
-  }
+  if(!user) return;
+  try{const name=$('profName').value.trim(),phone=$('profPhone').value.trim(),region=$('profRegion').value;
+  await db.collection('users').doc(user.uid).set({name,phone,region},{merge:true});
+  if(name) await user.updateProfile({displayName:name});
+  toast('تم الحفظ ✅','success'); loadProfile();}catch(e){toast('خطأ','error');}
 }
 
 // ==========================================
-// 💬 CHAT SYSTEM
+// 💬 CHAT — الإصلاح الكامل
 // ==========================================
-function openChat(tid, tname) {
+
+/*
+ * ✅ الإصلاح 1: openChat أصبح async مع await
+ * ✅ الإصلاح 2: اسم المجموعة الفرعية = "messages" (يطابق القواعد)
+ * ✅ الإصلاح 3: استخدام set+merge بدل update لتفادي خطأ "الوثيقة غير موجودة"
+ * ✅ الإصلاح 4: تنظيف الأخطاء مع console.error للتشخيص
+ */
+
+async function openChat(tid, tname) {
   if (!user) return needAuth('chat');
   if (tid === user.uid) return toast('لا يمكنك مراسلة نفسك', 'warning');
 
   isAdminChat = false;
   activeChat = [user.uid, tid].sort().join('_');
 
-  db.collection('chats').doc(activeChat).set({
-    users: [user.uid, tid],
-    names: { [user.uid]: user.displayName || 'مستخدم', [tid]: tname },
-    updatedAt: Date.now()
-  }, { merge: true });
+  try {
+    // ✅ انتظار إنشاء وثيقة المحادثة قبل أي شيء آخر
+    await db.collection('chats').doc(activeChat).set({
+      users: [user.uid, tid],
+      names: {
+        [user.uid]: user.displayName || 'مستخدم',
+        [tid]: tname
+      },
+      updatedAt: Date.now()
+    }, { merge: true });
+
+    console.log('✅ تم إنشاء/تحديث المحادثة:', activeChat);
+  } catch (e) {
+    console.error('❌ خطأ في إنشاء المحادثة:', e);
+    toast('خطأ في فتح المحادثة', 'error');
+    return;
+  }
 
   setupChatUI(tname);
 }
@@ -1853,38 +1147,30 @@ function listenMsgs() {
   if (chatUnsub) chatUnsub();
   if (!activeChat) return;
 
-  chatUnsub = db.collection('chats').doc(activeChat).collection('msgs')
-    .orderBy('time', 'asc').onSnapshot(snap => {
-      const msgDiv = $('chatMsgs');
+  // ✅ الإصلاح: استخدام "messages" بدل "msgs"
+  chatUnsub = db.collection('chats').doc(activeChat)
+    .collection(MSGS_COL)
+    .orderBy('time', 'asc')
+    .onSnapshot(snap => {
+      const div = $('chatMsgs');
       if (snap.empty) {
-        msgDiv.innerHTML = `<div class="empty-chat"><i class="fas fa-paper-plane"></i><p>ابدأ المحادثة</p></div>`;
+        div.innerHTML = '<div class="empty-chat"><i class="fas fa-paper-plane"></i><p>ابدأ المحادثة</p></div>';
         return;
       }
-
-      msgDiv.innerHTML = snap.docs.map(d => {
+      div.innerHTML = snap.docs.map(d => {
         const m = d.data();
         const me = m.from === user.uid;
         const canDel = me || isAdminChat;
-        const timeStr = m.time ? new Date(m.time).toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' }) : '';
-
+        const t = m.time ? new Date(m.time).toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' }) : '';
         let content = '';
-        if (m.type === 'img') {
-          content = `<img src="${m.url}" style="max-width:200px; border-radius:10px; cursor:pointer;" onclick="window.open('${m.url}','_blank')">`;
-        } else if (m.type === 'voice') {
-          content = `<audio controls src="${m.url}" style="max-width:200px; height:35px;"></audio>`;
-        } else {
-          content = m.text || '';
-        }
-
-        return `
-          <div class="bubble ${me ? 'me' : 'other'}">
-            ${canDel ? `<button class="del-btn" onclick="delMsg('${d.id}')"><i class="fas fa-times" style="font-size:8px;"></i></button>` : ''}
-            ${content}
-            <span class="time">${timeStr}</span>
-          </div>`;
+        if (m.type === 'img') content = `<img src="${m.url}" style="max-width:200px;border-radius:10px;cursor:pointer;" onclick="window.open('${m.url}','_blank')">`;
+        else if (m.type === 'voice') content = `<audio controls src="${m.url}" style="max-width:200px;height:35px;"></audio>`;
+        else content = m.text || '';
+        return `<div class="bubble ${me ? 'me' : 'other'}">${canDel ? `<button class="del-btn" onclick="delMsg('${d.id}')"><i class="fas fa-times" style="font-size:8px;"></i></button>` : ''}${content}<span class="time">${t}</span></div>`;
       }).join('');
-
-      msgDiv.scrollTop = msgDiv.scrollHeight;
+      div.scrollTop = div.scrollHeight;
+    }, err => {
+      console.error('❌ خطأ في الاستماع للرسائل:', err);
     });
 }
 
@@ -1892,36 +1178,55 @@ async function sendMsg() {
   if (isAdminChat) return;
   const input = $('chatIn');
   const text = input.value.trim();
-  if (!text || !activeChat) return;
+  if (!text || !activeChat || !user) return;
 
   input.value = '';
+
   try {
-    await db.collection('chats').doc(activeChat).collection('msgs').add({
-      from: user.uid, text, time: Date.now(), type: 'text'
-    });
-    await db.collection('chats').doc(activeChat).update({ updatedAt: Date.now() });
-  } catch (e) { toast('خطأ في الإرسال', 'error'); }
+    // ✅ الإصلاح: "messages" بدل "msgs"
+    await db.collection('chats').doc(activeChat)
+      .collection(MSGS_COL)
+      .add({
+        from: user.uid,
+        text: text,
+        time: Date.now(),
+        type: 'text'
+      });
+
+    // ✅ الإصلاح: set+merge بدل update
+    await db.collection('chats').doc(activeChat).set({
+      updatedAt: Date.now()
+    }, { merge: true });
+
+    console.log('✅ تم إرسال الرسالة بنجاح');
+  } catch (e) {
+    console.error('❌ خطأ في إرسال الرسالة:', e);
+    console.error('❌ كود الخطأ:', e.code);
+    console.error('❌ رسالة الخطأ:', e.message);
+    toast('خطأ في الإرسال: ' + (e.code || e.message), 'error');
+  }
 }
 
 async function sendImg(inp) {
   const file = inp.files[0];
   if (!file || !activeChat) return;
-  if (file.size > 5 * 1024 * 1024) return toast('حجم الصورة كبير (الحد: 5MB)', 'warning');
-
+  if (file.size > 5 * 1024 * 1024) return toast('حجم الصورة كبير', 'warning');
   toast('جارِ رفع الصورة...', 'info');
   try {
     const ref = storage.ref(`chat_images/${Date.now()}_${file.name}`);
     await ref.put(file);
     const url = await ref.getDownloadURL();
-    await db.collection('chats').doc(activeChat).collection('msgs').add({
+    // ✅ "messages" بدل "msgs"
+    await db.collection('chats').doc(activeChat).collection(MSGS_COL).add({
       from: user.uid, url, time: Date.now(), type: 'img'
     });
-    await db.collection('chats').doc(activeChat).update({ updatedAt: Date.now() });
-  } catch (e) { toast('خطأ في رفع الصورة', 'error'); }
+    await db.collection('chats').doc(activeChat).set({ updatedAt: Date.now() }, { merge: true });
+    toast('تم إرسال الصورة ✅', 'success');
+  } catch (e) { console.error('❌ خطأ صورة:', e); toast('خطأ في رفع الصورة', 'error'); }
   inp.value = '';
 }
 
-// Voice Recording
+// Voice
 let mediaRec = null, audioChunks = [];
 async function startRec() {
   if (isAdminChat) return;
@@ -1934,186 +1239,126 @@ async function startRec() {
       stream.getTracks().forEach(t => t.stop());
       $('recIndicator').classList.remove('on');
       if (audioChunks.length === 0) return;
-
       const blob = new Blob(audioChunks, { type: 'audio/webm' });
-      toast('جارِ رفع التسجيل الصوتي...', 'info');
+      toast('جارِ رفع الصوت...', 'info');
       try {
         const ref = storage.ref(`voice/${Date.now()}.webm`);
         await ref.put(blob);
         const url = await ref.getDownloadURL();
-        await db.collection('chats').doc(activeChat).collection('msgs').add({
+        // ✅ "messages"
+        await db.collection('chats').doc(activeChat).collection(MSGS_COL).add({
           from: user.uid, url, time: Date.now(), type: 'voice'
         });
-        await db.collection('chats').doc(activeChat).update({ updatedAt: Date.now() });
-      } catch (e) { toast('خطأ في رفع الصوت', 'error'); }
+        await db.collection('chats').doc(activeChat).set({ updatedAt: Date.now() }, { merge: true });
+      } catch (e) { console.error('❌ خطأ صوت:', e); toast('خطأ في رفع الصوت', 'error'); }
     };
     mediaRec.start();
     $('recIndicator').classList.add('on');
   } catch (e) { toast('لا يمكن الوصول للمايكروفون', 'error'); }
 }
-
-function stopRec() {
-  if (mediaRec && mediaRec.state === 'recording') {
-    mediaRec.stop();
-  }
-}
+function stopRec() { if (mediaRec && mediaRec.state === 'recording') mediaRec.stop(); }
 
 async function delMsg(msgId) {
   if (!activeChat) return;
   try {
-    await db.collection('chats').doc(activeChat).collection('msgs').doc(msgId).delete();
-  } catch (e) { toast('خطأ في الحذف', 'error'); }
+    // ✅ "messages"
+    await db.collection('chats').doc(activeChat).collection(MSGS_COL).doc(msgId).delete();
+  } catch (e) { console.error('❌ خطأ حذف:', e); toast('خطأ في الحذف', 'error'); }
 }
 
 function loadChatList() {
   if (!user) return;
-
-  const query = isAdmin
-    ? db.collection('chats').orderBy('updatedAt', 'desc')
-    : db.collection('chats').where('users', 'array-contains', user.uid).orderBy('updatedAt', 'desc');
+  let query;
+  if (isAdmin) {
+    query = db.collection('chats').orderBy('updatedAt', 'desc');
+  } else {
+    query = db.collection('chats').where('users', 'array-contains', user.uid);
+  }
 
   query.onSnapshot(snap => {
     if (snap.empty) {
-      $('chatList').innerHTML = `<div style="padding:30px; text-align:center; color:var(--text-muted);"><i class="fas fa-inbox" style="font-size:2rem; display:block; margin-bottom:10px; opacity:0.3;"></i><p>لا توجد محادثات</p></div>`;
+      $('chatList').innerHTML = '<div style="padding:30px;text-align:center;color:var(--text-muted);"><i class="fas fa-inbox" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3;"></i><p>لا توجد محادثات</p></div>';
       return;
     }
-
     $('chatList').innerHTML = snap.docs.map(d => {
       const data = d.data();
       let otherName = 'مستخدم';
-
-      if (isAdmin && data.names) {
-        const names = Object.values(data.names);
-        otherName = names.join(' ↔ ');
-      } else if (data.names && data.users) {
-        const otherId = data.users.find(u => u !== user.uid);
-        otherName = data.names[otherId] || 'مستخدم';
-      }
-
-      const initial = otherName.charAt(0).toUpperCase();
-      const isActive = activeChat === d.id;
-
+      if (isAdmin && data.names) { otherName = Object.values(data.names).join(' ↔ '); }
+      else if (data.names && data.users) { const oid = data.users.find(u => u !== user.uid); otherName = data.names[oid] || 'مستخدم'; }
+      const init = otherName.charAt(0).toUpperCase();
+      const isAct = activeChat === d.id;
+      const safeName = otherName.replace(/'/g, "\\'");
       if (isAdmin) {
-        return `
-          <div class="chat-list-item ${isActive ? 'active' : ''}" onclick="adminOpenChat('${d.id}','${otherName}')">
-            <div class="chat-avatar" style="background:linear-gradient(135deg,var(--secondary),#d97706);">${initial}</div>
-            <div class="chat-list-info"><h4>${otherName}</h4><p>🔍 مراقبة</p></div>
-          </div>`;
+        return `<div class="chat-list-item ${isAct?'active':''}" onclick="adminOpenChat('${d.id}','${safeName}')"><div class="chat-avatar" style="background:linear-gradient(135deg,var(--secondary),#d97706);">${init}</div><div class="chat-list-info"><h4>${otherName}</h4><p>🔍 مراقبة</p></div></div>`;
       }
-
-      const otherId = data.users.find(u => u !== user.uid);
-      return `
-        <div class="chat-list-item ${isActive ? 'active' : ''}" onclick="openChat('${otherId}','${otherName}')">
-          <div class="chat-avatar">${initial}</div>
-          <div class="chat-list-info"><h4>${otherName}</h4><p>اضغط لفتح المحادثة</p></div>
-        </div>`;
+      const oid = data.users.find(u => u !== user.uid);
+      return `<div class="chat-list-item ${isAct?'active':''}" onclick="openChat('${oid}','${safeName}')"><div class="chat-avatar">${init}</div><div class="chat-list-info"><h4>${otherName}</h4><p>اضغط لفتح</p></div></div>`;
     }).join('');
+  }, err => {
+    console.error('❌ خطأ قائمة المحادثات:', err);
   });
 }
 
 // ==========================================
-// 👑 ADMIN PANEL
+// 👑 ADMIN
 // ==========================================
 async function loadAdminStats() {
   try {
-    const usersSnap = await db.collection('users').get();
-    $('stUsers').innerText = usersSnap.size;
-    const chatsSnap = await db.collection('chats').get();
-    $('stChats').innerText = chatsSnap.size;
+    const us = await db.collection('users').get(); $('stUsers').innerText = us.size;
+    const cs = await db.collection('chats').get(); $('stChats').innerText = cs.size;
   } catch (e) { console.error(e); }
 }
 
 async function loadAdmin() {
   if (!isAdmin) return;
+  $('adminProds').innerHTML = prods.map(p =>
+    `<div class="admin-card"><div><strong>${p.name}</strong> <span style="color:var(--text-muted);font-size:0.8rem;">· ${p.sellerName||'فلاح'} · ${getRem(p)}/${p.quantity} كغ</span></div><button class="icon-btn" onclick="deleteProd('${p.id}')" style="border-color:var(--danger);color:var(--danger);"><i class="fas fa-trash"></i></button></div>`
+  ).join('') || '<p style="color:var(--text-muted);">لا توجد محاصيل</p>';
 
-  // Products
-  $('adminProds').innerHTML = prods.map(p => `
-    <div class="admin-card">
-      <div>
-        <strong>${p.name}</strong>
-        <span style="color:var(--text-muted); font-size:0.8rem;"> · ${p.sellerName || 'فلاح'} · ${getRem(p)}/${p.quantity} كغ · ${p.price} د</span>
-      </div>
-      <button class="icon-btn" onclick="deleteProd('${p.id}')" style="border-color:var(--danger); color:var(--danger);">
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>`).join('') || '<p style="color:var(--text-muted);">لا توجد محاصيل</p>';
-
-  // Users
   try {
-    const usersSnap = await db.collection('users').get();
-    allUsers = [];
-    usersSnap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
-    $('adminUsers').innerHTML = allUsers.map(u => `
-      <div class="admin-card">
-        <div>
-          <strong>${u.name || 'مستخدم'}</strong>
-          <span style="color:var(--text-muted); font-size:0.8rem;"> · ${u.email} · ${u.role || ''} · ${u.region || ''}</span>
-        </div>
-        <button class="icon-btn" onclick="deleteUser('${u.id}')" style="border-color:var(--danger); color:var(--danger);">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>`).join('') || '<p style="color:var(--text-muted);">لا يوجد مستخدمون</p>';
+    const us = await db.collection('users').get();
+    allUsers = []; us.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
+    $('adminUsers').innerHTML = allUsers.map(u =>
+      `<div class="admin-card"><div><strong>${u.name || 'مستخدم'}</strong> <span style="color:var(--text-muted);font-size:0.8rem;">· ${u.email} · ${u.role || ''}</span></div><button class="icon-btn" onclick="deleteUser('${u.id}')" style="border-color:var(--danger);color:var(--danger);"><i class="fas fa-trash"></i></button></div>`
+    ).join('') || '<p style="color:var(--text-muted);">لا يوجد مستخدمون</p>';
   } catch (e) { console.error(e); }
 
-  // Chats
   try {
-    const chatsSnap = await db.collection('chats').get();
-    $('adminChats').innerHTML = chatsSnap.docs.map(d => {
-      const data = d.data();
-      const names = data.names ? Object.values(data.names).join(' ↔ ') : d.id;
-      return `
-        <div class="admin-card">
-          <div><strong>${names}</strong></div>
-          <div style="display:flex; gap:6px;">
-            <button class="icon-btn" onclick="adminOpenChat('${d.id}','${names}')" style="border-color:var(--blue); color:var(--blue);">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="icon-btn" onclick="deleteChat('${d.id}')" style="border-color:var(--danger); color:var(--danger);">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>`;
+    const cs = await db.collection('chats').get();
+    $('adminChats').innerHTML = cs.docs.map(d => {
+      const data = d.data(); const names = data.names ? Object.values(data.names).join(' ↔ ') : d.id;
+      const safeName = names.replace(/'/g, "\\'");
+      return `<div class="admin-card"><div><strong>${names}</strong></div><div style="display:flex;gap:6px;"><button class="icon-btn" onclick="adminOpenChat('${d.id}','${safeName}')" style="border-color:var(--blue);color:var(--blue);"><i class="fas fa-eye"></i></button><button class="icon-btn" onclick="deleteChat('${d.id}')" style="border-color:var(--danger);color:var(--danger);"><i class="fas fa-trash"></i></button></div></div>`;
     }).join('') || '<p style="color:var(--text-muted);">لا توجد محادثات</p>';
   } catch (e) { console.error(e); }
 }
 
 async function deleteUser(uid) {
   if (!confirm('حذف هذا المستخدم؟')) return;
-  try {
-    await db.collection('users').doc(uid).delete();
-    toast('تم حذف المستخدم', 'success');
-    loadAdmin();
-  } catch (e) { toast('خطأ', 'error'); }
+  try { await db.collection('users').doc(uid).delete(); toast('تم الحذف', 'success'); loadAdmin(); } catch (e) { toast('خطأ', 'error'); }
 }
 
 async function deleteChat(cid) {
   if (!confirm('حذف هذه المحادثة؟')) return;
   try {
-    // Delete messages sub-collection
-    const msgs = await db.collection('chats').doc(cid).collection('msgs').get();
+    // ✅ "messages"
+    const msgs = await db.collection('chats').doc(cid).collection(MSGS_COL).get();
     const batch = db.batch();
     msgs.forEach(m => batch.delete(m.ref));
     batch.delete(db.collection('chats').doc(cid));
     await batch.commit();
-    toast('تم حذف المحادثة', 'success');
-    loadAdmin();
+    toast('تم الحذف', 'success'); loadAdmin();
   } catch (e) { toast('خطأ', 'error'); }
 }
 
 // ==========================================
-// 🚀 INITIALIZATION
+// 🚀 INIT
 // ==========================================
 (function init() {
-  // Load saved preferences
-  const savedLang = localStorage.getItem('lang') || 'ar';
-  $('langSel').value = savedLang;
-  setLang(savedLang);
-
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) setTheme(savedTheme);
-
-  // Handle browser back button
-  window.addEventListener('popstate', () => goBack());
+  const lang = localStorage.getItem('lang') || 'ar';
+  $('langSel').value = lang; setLang(lang);
+  const theme = localStorage.getItem('theme');
+  if (theme) setTheme(theme);
 })();
 </script>
 </body>
